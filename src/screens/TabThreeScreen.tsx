@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View } from "../components/Themed";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Polyline } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
 import { useWindowDimensions } from "react-native";
 
@@ -46,6 +46,7 @@ export default function TabThreeScreen() {
         {coordinates.map((c) => (
           <Marker coordinate={c} />
         ))}
+        <Polyline coordinates={coordinates} strokeWidth={3} strokeColor="red" />
       </MapView>
       <Modalize
         alwaysOpen={windowDimensions.height * 0.25}
