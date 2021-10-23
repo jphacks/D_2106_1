@@ -1,5 +1,5 @@
 import * as MediaLibrary from "expo-media-library";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert } from "react-native";
 import useAsyncCallback from "./useAsyncCallback";
 
@@ -10,10 +10,7 @@ const useCameraRoll = (options: MediaLibrary.AssetsOptions = {}) => {
     requestPermissionBase
   );
 
-  useEffect(() => {
-    requestPermission();
-  }, []);
-  useEffect(() => {
+  const refreshAssets = useCallback(() => {
     if (reqestingPermission) return;
     if (status && !status.granted)
       Alert.alert("カメラロールにアクセスできません");
@@ -21,7 +18,15 @@ const useCameraRoll = (options: MediaLibrary.AssetsOptions = {}) => {
       MediaLibrary.getAssetsAsync(options).then((res) => setAssets(res.assets));
   }, [status, reqestingPermission]);
 
-  return assets;
+  useEffect(() => {
+    requestPermission();
+  }, []);
+
+  useEffect(() => {
+    refreshAssets();
+  }, [status, reqestingPermission]);
+
+  return { assets, refreshAssets };
 };
 
 export default useCameraRoll;
