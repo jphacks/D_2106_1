@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "d2106front.app"
+               BuildableName = "d2106.app"
                BlueprintName = "d2106front"
                ReferencedContainer = "container:d2106front.xcodeproj">
             </BuildableReference>
@@ -55,7 +55,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "d2106front.app"
+            BuildableName = "d2106.app"
             BlueprintName = "d2106front"
             ReferencedContainer = "container:d2106front.xcodeproj">
          </BuildableReference>
@@ -72,7 +72,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "d2106front.app"
+            BuildableName = "d2106.app"
             BlueprintName = "d2106front"
             ReferencedContainer = "container:d2106front.xcodeproj">
          </BuildableReference>
