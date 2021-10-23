@@ -9,7 +9,6 @@ import {
   useWindowDimensions,
 } from "react-native";
 import ImageViewing from "react-native-image-viewing";
-import Image from "src/components/atoms/Image";
 import useBoolState from "src/hooks/useBoolState";
 
 export type Props = {
@@ -25,13 +24,15 @@ export type Props = {
   delayLongPress?: number;
   HeaderComponent?: React.FC<{ imageIndex: number }>;
   FooterComponent?: React.FC<{ imageIndex: number }>;
-  flatListProps?: Partial<FlatListProps<any>>;
+  flatListProps?: Partial<FlatListProps<string>>;
+  renderImage: ({ imageUri: string }) => React.ReactNode;
 };
 
 const ImageGrid: React.FC<Props> = ({
   images,
   shift = 0,
   flatListProps,
+  renderImage,
   ...props
 }) => {
   const { width } = useWindowDimensions();
@@ -52,21 +53,15 @@ const ImageGrid: React.FC<Props> = ({
         {...flatListProps}
         data={images}
         keyExtractor={(uri) => uri}
-        renderItem={({ item: imageUrl, index }) => (
+        renderItem={({ item, index }) => (
           <TouchableOpacity
-            key={`${imageUrl}_${index}`}
+            key={`${item}_${index}`}
             activeOpacity={0.8}
             onPress={() => onSelect(index)}
           >
-            <Image
-              source={{ uri: imageUrl }}
-              width={width / 3}
-              height={width / 3}
-              style={styles.gridImage}
-            />
+            {renderImage({ imageUri: item })}
           </TouchableOpacity>
         )}
-        numColumns={3}
         contentContainerStyle={styles.gridContainer}
       />
       <ImageViewing

@@ -1,4 +1,5 @@
 import React, { useMemo, useRef } from "react";
+import { useEffect } from "react";
 import {
   Animated,
   Image as RNImage,
@@ -14,6 +15,7 @@ export type Props = {
   onNope: () => void;
   onLike: () => void;
   isActive?: boolean;
+  isActiveInBackground?: boolean;
   image: ImageSourcePropType;
 };
 
@@ -24,11 +26,18 @@ const Card: React.FC<Props> = ({
   position,
   parentPosition,
   isActive,
+  isActiveInBackground,
   onNope,
   onLike,
   image: imageSource,
 }) => {
   const opacity = useRef(new Animated.Value(1)).current;
+  const showSelf = () =>
+    Animated.timing(opacity, {
+      toValue: 1,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
   const hideSelf = () =>
     Animated.timing(opacity, {
       toValue: 0,
@@ -63,13 +72,13 @@ const Card: React.FC<Props> = ({
               toValue: { x: width + 100, y: gestureState.dy },
               useNativeDriver: true,
             }).start(hideSelf);
-            onNope();
+            onLike();
           } else if (gestureState.dx < -120) {
             Animated.spring(position, {
               toValue: { x: -width - 100, y: gestureState.dy },
               useNativeDriver: true,
             }).start(hideSelf);
-            onLike();
+            onNope();
           } else {
             Animated.spring(position, {
               toValue: { x: 0, y: 0 },
@@ -90,9 +99,14 @@ const Card: React.FC<Props> = ({
     ],
     opacity,
   };
+
+  useEffect(() => {
+    (isActive || isActiveInBackground) && showSelf();
+  }, [isActive, isActiveInBackground]);
+
   return (
     <Animated.View
-      {...panResponder.panHandlers} // <----- This is what binds to the PanResponder's onPanResponderMove handler
+      {...panResponder.panHandlers}
       style={[rotateAndTranslate, styles.card, { width }]}
     >
       <RNImage style={styles.cardImg} source={imageSource} />
