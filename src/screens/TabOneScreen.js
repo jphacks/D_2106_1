@@ -1,77 +1,56 @@
-import * as React from "react";
-import { StyleSheet } from "react-native";
-
-import * as MediaLibrary from "expo-media-library";
 import styled from "styled-components";
-import { Button, Text } from "@ui-kitten/components";
+import { Button } from "@ui-kitten/components";
 import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, useWindowDimensions } from "react-native";
+import Image from "src/components/atoms/Image";
+import ImageGrid from "src/components/organisms/ImageGrid";
+import useCameraRoll from "src/hooks/useCameraRoll";
+import { View } from "src/components/Themed";
 
 export default function TabOneScreen({ navigation }) {
-  const [currentTime, setCurrentTime] = React.useState("");
-  const [status, requestPermission] = MediaLibrary.usePermissions();
-  const [data, setData] = React.useState([]);
-  const [isAsset, setIsAsset] = React.useState(false);
-
-  const onPressGetAsset = async () => {
-    const foo = await MediaLibrary.getAssetsAsync();
-    setData(foo.assets.map((item) => item.uri));
-  };
-
-  React.useEffect(() => {
-    requestPermission;
-    if (isAsset) onPressGetAsset();
-  }, [isAsset]);
+  const [currentTime, setCurrentTime] = useState("");
+  const { width } = useWindowDimensions();
+  const assets = useCameraRoll();
 
   return (
-    <_container>
+    <StyledContainer>
       <_header>
         <Button
           onPress={async () => {
-            requestPermission;
-            setCurrentTime(await moment().format());
+            setCurrentTime(await moment());
             console.log(currentTime);
-            console.log(!isAsset);
-            setIsAsset(!isAsset);
           }}
         >
-          <Text>Go travel</Text>
+          Go Travel
         </Button>
-        <Button title="ResetAsset" onPress={() => setData([])} />
       </_header>
-      <_content>
-        <_pictures>
-          {data.map((uri) => (
-            <Image source={{ uri }} style={{ width: 100, height: 100 }} />
-          ))}
-        </_pictures>
-      </_content>
-    </_container>
+      <View>
+        <ImageGrid
+          images={assets.map((items) => items.uri)}
+          renderImage={({ imageUri }) => (
+            <Image
+              source={{ uri: imageUri }}
+              width={width / 3}
+              height={width / 3}
+              style={styles.gridImage}
+            />
+          )}
+          style={{ backgroundColor: "blue", width: 300, height: 300 }}
+          flatListProps={{ numColumns: 3 }}
+        />
+      </View>
+    </StyledContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});
-
-const _container = styled.SafeAreaView`
+const StyledContainer = styled.SafeAreaView`
     flex: 1;
     background color: #fff;
-    align-items: center;
-    justify-content: center;
+    // align-items: center;
+    // justify-content: center;
     `;
+
 const _header = styled.View`
     flex: 2 0;
     background color: #fff;
@@ -84,8 +63,7 @@ const _content = styled.View`
     background color: silver;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    `;
+    width: 100%;`;
 
 const _pictures = styled.View`
     flex: 10;
@@ -95,3 +73,10 @@ const _pictures = styled.View`
     flexDirection: row;
     width: 300;;
   `;
+
+const styles = StyleSheet.create({
+  gridImage: {
+    borderWidth: 1,
+    borderColor: "white",
+  },
+});
