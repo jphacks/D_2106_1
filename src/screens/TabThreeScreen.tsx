@@ -4,6 +4,14 @@ import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
 import { useWindowDimensions } from "react-native";
 
+type CoordinateType = {
+  id: string;
+  imageUrls: string[];
+  latitude: number;
+  longitude: number;
+  timestamp: string;
+};
+
 export default function TabThreeScreen() {
   const windowDimensions = useWindowDimensions();
   const [mapCorners, setMapCorners] = React.useState<{
@@ -22,7 +30,7 @@ export default function TabThreeScreen() {
     });
 
   // TODO: 実データに置き換える
-  const coordinates = [
+  const coordinates: CoordinateType[] = [
     {
       id: "gpsId1",
       imageUrls: ["https://"],
