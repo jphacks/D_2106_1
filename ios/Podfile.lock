@@ -3,6 +3,9 @@ PODS:
   - DoubleConversion (1.1.6)
   - EXApplication (4.0.0):
     - ExpoModulesCore
+  - EXBackgroundFetch (10.0.3):
+    - ExpoModulesCore
+    - UMTaskManagerInterface
   - EXConstants (12.1.3):
     - ExpoModulesCore
   - EXErrorRecovery (3.0.3):
@@ -22,6 +25,8 @@ PODS:
   - EXMediaLibrary (13.0.3):
     - ExpoModulesCore
     - React-Core
+  - EXPermissions (13.0.3):
+    - ExpoModulesCore
   - Expo (43.0.0):
     - ExpoModulesCore
   - ExpoModulesCore (0.4.4):
@@ -311,6 +316,8 @@ PODS:
     - React-cxxreact (= 0.64.2)
     - React-jsi (= 0.64.2)
     - React-perflogger (= 0.64.2)
+  - RNCAsyncStorage (1.15.9):
+    - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
   - RNReanimated (2.2.3):
@@ -355,6 +362,7 @@ PODS:
 DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EXApplication (from `../node_modules/expo-application/ios`)
+  - EXBackgroundFetch (from `../node_modules/expo-background-fetch/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXErrorRecovery (from `../node_modules/expo-error-recovery/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
@@ -364,6 +372,7 @@ DEPENDENCIES:
   - EXLocation (from `../node_modules/expo-location/ios`)
   - EXManifests (from `../node_modules/expo-manifests/ios`)
   - EXMediaLibrary (from `../node_modules/expo-media-library/ios`)
+  - EXPermissions (from `../node_modules/expo-permissions/ios`)
   - Expo (from `../node_modules/expo/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
@@ -401,6 +410,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -418,6 +428,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   EXApplication:
     :path: "../node_modules/expo-application/ios"
+  EXBackgroundFetch:
+    :path: "../node_modules/expo-background-fetch/ios"
   EXConstants:
     :path: "../node_modules/expo-constants/ios"
   EXErrorRecovery:
@@ -436,6 +448,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-manifests/ios"
   EXMediaLibrary:
     :path: "../node_modules/expo-media-library/ios"
+  EXPermissions:
+    :path: "../node_modules/expo-permissions/ios"
   Expo:
     :path: "../node_modules/expo/ios"
   ExpoModulesCore:
@@ -506,6 +520,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -525,6 +541,7 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   EXApplication: 0e15240e4d125b62f1cae48759ffbbd32b9286a6
+  EXBackgroundFetch: 93e9759b7d6f0d1fa2ffcec2dec4b7283660b7cd
   EXConstants: 6d585d93723b18d7a8c283591a335609e3bc153e
   EXErrorRecovery: ac2622400a32be84604591f70d0efff416e4b9a2
   EXFileSystem: 99aac7962c11c680681819dd9cbca24e20e5b1e7
@@ -534,6 +551,7 @@ SPEC CHECKSUMS:
   EXLocation: 192eaee761c159d1479111a0ced3bab7ad8475a3
   EXManifests: 50e42e01335df4e54109dee7be5a91bfd37347db
   EXMediaLibrary: 2a684cca228d6605a72f9995d3e7b8af2a05246c
+  EXPermissions: 7696f4c16e89981f84c04d96327f7e1e592373c0
   Expo: f3357f1f9796d0b4d396d0be84c49933671db4ad
   ExpoModulesCore: 47b403a33ad73770c49d7559615b3ea121a36116
   EXSplashScreen: 68390ddb65a5def66ce8cf46a1e14a9b33cdac70
@@ -569,6 +587,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 24600e3b1aaa77126989bc58b6747509a1ba14f3
   React-runtimeexecutor: a9904c6d0218fb9f8b19d6dd88607225927668f9
   ReactCommon: 149906e01aa51142707a10665185db879898e966
+  RNCAsyncStorage: 26f25150da507524a7815f2ada06ca0967f65633
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: 64c38d47ffcc29c97fc1d8cfde9e8a73d7be7cc8
   RNScreens: 6e1ea5787989f92b0671049b808aef64fa1ef98c

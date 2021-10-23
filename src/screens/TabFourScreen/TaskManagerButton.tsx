@@ -6,18 +6,18 @@ import * as Location from "expo-location";
 const LOCATION_TASK_NAME = "background-location-task";
 
 const requestPermissions = async () => {
-  const { status: fgStatus } =
-    await Location.requestForegroundPermissionsAsync();
+  // const { status: fgStatus } =
+  //   await Location.requestForegroundPermissionsAsync();
   const { status: bgStatus } =
     await Location.requestBackgroundPermissionsAsync();
 
-  console.log("status", fgStatus, bgStatus);
+  console.log("status", bgStatus);
 
-  if (fgStatus === "granted" && bgStatus === "granted") {
+  if (bgStatus === "granted") {
     console.log("startLocationUpdatesAsync");
     await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
       accuracy: Location.Accuracy.Balanced,
-      timeInterval: 1000,
+      timeInterval: 100,
     });
   }
 };
@@ -27,5 +27,17 @@ const TaskManagerButton = () => (
     <Text>Enable background location</Text>
   </TouchableOpacity>
 );
+
+TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
+  if (error) {
+    // Error occurred - check `error.message` for more details.
+    return;
+  }
+  if (data) {
+    const { locations } = data as any;
+    console.log("location", JSON.stringify(locations));
+    // do something with the locations captured in the background
+  }
+});
 
 export default TaskManagerButton;
