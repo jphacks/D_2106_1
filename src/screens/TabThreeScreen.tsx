@@ -1,11 +1,25 @@
 import * as React from "react";
 import { View } from "../components/Themed";
-import MapView, { Marker, Polyline } from "react-native-maps";
+import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
 import { useWindowDimensions } from "react-native";
 
 export default function TabThreeScreen() {
   const windowDimensions = useWindowDimensions();
+  const [mapCorners, setMapCorners] = React.useState<{
+    lat1: number;
+    lat2: number;
+    lon1: number;
+    lon2: number;
+  }>({ lat1: 45, lat2: 46, lon1: 135, lon2: 136 });
+
+  const getBounds = (region: Region) =>
+    setMapCorners({
+      lat1: region.longitude - region.longitudeDelta / 2,
+      lat2: region.longitude + region.longitudeDelta / 2,
+      lon1: region.latitude - region.latitudeDelta / 2,
+      lon2: region.latitude + region.latitudeDelta / 2,
+    });
 
   // TODO: 実データに置き換える
   const coordinates = [
@@ -40,6 +54,9 @@ export default function TabThreeScreen() {
           longitude: 136.9599526,
           latitudeDelta: 0.5,
           longitudeDelta: 0.5,
+        }}
+        onRegionChange={(region) => {
+          getBounds(region);
         }}
         style={{ flex: 1.0 }}
       >
