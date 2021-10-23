@@ -3,6 +3,7 @@ import { View } from "../components/Themed";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
 import { useWindowDimensions } from "react-native";
+import { useGetAPI } from "src/hooks/useGetAPI";
 
 type CoordinateType = {
   id: string;
@@ -29,7 +30,14 @@ export default function TabThreeScreen() {
       lon2: region.latitude + region.latitudeDelta / 2,
     });
 
+  const { data } = useGetAPI("/album/detail", {
+    // TODO: 実データに置き換える
+    album_id: "album_id",
+    ...mapCorners,
+  });
+
   // TODO: 実データに置き換える
+  // const coordinates = data?.locations;
   const coordinates: CoordinateType[] = [
     {
       id: "gpsId1",
