@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "jphack2021",
-    "slug": "jphack2021",
+    "name": "d2106-front",
+    "slug": "d2106-front",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/icon.png",
@@ -21,14 +21,14 @@
       "infoPlist": {
         "UIBackgroundModes": ["location", "fetch"]
       },
-      "bundleIdentifier": "com.takaonarikawa.jphack2021"
+      "bundleIdentifier": "com.takaonarikawa.d2106"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.takaonarikawa.jphack2021"
+      "package": "com.takaonarikawa.d2106"
     },
     "web": {
       "favicon": "./src/assets/images/favicon.png"
