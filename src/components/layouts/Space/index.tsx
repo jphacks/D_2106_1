@@ -2,7 +2,6 @@ import React from "react";
 import { StyleProp, ViewStyle } from "react-native";
 import { View } from "src/components/atoms/Themed";
 import { intersperse } from "src/utils";
-import { CSSProp } from "styled-components";
 
 export type Props = {
   size?: number | "tiny" | "small" | "middle" | "large";
@@ -11,7 +10,6 @@ export type Props = {
   wrap?: boolean;
   align?: "start" | "end" | "center";
   style?: StyleProp<ViewStyle>;
-  css?: CSSProp;
 };
 
 const Space: React.FC<Props> = ({
@@ -27,7 +25,7 @@ const Space: React.FC<Props> = ({
   const childrenWithMargin = Array.isArray(children)
     ? intersperse(
         (children as React.ReactNode[] | null)?.filter((c) => c) ?? [],
-        <Split size={size} direction={direction} vertical={vertical} />,
+        <Split size={size} direction={direction} vertical={vertical} />
       ).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
     : children;
   const isVerticfal = direction === "vertical" || vertical;
@@ -55,7 +53,11 @@ const Space: React.FC<Props> = ({
   );
 };
 
-export const Split: React.FC<Props & { vertical?: boolean }> = ({ size, direction, vertical }) => {
+export const Split: React.FC<Props & { vertical?: boolean }> = ({
+  size,
+  direction,
+  vertical,
+}) => {
   const pxSize = sizeToPx(size);
   const isVertical = direction === "vertical" || vertical;
   return (
