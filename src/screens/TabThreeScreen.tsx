@@ -1,36 +1,19 @@
 import * as React from "react";
-import { StyleSheet } from "react-native";
-
-import EditScreenInfo from "../components/EditScreenInfo";
-import { Text, View } from "../components/Themed";
+import { View } from "../components/Themed";
+import MapView from "react-native-maps";
 
 export default function TabThreeScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Three</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <EditScreenInfo path="/screens/TabThreeScreen.tsx" />
+    <View style={{ flex: 1 }}>
+      <MapView
+        initialRegion={{
+          latitude: 35.1221702,
+          longitude: 136.9599526,
+          latitudeDelta: 0.5,
+          longitudeDelta: 0.5,
+        }}
+        style={{ flex: 1.0 }}
+      ></MapView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});
