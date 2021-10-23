@@ -20,6 +20,7 @@ import useAsyncStorage from "src/hooks/useAsyncStorage";
 import { RECORDING_BEGIN_TIME } from "src/hooks/useBackgroundLocation";
 import useCameraRoll from "src/hooks/useCameraRoll";
 import { BASE_PX } from "src/utils/space";
+import { globalStyles } from "src/utils/style";
 import Card from "./Card";
 
 type CardType = {
@@ -70,8 +71,6 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number }> = ({
     [data, likedAssetIds]
   );
 
-  const modalizeRef = useRef<Modalize>(null);
-
   const onLayoutParent = useCallback(
     (e: LayoutChangeEvent) => setParentHeight(e.nativeEvent.layout.height),
     []
@@ -80,9 +79,6 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number }> = ({
     (e: LayoutChangeEvent) => setPreviewHeight(e.nativeEvent.layout.height),
     []
   );
-
-  const ModalHeader = () => <View style={{ margin: BASE_PX }}></View>;
-
   return (
     <View style={styles.flex1} onLayout={onLayoutParent}>
       <Center
@@ -113,13 +109,13 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number }> = ({
           .reverse()}
       </Center>
       <Modalize
-        ref={modalizeRef}
         snapPoint={100}
         withHandle={true}
         handlePosition="inside"
         alwaysOpen={parentHeight - previewHeight - BASE_PX}
         modalTopOffset={150}
-        HeaderComponent={ModalHeader}
+        HeaderComponent={<View style={{ margin: BASE_PX }} />}
+        modalStyle={globalStyles.shadow}
       >
         <Margin top={BASE_PX}>
           <ImageGrid

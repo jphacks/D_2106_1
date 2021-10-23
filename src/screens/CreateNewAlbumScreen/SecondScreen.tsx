@@ -1,11 +1,18 @@
 import { Button } from "@ui-kitten/components";
-import React, { useEffect, useRef, useState } from "react";
-import { SafeAreaView, StyleSheet, useWindowDimensions } from "react-native";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import {
+  LayoutChangeEvent,
+  SafeAreaView,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
+import MapView, { Polyline } from "react-native-maps";
+import { Modalize } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
 import Message from "src/components/atoms/Message";
 import ScreenLoader from "src/components/atoms/ScreenLoader";
 import { P } from "src/components/atoms/Text";
-import { Padding } from "src/components/layouts/Margin";
+import Margin from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
 import ImageGrid from "src/components/organisms/ImageGrid";
 import { View } from "src/components/Themed";
@@ -17,14 +24,8 @@ import useBackgroundLocation, {
 import useCameraRoll from "src/hooks/useCameraRoll";
 import useInterval from "src/hooks/useInterval";
 import { useNavigation } from "src/hooks/useNavigation";
-import { BORDER_COLOR } from "src/utils/color";
-import { LARGE_PX } from "src/utils/space";
-import MapView, { Polyline } from "react-native-maps";
-import {
-  Animated as AnimatedMap,
-  AnimatedRegion,
-  Marker,
-} from "react-native-maps";
+import { BASE_PX } from "src/utils/space";
+import { globalStyles } from "src/utils/style";
 const SecondScreen: React.FC<{ recordingBeginTime: number }> = ({
   recordingBeginTime,
 }) => {
@@ -50,14 +51,31 @@ const SecondScreen: React.FC<{ recordingBeginTime: number }> = ({
     if (!isFreeLook) animateToCoordinate(lastLocation?.coordinate);
   }, [lastLocation]);
 
+  // モーダル用に高さを取得
+  const [parentHeight, setParentHeight] = useState(0);
+  const [mapHeight, setMapHeight] = useState(0);
+
+  const onLayoutParent = useCallback(
+    (e: LayoutChangeEvent) => setParentHeight(e.nativeEvent.layout.height),
+    []
+  );
+  const onLayoutMap = useCallback(
+    (e: LayoutChangeEvent) => setMapHeight(e.nativeEvent.layout.height),
+    []
+  );
+
   return (
     <SafeAreaView style={styles.flex1}>
-      <View style={[styles.flex1, { position: "relative" }]}>
+      <View
+        style={[styles.flex1, { position: "relative" }]}
+        onLayout={onLayoutParent}
+      >
         <MapView
           ref={mapRef}
-          style={{ flex: 1 }}
+          style={{ flex: 0.5 }}
           initialRegion={DEFAULT_REGION}
           onPanDrag={() => setIsFreeLook(true)}
+          onLayout={onLayoutMap}
         >
           <Polyline
             coordinates={locations.map((l) => l.coordinate)}
@@ -91,36 +109,45 @@ const SecondScreen: React.FC<{ recordingBeginTime: number }> = ({
           )}
         </Space>
       </View>
-      <View
-        style={[styles.flex1, { borderColor: BORDER_COLOR, borderWidth: 2 }]}
+      <Modalize
+        snapPoint={100}
+        withHandle={true}
+        handlePosition="inside"
+        alwaysOpen={parentHeight - mapHeight + 4}
+        modalTopOffset={150}
+        HeaderComponent={<View style={{ margin: BASE_PX }} />}
+        modalStyle={globalStyles.shadow}
       >
-        <ImageGrid
-          images={assets.map((items) => items.uri)}
-          renderImage={({ imageUri }) => (
-            <Image
-              source={{ uri: imageUri }}
-              width={width / 3}
-              height={width / 3}
-              style={styles.gridImage}
-            />
-          )}
-          flatListProps={{
-            numColumns: 3,
-            ListHeaderComponent: (
-              <>
-                {assets.length <= 0 && (
-                  <Space vertical>
-                    <P gray>
-                      位置情報を記録し始めてから撮影が行われていません。
-                    </P>
-                    <P gray>カメラアプリで写真を撮影しましょう。</P>
-                  </Space>
-                )}
-              </>
-            ),
-          }}
-        />
-      </View>
+        <Margin top={BASE_PX}>
+          <ImageGrid
+            images={assets.map((items) => items.uri)}
+            renderImage={({ imageUri }) => (
+              <Image
+                source={{ uri: imageUri }}
+                width={width / 3}
+                height={width / 3}
+                style={styles.gridImage}
+              />
+            )}
+            flatListProps={{
+              scrollEnabled: false,
+              numColumns: 3,
+              ListHeaderComponent: (
+                <>
+                  {assets.length <= 0 && (
+                    <Space vertical>
+                      <P gray>
+                        位置情報を記録し始めてから撮影が行われていません。
+                      </P>
+                      <P gray>カメラアプリで写真を撮影しましょう。</P>
+                    </Space>
+                  )}
+                </>
+              ),
+            }}
+          />
+        </Margin>
+      </Modalize>
     </SafeAreaView>
   );
 };

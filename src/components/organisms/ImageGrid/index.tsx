@@ -51,7 +51,6 @@ const ImageGrid: React.FC<Props> = ({
       <FlatList
         {...flatListProps}
         data={images}
-        keyExtractor={(uri) => uri}
         renderItem={({ item, index }) => (
           <TouchableOpacity
             key={`${item}_${index}`}
@@ -61,6 +60,7 @@ const ImageGrid: React.FC<Props> = ({
             {renderImage({ imageUri: item })}
           </TouchableOpacity>
         )}
+        keyExtractor={(uri) => uri}
         contentContainerStyle={styles.gridContainer}
       />
       <ImageViewing
