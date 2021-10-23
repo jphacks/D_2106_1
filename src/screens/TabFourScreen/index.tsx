@@ -1,12 +1,20 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as React from "react";
 import { Button, StyleSheet } from "react-native";
 import EditScreenInfo from "src/components/EditScreenInfo";
 import { Text, View } from "src/components/Themed";
-import useBackgroundLocation from "src/hooks/useBackgroundLocation";
+import useBackgroundLocation, {
+  BACKGROUND_LOCATIONS,
+} from "src/hooks/useBackgroundLocation";
 
 export default function TabFourScreen() {
   const { requirePermission, startLocationRecording, stopLocationRecording } =
     useBackgroundLocation();
+
+  const logLocations = async () => {
+    const result = await AsyncStorage.getItem(BACKGROUND_LOCATIONS);
+    console.log("result", result);
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab Four</Text>
@@ -19,6 +27,7 @@ export default function TabFourScreen() {
       <Button title="権限をリクエスト" onPress={requirePermission} />
       <Button title="記録を開始" onPress={startLocationRecording} />
       <Button title="記録を停止" onPress={stopLocationRecording} />
+      <Button title="記録のログ出力" onPress={logLocations} />
     </View>
   );
 }

@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const FETCH_LOCATION = "FETCH_LOCATION";
 const TIME_INTERVAL = 10000;
-const ASYNC_STORAGE_KEY = "LOCATION_RECORDS";
+export const BACKGROUND_LOCATIONS = "LOCATION_RECORDS";
 
 const useBackgroundLocation = () => {
   const [status, setStatus] =
@@ -15,6 +15,7 @@ const useBackgroundLocation = () => {
     []
   );
   const startLocationRecording = useCallback(async () => {
+    await AsyncStorage.setItem(BACKGROUND_LOCATIONS, JSON.stringify([]));
     await Location.startLocationUpdatesAsync(FETCH_LOCATION, {
       accuracy: Location.Accuracy.Balanced,
       timeInterval: TIME_INTERVAL,
@@ -33,12 +34,9 @@ const useBackgroundLocation = () => {
 };
 
 TaskManager.defineTask(FETCH_LOCATION, async ({ data, error }) => {
-  if (error) {
-    // Error occurred - check `error.message` for more details.
-    return;
-  }
+  if (error) return console.log("FETCH_LOCATION error:", error);
   if (data) {
-    const prevLocationsStr = await AsyncStorage.getItem(ASYNC_STORAGE_KEY);
+    const prevLocationsStr = await AsyncStorage.getItem(BACKGROUND_LOCATIONS);
     const prevLocations = prevLocationsStr ? JSON.parse(prevLocationsStr) : [];
 
     const locations = (data as any).locations.map((l: any) => ({
@@ -50,13 +48,9 @@ TaskManager.defineTask(FETCH_LOCATION, async ({ data, error }) => {
     }));
 
     AsyncStorage.setItem(
-      ASYNC_STORAGE_KEY,
+      BACKGROUND_LOCATIONS,
       JSON.stringify([...prevLocations, ...locations])
     );
-
-    console.log("location", JSON.stringify(locations));
-
-    // do something with the locations captured in the background
   }
 });
 
