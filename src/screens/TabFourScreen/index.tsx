@@ -4,7 +4,7 @@ import { Button, StyleSheet } from "react-native";
 import EditScreenInfo from "src/components/EditScreenInfo";
 import { Text, View } from "src/components/Themed";
 import useBackgroundLocation, {
-  BACKGROUND_LOCATIONS,
+  LOCATION_RECORDS,
 } from "src/hooks/useBackgroundLocation";
 
 export default function TabFourScreen() {
@@ -12,7 +12,7 @@ export default function TabFourScreen() {
     useBackgroundLocation();
 
   const logLocations = async () => {
-    const result = await AsyncStorage.getItem(BACKGROUND_LOCATIONS);
+    const result = await AsyncStorage.getItem(LOCATION_RECORDS);
     console.log("result", result);
   };
   return (

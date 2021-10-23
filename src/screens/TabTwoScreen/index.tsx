@@ -125,40 +125,45 @@ export default function TabTwoScreen() {
             flatListProps={{
               scrollEnabled: false,
               numColumns: 3,
-              ListHeaderComponent: () => (
+              ListHeaderComponent: (
                 <>
                   {!likedAssetExists && (
-                    <Space size={0}>
-                      <Space
-                        vertical
-                        align="center"
-                        style={{ width: width / 2 }}
-                      >
-                        <Image
-                          source={require("./arrow.png")}
-                          width={50}
-                          height={50}
-                          resizeMode="contain"
-                        />
-                        <P gray style={{ fontSize: 20 }}>
-                          スキップ
-                        </P>
-                      </Space>
-                      <Space
-                        vertical
-                        align="center"
-                        style={{ width: width / 2 }}
-                      >
-                        <Image
-                          source={require("./arrow.png")}
-                          width={50}
-                          height={50}
-                          resizeMode="contain"
-                          style={{ transform: [{ scaleX: -1 }] }}
-                        />
-                        <P gray style={{ fontSize: 20 }}>
-                          アルバムに追加
-                        </P>
+                    <Space vertical align="center" size={BASE_PX}>
+                      <P gray style={styles.howToText}>
+                        スワイプして写真を選別しましょう
+                      </P>
+                      <Space size={0}>
+                        <Space
+                          vertical
+                          align="center"
+                          style={{ width: width / 2 }}
+                        >
+                          <Image
+                            source={require("./arrow.png")}
+                            width={50}
+                            height={50}
+                            resizeMode="contain"
+                          />
+                          <P gray style={styles.howToText}>
+                            スキップ
+                          </P>
+                        </Space>
+                        <Space
+                          vertical
+                          align="center"
+                          style={{ width: width / 2 }}
+                        >
+                          <Image
+                            source={require("./arrow.png")}
+                            width={50}
+                            height={50}
+                            resizeMode="contain"
+                            style={{ transform: [{ scaleX: -1 }] }}
+                          />
+                          <P gray style={styles.howToText}>
+                            アルバムに追加
+                          </P>
+                        </Space>
                       </Space>
                     </Space>
                   )}
@@ -181,5 +186,8 @@ const styles = StyleSheet.create({
   gridImage: {
     borderWidth: 1,
     borderColor: "white",
+  },
+  howToText: {
+    fontSize: 20,
   },
 });
