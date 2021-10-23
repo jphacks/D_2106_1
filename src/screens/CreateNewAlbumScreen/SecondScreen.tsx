@@ -1,5 +1,5 @@
 import { Button } from "@ui-kitten/components";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaView, StyleSheet, useWindowDimensions } from "react-native";
 import Image from "src/components/atoms/Image";
 import Message from "src/components/atoms/Message";
@@ -11,36 +11,85 @@ import ImageGrid from "src/components/organisms/ImageGrid";
 import { View } from "src/components/Themed";
 import { screens } from "src/dict";
 import useAsyncStorage from "src/hooks/useAsyncStorage";
-import { RECORDING_BEGIN_TIME } from "src/hooks/useBackgroundLocation";
+import useBackgroundLocation, {
+  RECORDING_BEGIN_TIME,
+} from "src/hooks/useBackgroundLocation";
 import useCameraRoll from "src/hooks/useCameraRoll";
 import useInterval from "src/hooks/useInterval";
 import { useNavigation } from "src/hooks/useNavigation";
 import { BORDER_COLOR } from "src/utils/color";
 import { LARGE_PX } from "src/utils/space";
-
+import MapView, { Polyline } from "react-native-maps";
+import {
+  Animated as AnimatedMap,
+  AnimatedRegion,
+  Marker,
+} from "react-native-maps";
 const SecondScreen: React.FC<{ recordingBeginTime: number }> = ({
   recordingBeginTime,
 }) => {
+  const mapRef = useRef<MapView>(null);
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
+  const [isFreeLook, setIsFreeLook] = useState(true);
   const { assets, refreshAssets } = useCameraRoll({
     createdAfter: recordingBeginTime,
   });
+  const { locations } = useBackgroundLocation();
+  const lastLocation = locations.last();
+
+  const animateToCoordinate = (coord?: Coordinate) =>
+    coord &&
+    mapRef.current?.animateToRegion(
+      { ...coord, latitudeDelta: 0.005, longitudeDelta: 0.005 },
+      500
+    );
 
   useInterval(() => refreshAssets(), 5000);
+  useEffect(() => {
+    if (!isFreeLook) animateToCoordinate(lastLocation?.coordinate);
+  }, [lastLocation]);
 
   return (
     <SafeAreaView style={styles.flex1}>
-      <View style={styles.flex1}>
-        <Padding size={LARGE_PX}>
+      <View style={[styles.flex1, { position: "relative" }]}>
+        <MapView
+          ref={mapRef}
+          style={{ flex: 1 }}
+          initialRegion={DEFAULT_REGION}
+          onPanDrag={() => setIsFreeLook(true)}
+        >
+          <Polyline
+            coordinates={locations.map((l) => l.coordinate)}
+            strokeWidth={8}
+          />
+        </MapView>
+        <Space
+          style={{
+            position: "absolute",
+            top: 20,
+            left: 20,
+            right: 20,
+          }}
+        >
           <Button
             onPress={() => navigation.navigate(screens.CreateNewAlbumThird)}
             disabled={assets.length <= 0}
           >
             アルバムの作成に進む
           </Button>
-        </Padding>
-        <P>ここの背景でマップデータ上に現状のGPS記録を表示させたい</P>
+          {isFreeLook && (
+            <Button
+              onPress={() => {
+                setIsFreeLook(false);
+                animateToCoordinate(lastLocation?.coordinate);
+              }}
+              disabled={assets.length <= 0}
+            >
+              現在地に戻る
+            </Button>
+          )}
+        </Space>
       </View>
       <View
         style={[styles.flex1, { borderColor: BORDER_COLOR, borderWidth: 2 }]}
@@ -76,6 +125,16 @@ const SecondScreen: React.FC<{ recordingBeginTime: number }> = ({
   );
 };
 
+type Coordinate = {
+  latitude: number;
+  longitude: number;
+};
+const DEFAULT_REGION = {
+  latitude: 35.1221702,
+  longitude: 136.9599526,
+  latitudeDelta: 0.2,
+  longitudeDelta: 0.2,
+};
 const styles = StyleSheet.create({
   flex1: {
     flex: 1,

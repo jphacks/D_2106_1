@@ -71,6 +71,7 @@ const useBackgroundLocation = () => {
 };
 
 TaskManager.defineTask(FETCH_LOCATION, async ({ data, error }) => {
+  console.log("location collected");
   if (error) return console.log("FETCH_LOCATION error:", error);
   if (data) {
     const prevLocationsStr = await AsyncStorage.getItem(LOCATION_RECORDS);
