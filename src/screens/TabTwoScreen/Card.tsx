@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import {
   Animated,
   Image as RNImage,
@@ -28,6 +28,14 @@ const Card: React.FC<Props> = ({
   onLike,
   image: imageSource,
 }) => {
+  const opacity = useRef(new Animated.Value(1)).current;
+  const hideSelf = () =>
+    Animated.timing(opacity, {
+      toValue: 0,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+
   const { width } = useWindowDimensions();
   const rotate = position.x.interpolate({
     inputRange: [-width, 0, width],
@@ -46,24 +54,21 @@ const Card: React.FC<Props> = ({
   const panResponder = useMemo(
     () =>
       PanResponder.create({
-        onStartShouldSetPanResponder: (evt, gestureState) => {
-          return !!isActive;
-        },
-        onPanResponderMove: (evt, gestureState) => {
-          position.setValue({ x: gestureState.dx, y: gestureState.dy });
-        },
+        onStartShouldSetPanResponder: (evt, gestureState) => !!isActive,
+        onPanResponderMove: (evt, gestureState) =>
+          position.setValue({ x: gestureState.dx, y: gestureState.dy }),
         onPanResponderRelease: (evt, gestureState) => {
           if (gestureState.dx > 120) {
             Animated.spring(position, {
               toValue: { x: width + 100, y: gestureState.dy },
               useNativeDriver: true,
-            }).start();
+            }).start(hideSelf);
             onNope();
           } else if (gestureState.dx < -120) {
             Animated.spring(position, {
               toValue: { x: -width - 100, y: gestureState.dy },
               useNativeDriver: true,
-            }).start();
+            }).start(hideSelf);
             onLike();
           } else {
             Animated.spring(position, {
@@ -79,10 +84,11 @@ const Card: React.FC<Props> = ({
 
   const rotateAndTranslate = {
     transform: [
-      { rotate: rotate },
+      { rotate },
       { scale: nextCardScale },
       ...position.getTranslateTransform(),
     ],
+    opacity,
   };
   return (
     <Animated.View
@@ -105,34 +111,6 @@ const styles = StyleSheet.create({
   card: {
     position: "absolute",
     height: "105%",
-  },
-  cardTextContainer: {
-    position: "absolute",
-    top: 45,
-    zIndex: 999,
-  },
-  cardText: {
-    borderWidth: 2,
-    fontSize: 30,
-    fontWeight: "800",
-    padding: 10,
-    borderRadius: 4,
-  },
-  cardTextContainerLike: {
-    right: 45,
-    transform: [{ rotate: "15deg" }],
-  },
-  cardTextLike: {
-    color: "#4bdb79",
-    borderColor: "#4bdb79",
-  },
-  cardTextContainerNope: {
-    left: 45,
-    transform: [{ rotate: "-15deg" }],
-  },
-  cardTextNope: {
-    color: "#D80027",
-    borderColor: "#D80027",
   },
 });
 
