@@ -27,6 +27,7 @@ import {
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
+import TabFourScreen from "src/screens/TabFourScreen";
 
 export default function Navigation({
   colorScheme,
@@ -119,6 +120,14 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="TabThree"
         component={TabThreeScreen}
+        options={{
+          title: "Tab Two",
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="TabFour"
+        component={TabFourScreen}
         options={{
           title: "Tab Two",
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
