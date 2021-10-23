@@ -10,7 +10,10 @@ import {
   DefaultTheme,
   DarkTheme,
 } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationOptions,
+} from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
 
@@ -27,7 +30,10 @@ import {
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
-import TabFourScreen from "src/screens/TabFourScreen";
+import CreateNewAlbumFirstScreen from "src/screens/CreateNewAlbumScreen/FirstScreen";
+import CreateNewAlbumSecondScreen from "src/screens/CreateNewAlbumScreen/SecondScreen";
+import CreateNewAlbumThirdScreen from "src/screens/CreateNewAlbumScreen/ThirdScreen";
+import { screens } from "src/dict";
 
 export default function Navigation({
   colorScheme,
@@ -127,15 +133,41 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="TabFour"
-        component={TabFourScreen}
-        options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
+        component={CreateNewAlbumNavigator}
+        options={{ headerShown: false }}
       />
     </BottomTab.Navigator>
   );
 }
+
+const CreateNewAlbumStack = createNativeStackNavigator();
+
+const CreateNewAlbumNavigator: React.FC = () => {
+  const screenOptions = useScreenOptions();
+  return (
+    <CreateNewAlbumStack.Navigator
+      initialRouteName={screens.CreateNewAlbumFirst}
+      screenOptions={screenOptions}
+    >
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumFirst}
+        component={CreateNewAlbumFirstScreen}
+      />
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumSecond}
+        component={CreateNewAlbumSecondScreen}
+      />
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumThird}
+        component={CreateNewAlbumThirdScreen}
+      />
+    </CreateNewAlbumStack.Navigator>
+  );
+};
+
+const useScreenOptions = (): NativeStackNavigationOptions => {
+  return {};
+};
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/

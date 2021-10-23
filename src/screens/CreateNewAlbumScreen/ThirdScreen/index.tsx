@@ -8,12 +8,16 @@ import {
 } from "react-native";
 import { Modalize } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
+import Message from "src/components/atoms/Message";
+import ScreenLoader from "src/components/atoms/ScreenLoader";
 import { P } from "src/components/atoms/Text";
 import { View } from "src/components/atoms/Themed";
 import { Center } from "src/components/layouts/Align";
 import Margin from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
 import ImageGrid from "src/components/organisms/ImageGrid";
+import useAsyncStorage from "src/hooks/useAsyncStorage";
+import { RECORDING_BEGIN_TIME } from "src/hooks/useBackgroundLocation";
 import useCameraRoll from "src/hooks/useCameraRoll";
 import { BASE_PX } from "src/utils/space";
 import Card from "./Card";
@@ -25,15 +29,18 @@ type CardType = {
   parentPosition: Animated.ValueXY;
 };
 
-export default function TabTwoScreen() {
+const ThirdScreen: React.FC<{ recordingBeginTime: number }> = ({
+  recordingBeginTime,
+}) => {
   const { width } = useWindowDimensions();
   const imgSize = width;
   const [parentHeight, setParentHeight] = useState(0);
   const [previewHeight, setPreviewHeight] = useState(0);
 
-  const { assets } = useCameraRoll();
+  const { assets } = useCameraRoll({ createdAfter: recordingBeginTime });
   const [likedAssetIds, setLikedAssetIds] = useState<string[]>([]);
   const likedAssetExists = likedAssetIds.length > 0;
+
   const [activeIndex, setActiveIndex] = useState(0);
 
   const data: CardType[] = useMemo(
@@ -57,6 +64,11 @@ export default function TabTwoScreen() {
       item.position.setValue({ x: 0, y: 0 });
     });
   }, [data]);
+  const likedImageUris = useMemo(
+    () =>
+      data.filter((c) => likedAssetIds.includes(c.id)).map((c) => c.image.uri),
+    [data, likedAssetIds]
+  );
 
   const modalizeRef = useRef<Modalize>(null);
 
@@ -111,9 +123,7 @@ export default function TabTwoScreen() {
       >
         <Margin top={BASE_PX}>
           <ImageGrid
-            images={data
-              .filter((c) => likedAssetIds.includes(c.id))
-              .map((c) => c.image.uri)}
+            images={likedImageUris}
             renderImage={({ imageUri }) => (
               <Image
                 source={{ uri: imageUri }}
@@ -175,7 +185,7 @@ export default function TabTwoScreen() {
       </Modalize>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   flex1: { flex: 1 },
@@ -191,3 +201,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+
+export default () => {
+  const [recordingBeginTimeStr, , loading] = useAsyncStorage<string | null>(
+    RECORDING_BEGIN_TIME,
+    null
+  );
+  const recordingBeginTime = recordingBeginTimeStr
+    ? parseInt(recordingBeginTimeStr)
+    : null;
+
+  if (loading) return <ScreenLoader />;
+  if (!recordingBeginTime)
+    return <Message message="記録開始時間が取得できませんでした" />;
+  return <ThirdScreen recordingBeginTime={recordingBeginTime} />;
+};

@@ -1,6 +1,6 @@
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useInterval from "./useInterval";
 import moment from "moment";
@@ -8,7 +8,7 @@ import moment from "moment";
 const FETCH_LOCATION = "FETCH_LOCATION";
 const TIME_INTERVAL = 10000;
 export const LOCATION_RECORDS = "LOCATION_RECORDS";
-export const START_RECORDING_TIME = "START_RECORDING_TIME";
+export const RECORDING_BEGIN_TIME = "RECORDING_BEGIN_TIME";
 
 export type LocationData = {
   coordinate: {
@@ -27,14 +27,17 @@ const useBackgroundLocation = () => {
     async () => setStatus(await Location.requestBackgroundPermissionsAsync()),
     []
   );
-  const startLocationRecording = useCallback(async () => {
-    await AsyncStorage.setItem(START_RECORDING_TIME, String(moment().unix()));
-    await AsyncStorage.setItem(LOCATION_RECORDS, JSON.stringify([]));
-    await Location.startLocationUpdatesAsync(FETCH_LOCATION, {
-      accuracy: Location.Accuracy.Balanced,
-      timeInterval: TIME_INTERVAL,
-    });
-  }, []);
+  const startLocationRecording = useCallback(
+    async (beginTime: number = moment().unix() * 1000) => {
+      await AsyncStorage.setItem(RECORDING_BEGIN_TIME, String(beginTime));
+      await AsyncStorage.setItem(LOCATION_RECORDS, JSON.stringify([]));
+      await Location.startLocationUpdatesAsync(FETCH_LOCATION, {
+        accuracy: Location.Accuracy.Balanced,
+        timeInterval: TIME_INTERVAL,
+      });
+    },
+    []
+  );
   const stopLocationRecording = useCallback(async () => {
     await Location.stopLocationUpdatesAsync(FETCH_LOCATION);
   }, []);
@@ -47,10 +50,20 @@ const useBackgroundLocation = () => {
     };
     fn();
   }, TIME_INTERVAL);
+  useEffect(() => {
+    const fn = async () => {
+      setStatus(await Location.getBackgroundPermissionsAsync());
+    };
+    fn();
+  }, []);
+
+  // TODO: iOSの設定で Always になっているかをちゃんとチェックしたい
+  // react-native-permissions で権限のチェックだけ行いたい
 
   return {
     locations,
     status,
+    isPermissionOk: !!status?.granted,
     requirePermission,
     startLocationRecording,
     stopLocationRecording,

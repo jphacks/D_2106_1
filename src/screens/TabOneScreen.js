@@ -11,7 +11,7 @@ import { View } from "src/components/Themed";
 export default function TabOneScreen({ navigation }) {
   const [currentTime, setCurrentTime] = useState("");
   const { width } = useWindowDimensions();
-  const assets = useCameraRoll();
+  const { assets } = useCameraRoll();
 
   return (
     <StyledContainer>

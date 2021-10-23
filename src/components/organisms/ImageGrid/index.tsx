@@ -35,7 +35,6 @@ const ImageGrid: React.FC<Props> = ({
   renderImage,
   ...props
 }) => {
-  const { width } = useWindowDimensions();
   const { state: visible, setTrue, setFalse } = useBoolState(false);
   const [currentImageIndex, setImageIndex] = useState(0);
 
