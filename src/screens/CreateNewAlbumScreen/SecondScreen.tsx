@@ -19,11 +19,12 @@ import ImageGrid from "src/components/organisms/ImageGrid";
 import { View } from "src/components/Themed";
 import { screens } from "src/dict";
 import useAsyncStorage from "src/hooks/useAsyncStorage";
-import useBackgroundLocation, {
+import {
+  useLocation,
   LocationData,
   positionToLocation,
   RECORDING_BEGIN_TIME,
-} from "src/hooks/useBackgroundLocation";
+} from "src/provider/location";
 import useCameraRoll from "src/hooks/useCameraRoll";
 import useInterval from "src/hooks/useInterval";
 import { useNavigation } from "src/hooks/useNavigation";
@@ -41,7 +42,7 @@ const SecondScreen: React.FC<{
   const { assets, refreshAssets } = useCameraRoll({
     createdAfter: recordingBeginTime,
   });
-  const { locations } = useBackgroundLocation();
+  const { locations } = useLocation();
   const lastLocation = locations.last() ?? startLocation;
 
   const animateToCoordinate = (coord?: Coordinate) =>

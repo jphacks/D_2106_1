@@ -13,7 +13,7 @@ export default function TabTwoScreen({ navigation }) {
   const title = "This is Title";
   const place = ["Nagoya", "Gihu"];
   const assets = useCameraRoll();
-  const time = moment(assets[0].creationTime).format("MMM Do YY");
+  const time = moment(assets.first?.().creationTime).format("MMM Do YY");
 
   const header = (
     <Image

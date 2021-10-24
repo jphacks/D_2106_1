@@ -19,7 +19,7 @@ import Space from "src/components/layouts/Space";
 import ImageGrid from "src/components/organisms/ImageGrid";
 import { screens } from "src/dict";
 import useAsyncStorage from "src/hooks/useAsyncStorage";
-import { RECORDING_BEGIN_TIME } from "src/hooks/useBackgroundLocation";
+import { RECORDING_BEGIN_TIME } from "src/provider/location";
 import useCameraRoll from "src/hooks/useCameraRoll";
 import { useNavigation } from "src/hooks/useNavigation";
 import { BASE_PX } from "src/utils/space";

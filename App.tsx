@@ -13,6 +13,7 @@ import {
 } from "@ui-kitten/components";
 import "src/utils/extension";
 import AppProvider from "src/provider/app";
+import LocationProvider from "src/provider/location";
 
 LogBox.ignoreAllLogs(true);
 export default function App() {
@@ -26,8 +27,10 @@ export default function App() {
       <UIKittenProvider {...eva} theme={eva.light}>
         <AppProvider>
           <SafeAreaProvider>
-            <Navigation colorScheme={colorScheme} />
-            <StatusBar />
+            <LocationProvider>
+              <Navigation colorScheme={colorScheme} />
+              <StatusBar />
+            </LocationProvider>
           </SafeAreaProvider>
         </AppProvider>
       </UIKittenProvider>
