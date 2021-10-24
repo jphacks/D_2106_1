@@ -11,6 +11,7 @@ import { Modalize } from "react-native-modalize";
 import Margin from "src/components/layouts/Margin";
 import { useGetAPI } from "src/hooks/useGetAPI";
 import { LARGE_PX, SMALL_PX } from "src/utils/space";
+import { globalStyles } from "src/utils/style";
 
 type CoordinateType = {
   id: string;
@@ -212,6 +213,10 @@ export default function FifthScreen(albumId: string) {
         modalHeight={windowDimensions.height * 0.75}
         onPositionChange={(args) => setOpenStatus(args)}
         handlePosition="inside"
+        rootStyle={{
+          marginBottom: -20,
+        }}
+        modalStyle={[globalStyles.shadow]}
       >
         <FlatList
           data={coordinates}
