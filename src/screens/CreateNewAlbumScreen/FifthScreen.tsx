@@ -9,6 +9,7 @@ import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
 import Margin from "src/components/layouts/Margin";
+import ImageGrid from "src/components/organisms/ImageGrid";
 import { useGetAPI } from "src/hooks/useGetAPI";
 import { BASE_PX, LARGE_PX, SMALL_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
@@ -19,6 +20,10 @@ type CoordinateType = {
   latitude: number;
   longitude: number;
   timestamp: string;
+};
+
+type CoordinateWithImageUrl = Omit<CoordinateType, "imageUrls"> & {
+  imageUrl: string;
 };
 
 export default function FifthScreen(albumId: string) {
@@ -120,19 +125,9 @@ export default function FifthScreen(albumId: string) {
         <Margin size={SMALL_PX} top={LARGE_PX}>
           <View style={{ ...globalStyles.shadow, shadowOpacity: 0.15 }}>
             <Image
-              source={{
-                uri: item.imageUrls[0] ?? "",
-              }}
-              height={
-                openStatus === "initial"
-                  ? windowDimensions.height * 0.2 - LARGE_PX
-                  : windowDimensions.width - SMALL_PX * 2
-              }
-              width={
-                openStatus === "initial"
-                  ? windowDimensions.height * 0.2 - LARGE_PX
-                  : windowDimensions.width - SMALL_PX * 2
-              }
+              source={{ uri: item.imageUrls[0] }}
+              height={windowDimensions.height * 0.2 - LARGE_PX}
+              width={windowDimensions.height * 0.2 - LARGE_PX}
               style={{
                 borderRadius: BASE_PX,
                 ...globalStyles.shadow,
@@ -233,13 +228,51 @@ export default function FifthScreen(albumId: string) {
         }}
         modalStyle={[globalStyles.shadow]}
       >
-        <FlatList
-          data={coordinates}
-          ref={flatListRef}
-          renderItem={renderItem}
-          horizontal={openStatus === "initial"}
-          showsHorizontalScrollIndicator={false}
-        />
+        {openStatus === "initial" ? (
+          <FlatList
+            data={coordinates}
+            ref={flatListRef}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
+        ) : (
+          <ImageGrid
+            data={coordinates
+              .map(({ imageUrls, ...c }) => ({
+                ...c,
+                imageUrl: imageUrls.first(),
+              }))
+              .filter<CoordinateWithImageUrl>(
+                (c): c is CoordinateWithImageUrl => !!c.imageUrl
+              )}
+            extractImageUri={(item) => item.imageUrl}
+            renderImage={({ item }) => (
+              <Margin size={SMALL_PX} top={LARGE_PX}>
+                <View style={{ ...globalStyles.shadow, shadowOpacity: 0.15 }}>
+                  <Image
+                    source={{ uri: item.imageUrl }}
+                    width={windowDimensions.width / 3 - SMALL_PX * 2}
+                    height={windowDimensions.width / 3 - SMALL_PX * 2}
+                    style={{
+                      borderRadius: BASE_PX,
+                      ...globalStyles.shadow,
+                      shadowOffset: {
+                        width: 3,
+                        height: 3,
+                      },
+                    }}
+                  />
+                </View>
+              </Margin>
+            )}
+            flatListProps={{
+              scrollEnabled: false,
+              numColumns: 3,
+            }}
+          />
+        )}
       </Modalize>
     </View>
   );
