@@ -2,8 +2,9 @@ import * as React from "react";
 import { View } from "../components/Themed";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
-import { Image, useWindowDimensions } from "react-native";
+import { FlatList, Image, useWindowDimensions } from "react-native";
 import { useGetAPI } from "src/hooks/useGetAPI";
+import { Card } from "@ui-kitten/components";
 
 type CoordinateType = {
   id: string;
@@ -24,6 +25,8 @@ export default function TabThreeScreen() {
   }>({ lat1: 45, lat2: 46, lon1: 135, lon2: 136 });
 
   const [imageSize, setImageSize] = React.useState<number>(50);
+
+  const flatListRef = React.useRef<FlatList>(null);
 
   const getBounds = (region: Region) => {
     setMapCorners({
@@ -74,6 +77,22 @@ export default function TabThreeScreen() {
       timestamp: "2021-10-05T12:34:56.123456+00:00",
     },
   ];
+
+  const renderItem = React.useCallback(
+    ({ item }) => (
+      <Card>
+        <Image
+          resizeMode="cover"
+          source={{
+            uri: item.imageUrls[0] ?? "",
+            height: 100,
+            width: 150,
+          }}
+        />
+      </Card>
+    ),
+    []
+  );
 
   return (
     <View style={{ flex: 1.5 }}>
@@ -140,7 +159,14 @@ export default function TabThreeScreen() {
       <Modalize
         alwaysOpen={windowDimensions.height * 0.25}
         modalHeight={windowDimensions.height * 0.75}
-      ></Modalize>
+      >
+        <FlatList
+          data={coordinates}
+          ref={flatListRef}
+          renderItem={renderItem}
+          horizontal
+        />
+      </Modalize>
     </View>
   );
 }
