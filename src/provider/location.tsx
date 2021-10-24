@@ -4,10 +4,10 @@ import * as TaskManager from "expo-task-manager";
 import moment from "moment";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AppState } from "react-native";
-import { check, PERMISSIONS } from "react-native-permissions";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PermissionGuide from "src/components/organisms/PermissionGuide";
 import useInterval from "src/hooks/useInterval";
+import useIsLocationAlways from "src/hooks/useIsLocationAlways";
 import { emptyAsyncFn } from "src/utils";
 
 const TIME_INTERVAL = 1000;
@@ -68,6 +68,7 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
   const [hasStartedRecording, setHasStartedRecording] = useState<
     boolean | null
   >(null);
+  const checkIsLocationAlways = useIsLocationAlways();
   const isPermissionOk = !!status?.granted && isAlways;
 
   const [permissionGuideVisible, setPermissionGuideVisible] = useState(false);
@@ -99,8 +100,7 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
   const recheckAll = async () => {
     setHasStartedRecording(null);
     const nextStatus = await Location.getBackgroundPermissionsAsync();
-    const nextIsAlways =
-      (await check(PERMISSIONS.IOS.LOCATION_ALWAYS)) === "granted";
+    const nextIsAlways = await checkIsLocationAlways();
     const nextHasStartedRecording =
       await Location.hasStartedLocationUpdatesAsync(FETCH_LOCATION);
     setStatus(nextStatus);
