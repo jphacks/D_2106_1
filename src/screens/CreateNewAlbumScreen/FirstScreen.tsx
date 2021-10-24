@@ -1,6 +1,6 @@
 import { Button } from "@ui-kitten/components";
 import React from "react";
-import { Alert, Linking, SafeAreaView, StyleSheet } from "react-native";
+import { Alert, SafeAreaView, StyleSheet } from "react-native";
 import { H3, SmallP } from "src/components/atoms/Text";
 import { Padding } from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
