@@ -9,7 +9,9 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
 import { Modalize } from "react-native-modalize";
+import * as Progress from "react-native-progress";
 import Image from "src/components/atoms/Image";
 import Message from "src/components/atoms/Message";
 import { P } from "src/components/atoms/Text";
@@ -19,7 +21,9 @@ import Margin, { Padding } from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
 import ImageGrid from "src/components/organisms/ImageGrid";
 import { screens } from "src/dict";
+import useAsyncCallback from "src/hooks/useAsyncCallback";
 import { useNavigation } from "src/hooks/useNavigation";
+import useUploadImage from "src/hooks/useUploadImage";
 import { trimString } from "src/utils";
 import { BLACK_COLOR, PRIMARY_COLOR } from "src/utils/color";
 import { BASE_PX } from "src/utils/space";
@@ -32,6 +36,7 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
   const navigation = useNavigation();
   const [parentHeight, setParentHeight] = useState(0);
   const [previewHeight, setPreviewHeight] = useState(0);
+  const { uploadAssetImages } = useUploadImage("/upload/image");
 
   const onLayoutParent = useCallback(
     (e: LayoutChangeEvent) => setParentHeight(e.nativeEvent.layout.height),
@@ -45,69 +50,92 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
   const [title, setTitle] = useState("");
   const [thumbnail, setThumbnail] = useState<Asset | null>(null);
 
+  const [progress, setProgress] = useState(0);
+
   const isFormDone = trimString(title) !== null && thumbnail !== null;
+
+  const [postAlbum, postingAlbum] = useAsyncCallback(async () => {
+    // メタデータの送信
+    const albumId = "foo-bar-far";
+    await uploadAssetImages({
+      albumId,
+      assets: [
+        ...selectedAssets,
+        ...selectedAssets,
+        ...selectedAssets,
+        ...selectedAssets,
+        ...selectedAssets,
+        ...selectedAssets,
+        ...selectedAssets,
+      ],
+      onProgress: (r) => setProgress(r),
+    });
+    navigation.navigate(screens.CreateNewAlbumFifth, {
+      albumId: "album_id",
+    });
+  });
   return (
-    <View style={styles.flex1} onLayout={onLayoutParent}>
-      <Padding size={BASE_PX} bottom={0} onLayout={onLayoutPreview}>
-        <Space vertical size={12}>
-          <Button
-            disabled={!isFormDone}
-            onPress={() =>
-              navigation.navigate(screens.CreateNewAlbumFifth, {
-                albumId: "album_id",
-              })
-            }
-          >
-            アルバムを作成
-          </Button>
-          <Input
-            placeholder="アルバムのタイトル"
-            value={title}
-            onChangeText={(nextValue) => setTitle(nextValue)}
-          />
-          <P center>サムネイルとして使用する写真を選択</P>
-          <Center>
-            <AntDesign name="down" size={20} color={BLACK_COLOR} />
-          </Center>
-        </Space>
-      </Padding>
-      <Modalize
-        snapPoint={100}
-        withHandle={true}
-        handlePosition="inside"
-        alwaysOpen={parentHeight - previewHeight - BASE_PX}
-        modalTopOffset={150}
-        HeaderComponent={<View style={{ margin: BASE_PX }} />}
-        modalStyle={globalStyles.shadow}
-      >
-        <Margin top={BASE_PX}>
-          <ImageGrid
-            data={selectedAssets}
-            extractImageUri={(item) => item.uri}
-            renderImage={({ item }) => (
-              <TouchableOpacity onPress={() => setThumbnail(item)}>
-                <Image
-                  source={{ uri: item.uri }}
-                  width={width / 3}
-                  height={width / 3}
-                  style={[
-                    styles.gridImage,
-                    thumbnail?.id === item.id && {
-                      borderWidth: 4,
-                      borderColor: PRIMARY_COLOR,
-                    },
-                  ]}
-                />
-              </TouchableOpacity>
-            )}
-            flatListProps={{
-              scrollEnabled: false,
-              numColumns: 3,
-            }}
-          />
-        </Margin>
-      </Modalize>
-    </View>
+    <>
+      <View style={styles.flex1} onLayout={onLayoutParent}>
+        <Padding size={BASE_PX} bottom={0} onLayout={onLayoutPreview}>
+          <Space vertical size={12}>
+            <Button disabled={!isFormDone} onPress={postAlbum}>
+              アルバムを作成
+            </Button>
+            <Input
+              placeholder="アルバムのタイトル"
+              value={title}
+              onChangeText={(nextValue) => setTitle(nextValue)}
+            />
+            <P center>サムネイルとして使用する写真を選択</P>
+            <Center>
+              <AntDesign name="down" size={20} color={BLACK_COLOR} />
+            </Center>
+          </Space>
+        </Padding>
+        <Modalize
+          snapPoint={100}
+          withHandle={true}
+          handlePosition="inside"
+          alwaysOpen={parentHeight - previewHeight - BASE_PX}
+          modalTopOffset={150}
+          HeaderComponent={<View style={{ margin: BASE_PX }} />}
+          modalStyle={globalStyles.shadow}
+        >
+          <Margin top={BASE_PX}>
+            <ImageGrid
+              data={selectedAssets}
+              extractImageUri={(item) => item.uri}
+              renderImage={({ item }) => (
+                <TouchableOpacity onPress={() => setThumbnail(item)}>
+                  <Image
+                    source={{ uri: item.uri }}
+                    width={width / 3}
+                    height={width / 3}
+                    style={[
+                      styles.gridImage,
+                      thumbnail?.id === item.id && {
+                        borderWidth: 4,
+                        borderColor: PRIMARY_COLOR,
+                      },
+                    ]}
+                  />
+                </TouchableOpacity>
+              )}
+              flatListProps={{
+                scrollEnabled: false,
+                numColumns: 3,
+              }}
+            />
+          </Margin>
+        </Modalize>
+      </View>
+      <Spinner
+        visible={postingAlbum}
+        overlayColor={"rgba(0, 0, 0, 0.25)"}
+        customIndicator={<Progress.Pie progress={progress} size={50} />}
+      />
+    </>
   );
 };
 

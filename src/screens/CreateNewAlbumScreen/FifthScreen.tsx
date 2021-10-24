@@ -1,9 +1,15 @@
+import { AntDesign } from "@expo/vector-icons";
 import { Card } from "@ui-kitten/components";
 import * as React from "react";
 import { FlatList, Image, useWindowDimensions, View } from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
+import { Padding } from "src/components/layouts/Margin";
+import { screens } from "src/dict";
+import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useGetAPI } from "src/hooks/useGetAPI";
+import { useNavigation } from "src/hooks/useNavigation";
+import { useLocation } from "src/provider/location";
 
 type CoordinateType = {
   id: string;
@@ -14,7 +20,9 @@ type CoordinateType = {
 };
 
 export default function FifthScreen(albumId: string) {
+  const navigation = useNavigation();
   const windowDimensions = useWindowDimensions();
+  const { stopLocationRecording } = useLocation();
 
   const [mapCorners, setMapCorners] = React.useState<{
     lat1: number;
@@ -94,6 +102,25 @@ export default function FifthScreen(albumId: string) {
       timestamp: "2021-10-05T12:34:56.123456+00:00",
     },
   ];
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <Padding left={4}>
+          <AntDesign
+            name="left"
+            onPress={() => navigation.navigate(screens.CreateNewAlbumFirst)}
+            size={24}
+            color="#333"
+          />
+        </Padding>
+      ),
+    });
+  }, []);
+
+  useFocusedEffect(() => {
+    stopLocationRecording();
+  });
 
   const renderItem = React.useCallback(
     ({ item, index }) => (
