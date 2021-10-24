@@ -1,4 +1,6 @@
+import { AntDesign } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
+import { Button, Input } from "@ui-kitten/components";
 import { Asset } from "expo-media-library";
 import React, { useCallback, useState } from "react";
 import {
@@ -10,18 +12,16 @@ import {
 import { Modalize } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
 import Message from "src/components/atoms/Message";
+import { P } from "src/components/atoms/Text";
 import { View } from "src/components/atoms/Themed";
+import { Center } from "src/components/layouts/Align";
 import Margin, { Padding } from "src/components/layouts/Margin";
+import Space from "src/components/layouts/Space";
 import ImageGrid from "src/components/organisms/ImageGrid";
+import { trimString } from "src/utils";
+import { BLACK_COLOR, PRIMARY_COLOR } from "src/utils/color";
 import { BASE_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
-import { Button, Input } from "@ui-kitten/components";
-import Space from "src/components/layouts/Space";
-import { AntDesign } from "@expo/vector-icons";
-import { P } from "src/components/atoms/Text";
-import { Center } from "src/components/layouts/Align";
-import { BLACK_COLOR, PRIMARY_COLOR } from "src/utils/color";
-import { trimString, undefinedOrNull } from "src/utils";
 
 const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
   selectedAssets,
