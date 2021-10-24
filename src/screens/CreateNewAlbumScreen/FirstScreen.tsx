@@ -27,6 +27,8 @@ const FirstScreen: React.FC = () => {
     await startLocationRecording();
     navigation.navigate(screens.CreateNewAlbumSecond);
   });
+  const continueRecording = () =>
+    navigation.navigate(screens.CreateNewAlbumSecond);
   const [stop, stopping] = useAsyncCallback(async () => {
     await stopLocationRecording();
   });
@@ -61,7 +63,7 @@ const FirstScreen: React.FC = () => {
             純正のカメラやサードパーティーカメラ、スクリーンショットなどもトラックすることができます。
           </SmallP>
           <Button
-            onPress={start}
+            onPress={hasStartedRecording ? continueRecording : start}
             disabled={
               !isPermissionOk ||
               starting ||

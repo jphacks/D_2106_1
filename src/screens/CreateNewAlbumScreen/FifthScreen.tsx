@@ -6,8 +6,10 @@ import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
 import { Padding } from "src/components/layouts/Margin";
 import { screens } from "src/dict";
+import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useGetAPI } from "src/hooks/useGetAPI";
 import { useNavigation } from "src/hooks/useNavigation";
+import { useLocation } from "src/provider/location";
 
 type CoordinateType = {
   id: string;
@@ -20,6 +22,7 @@ type CoordinateType = {
 export default function FifthScreen(albumId: string) {
   const navigation = useNavigation();
   const windowDimensions = useWindowDimensions();
+  const { stopLocationRecording } = useLocation();
 
   const [mapCorners, setMapCorners] = React.useState<{
     lat1: number;
@@ -114,6 +117,10 @@ export default function FifthScreen(albumId: string) {
       ),
     });
   }, []);
+
+  useFocusedEffect(() => {
+    stopLocationRecording();
+  });
 
   const renderItem = React.useCallback(
     ({ item, index }) => (
