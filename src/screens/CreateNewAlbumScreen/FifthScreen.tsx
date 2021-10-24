@@ -195,7 +195,6 @@ export default function FifthScreen(albumId: string) {
                 }}
                 style={{
                   borderRadius: 4,
-                  position: "relative",
                   top: 5,
                   left: 5,
                 }}

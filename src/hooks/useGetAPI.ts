@@ -16,7 +16,6 @@ export const useGetAPI = <T = any>(endpoint: string, variables: any) => {
         .then((res) => res.json())
         .then((json) => {
           setData(json?.data);
-          console.log(`${DOMAIN_NAME}${endpoint}?${query}`);
         });
     } catch (e) {
       // 400 | 500 エラーも通す
