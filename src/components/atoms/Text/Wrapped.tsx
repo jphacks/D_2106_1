@@ -20,7 +20,12 @@ const Wrapped: React.FC<Props> = ({
   const TextRenderer = TextComponent || Text;
   return (
     <View
-      style={[styles.container, styles.rowWrapper, containerStyle, debug ? styles.debugStyle : {}]}
+      style={[
+        styles.container,
+        styles.rowWrapper,
+        containerStyle,
+        debug ? styles.debugStyle : {},
+      ]}
     >
       {words.map(
         (colText, colIndex) =>
@@ -31,7 +36,7 @@ const Wrapped: React.FC<Props> = ({
             >
               {colText}
             </TextRenderer>
-          ),
+          )
       )}
     </View>
   );

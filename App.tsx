@@ -7,6 +7,7 @@ import useColorScheme from "./src/hooks/useColorScheme";
 import Navigation from "./src/navigation";
 import * as eva from "@eva-design/eva";
 import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
+import "src/utils/extension";
 
 LogBox.ignoreAllLogs(true);
 export default function App() {

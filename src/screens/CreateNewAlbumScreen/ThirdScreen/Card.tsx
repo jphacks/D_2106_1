@@ -1,5 +1,4 @@
-import React, { useMemo, useRef } from "react";
-import { useEffect } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import {
   Animated,
   Image as RNImage,
@@ -105,6 +104,8 @@ const Card: React.FC<Props> = ({
   }, [isActive, isActiveInBackground]);
 
   return (
+    // type instantiation is excessively deep and possibly infinite
+    // @ts-ignore
     <Animated.View
       {...panResponder.panHandlers}
       style={[rotateAndTranslate, styles.card, { width }]}

@@ -27,7 +27,8 @@ export default function TabOneScreen({ navigation }) {
       </_header>
       <View>
         <ImageGrid
-          images={assets.map((items) => items.uri)}
+          data={assets}
+          extractImageUri={(item) => item.uri}
           renderImage={({ imageUri }) => (
             <Image
               source={{ uri: imageUri }}
