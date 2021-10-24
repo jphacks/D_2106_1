@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import moment from "moment";
+import { check, PERMISSIONS, RESULTS } from "react-native-permissions";
 import { useCallback, useEffect, useState } from "react";
 import useFocusedEffect from "./useFocusedEffect";
 import useInterval from "./useInterval";
@@ -61,6 +62,7 @@ const useBackgroundLocation = () => {
   useEffect(() => {
     const fn = async () => {
       setStatus(await Location.getBackgroundPermissionsAsync());
+      console.log(await check(PERMISSIONS.IOS.LOCATION_ALWAYS));
     };
     fn();
   }, []);
