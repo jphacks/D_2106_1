@@ -6,28 +6,34 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
-  NavigationContainer,
-  DefaultTheme,
   DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
 } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationOptions,
+} from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
-
+import { screens } from "src/dict";
+import CreateNewAlbumFirstScreen from "src/screens/CreateNewAlbumScreen/FirstScreen";
+import CreateNewAlbumFourthScreen from "src/screens/CreateNewAlbumScreen/FourthScreen";
+import CreateNewAlbumSecondScreen from "src/screens/CreateNewAlbumScreen/SecondScreen";
+import CreateNewAlbumThirdScreen from "src/screens/CreateNewAlbumScreen/ThirdScreen";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
 import TabThreeScreen from "../screens/TabThreeScreen";
+import TabTwoScreen from "../screens/TabTwoScreen";
 import {
   RootStackParamList,
   RootTabParamList,
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
-import TabFourScreen from "src/screens/TabFourScreen";
 
 export default function Navigation({
   colorScheme,
@@ -127,15 +133,45 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="TabFour"
-        component={TabFourScreen}
-        options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
+        component={CreateNewAlbumNavigator}
+        options={{ headerShown: false }}
       />
     </BottomTab.Navigator>
   );
 }
+
+const CreateNewAlbumStack = createNativeStackNavigator();
+
+const CreateNewAlbumNavigator: React.FC = () => {
+  const screenOptions = useScreenOptions();
+  return (
+    <CreateNewAlbumStack.Navigator
+      initialRouteName={screens.CreateNewAlbumFirst}
+      screenOptions={screenOptions}
+    >
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumFirst}
+        component={CreateNewAlbumFirstScreen}
+      />
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumSecond}
+        component={CreateNewAlbumSecondScreen}
+      />
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumThird}
+        component={CreateNewAlbumThirdScreen}
+      />
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumFour}
+        component={CreateNewAlbumFourthScreen}
+      />
+    </CreateNewAlbumStack.Navigator>
+  );
+};
+
+const useScreenOptions = (): NativeStackNavigationOptions => {
+  return {};
+};
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/

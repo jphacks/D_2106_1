@@ -11,7 +11,7 @@ import { View } from "src/components/Themed";
 export default function TabOneScreen({ navigation }) {
   const [currentTime, setCurrentTime] = useState("");
   const { width } = useWindowDimensions();
-  const assets = useCameraRoll();
+  const { assets } = useCameraRoll();
 
   return (
     <StyledContainer>
@@ -27,7 +27,8 @@ export default function TabOneScreen({ navigation }) {
       </_header>
       <View>
         <ImageGrid
-          images={assets.map((items) => items.uri)}
+          data={assets}
+          extractImageUri={(item) => item.uri}
           renderImage={({ imageUri }) => (
             <Image
               source={{ uri: imageUri }}

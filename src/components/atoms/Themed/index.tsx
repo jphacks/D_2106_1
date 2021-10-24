@@ -8,7 +8,8 @@ type ThemeProps = {
 };
 
 export type TextProps = ThemeProps & DefaultText["props"];
-export type ViewProps = ThemeProps & DefaultView["props"] & { filled?: boolean };
+export type ViewProps = ThemeProps &
+  DefaultView["props"] & { filled?: boolean };
 
 export const Text: React.FC<TextProps> = ({
   style,
@@ -36,7 +37,7 @@ export const View: React.FC<ViewProps> = ({
 }) => {
   const viewStyle = useMemo(
     () => [{ backgroundColor: filled ? "white" : "transparent" }, style],
-    [style, filled],
+    [style, filled]
   );
   return <DefaultView style={viewStyle} {...otherProps} />;
 };

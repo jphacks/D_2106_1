@@ -1,0 +1,30 @@
+name: format-code
+
+on:
+  - push
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install Organize-Imports-CLI
+        run: |
+          npm install -g organize-imports-cli
+      - name: Install Prettier
+        run: |
+          npm install -g prettier
+      - name: Run Format
+        run: sh format-code.sh
+        working-directory: ./
+
+      - name: Commit format
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Format (GitHub Actions)

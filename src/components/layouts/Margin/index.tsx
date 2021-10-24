@@ -78,6 +78,12 @@ export const Padding: React.FC<Props & ViewProps> = ({
 };
 
 const parse = (v?: string | number | null) =>
-  undefinedOrNull(v) ? v : !(typeof v === "string") ? v : v.includes("px") ? parseInt(v) : v;
+  undefinedOrNull(v)
+    ? v
+    : !(typeof v === "string")
+    ? v
+    : v.includes("px")
+    ? parseInt(v)
+    : v;
 
 export default Margin;

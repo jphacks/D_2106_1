@@ -19,6 +19,7 @@ export const WARNING_DARK_COLOR = "#FF8800";
 export const DANGER_COLOR = "#ff4444";
 export const DANGER_DARK_COLOR = "#CC0000";
 
+export const PRIMARY_COLOR = "#3c69f6";
 export const LIGHT_GRAY = "#F5F5F5";
 export const MAGENTA_COLOR = "#eb2f96";
 export const PINK_COLOR = "#FF86A8";
