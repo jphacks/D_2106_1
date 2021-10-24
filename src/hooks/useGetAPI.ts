@@ -7,19 +7,14 @@ export const useGetAPI = <T = any>(endpoint: string, variables: any) => {
   const [loading, setLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
-    try {
-      const query = new URLSearchParams(variables);
-      fetch(`${serverHost}${endpoint}?${query}`, {
-        method: "GET",
-      })
-        .then((res) => res.json())
-        .then((json) => setData(json?.data));
-    } catch (e) {
-      // 400 | 500 エラーも通す
-      console.log(e.message);
-    } finally {
-      setLoading(false);
-    }
+    const query = new URLSearchParams(variables);
+    fetch(`${serverHost}${endpoint}?${query}`, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((json) => setData(json?.data))
+      .catch((e) => console.error(e))
+      .finally(() => setLoading(false));
   }, []);
 
   return { data, loading };
