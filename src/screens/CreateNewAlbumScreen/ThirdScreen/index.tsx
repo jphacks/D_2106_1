@@ -75,10 +75,6 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number }> = ({
       item.position.setValue({ x: 0, y: 0 });
     });
   }, [data]);
-  const likedImageUris = useMemo(
-    () => likedAssets.map((v) => v.uri),
-    [likedAssets]
-  );
 
   const navigateToNext = () => {
     console.log("called");
@@ -132,10 +128,11 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number }> = ({
       >
         <Margin top={BASE_PX}>
           <ImageGrid
-            images={likedImageUris}
-            renderImage={({ imageUri }) => (
+            data={likedAssets}
+            extractImageUri={(item) => item.uri}
+            renderImage={({ item }) => (
               <Image
-                source={{ uri: imageUri }}
+                source={{ uri: item.uri }}
                 width={width / 3}
                 height={width / 3}
                 style={styles.gridImage}

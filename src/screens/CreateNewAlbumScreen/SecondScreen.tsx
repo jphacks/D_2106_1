@@ -125,10 +125,11 @@ const SecondScreen: React.FC<{
       >
         <Margin top={BASE_PX}>
           <ImageGrid
-            images={assets.map((items) => items.uri)}
-            renderImage={({ imageUri }) => (
+            data={assets}
+            extractImageUri={(item) => item.uri}
+            renderImage={({ item }) => (
               <Image
-                source={{ uri: imageUri }}
+                source={{ uri: item.uri }}
                 width={width / 3}
                 height={width / 3}
                 style={styles.gridImage}

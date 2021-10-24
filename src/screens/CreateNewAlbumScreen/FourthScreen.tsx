@@ -4,18 +4,26 @@ import React, { useCallback, useState } from "react";
 import {
   LayoutChangeEvent,
   StyleSheet,
+  TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
 import { Modalize } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
 import Message from "src/components/atoms/Message";
 import { View } from "src/components/atoms/Themed";
-import Margin from "src/components/layouts/Margin";
+import Margin, { Padding } from "src/components/layouts/Margin";
 import ImageGrid from "src/components/organisms/ImageGrid";
 import { BASE_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
+import { Button, Input } from "@ui-kitten/components";
+import Space from "src/components/layouts/Space";
+import { AntDesign } from "@expo/vector-icons";
+import { P } from "src/components/atoms/Text";
+import { Center } from "src/components/layouts/Align";
+import { BLACK_COLOR, PRIMARY_COLOR } from "src/utils/color";
+import { trimString, undefinedOrNull } from "src/utils";
 
-const FourScreen: React.FC<{ selectedAssets: Asset[] }> = ({
+const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
   selectedAssets,
 }) => {
   const { width } = useWindowDimensions();
@@ -30,9 +38,27 @@ const FourScreen: React.FC<{ selectedAssets: Asset[] }> = ({
     (e: LayoutChangeEvent) => setPreviewHeight(e.nativeEvent.layout.height),
     []
   );
+
+  const [title, setTitle] = useState("");
+  const [thumbnail, setThumbnail] = useState<Asset | null>(null);
+
+  const isFormDone = trimString(title) !== null && thumbnail !== null;
   return (
     <View style={styles.flex1} onLayout={onLayoutParent}>
-      <View></View>
+      <Padding size={BASE_PX} bottom={0} onLayout={onLayoutPreview}>
+        <Space vertical size={12}>
+          <Button disabled={!isFormDone}>アルバムを作成</Button>
+          <Input
+            placeholder="アルバムのタイトル"
+            value={title}
+            onChangeText={(nextValue) => setTitle(nextValue)}
+          />
+          <P center>サムネイルとして使用する写真を選択</P>
+          <Center>
+            <AntDesign name="down" size={20} color={BLACK_COLOR} />
+          </Center>
+        </Space>
+      </Padding>
       <Modalize
         snapPoint={100}
         withHandle={true}
@@ -44,14 +70,23 @@ const FourScreen: React.FC<{ selectedAssets: Asset[] }> = ({
       >
         <Margin top={BASE_PX}>
           <ImageGrid
-            images={selectedAssets.map((a) => a.uri)}
-            renderImage={({ imageUri }) => (
-              <Image
-                source={{ uri: imageUri }}
-                width={width / 3}
-                height={width / 3}
-                style={styles.gridImage}
-              />
+            data={selectedAssets}
+            extractImageUri={(item) => item.uri}
+            renderImage={({ item }) => (
+              <TouchableOpacity onPress={() => setThumbnail(item)}>
+                <Image
+                  source={{ uri: item.uri }}
+                  width={width / 3}
+                  height={width / 3}
+                  style={[
+                    styles.gridImage,
+                    thumbnail?.id === item.id && {
+                      borderWidth: 4,
+                      borderColor: PRIMARY_COLOR,
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
             )}
             flatListProps={{
               scrollEnabled: false,
@@ -87,5 +122,5 @@ export default () => {
   if (!selectedAssets?.length || selectedAssets.length <= 0)
     return <Message message="選択された画像が見つかりませんでした" />;
 
-  return <FourScreen selectedAssets={selectedAssets} />;
+  return <FourthScreen selectedAssets={selectedAssets} />;
 };
