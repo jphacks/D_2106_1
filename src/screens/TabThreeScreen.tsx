@@ -28,9 +28,18 @@ export default function TabThreeScreen() {
 
   const [openStatus, setOpenStatus] = React.useState<string>("initial");
 
+  const [currentRegion, setCurrentRegion] = React.useState<any | null>({
+    latitude: 35.1221702,
+    longitude: 136.9599526,
+    latitudeDelta: 0.5,
+    longitudeDelta: 0.5,
+  });
+
   const flatListRef = React.useRef<FlatList>(null);
 
   const markerRefs = React.useRef<{ [key: string]: Marker }>({});
+
+  const mapRef = React.useRef<MapView>(null);
 
   const getBounds = (region: Region) => {
     setMapCorners({
@@ -41,6 +50,12 @@ export default function TabThreeScreen() {
     });
 
     setImageSize(Math.max(100, Math.min(30 / region.longitudeDelta, 200)));
+
+    setCurrentRegion({
+      ...currentRegion,
+      longitudeDelta: region.longitudeDelta,
+      latitudeDelta: region.latitudeDelta,
+    });
   };
 
   const { data } = useGetAPI("/album/detail", {
@@ -83,7 +98,16 @@ export default function TabThreeScreen() {
 
   const renderItem = React.useCallback(
     ({ item, index }) => (
-      <Card onPress={() => markerRefs.current[index]?.showCallout()}>
+      <Card
+        onPress={() => {
+          markerRefs.current[index]?.showCallout();
+          mapRef.current?.animateToRegion({
+            ...currentRegion,
+            longitude: item?.longitude,
+            latitude: item?.latitude,
+          });
+        }}
+      >
         <Image
           resizeMode="cover"
           source={{
@@ -100,6 +124,7 @@ export default function TabThreeScreen() {
   return (
     <View style={{ flex: 1.5 }}>
       <MapView
+        ref={mapRef}
         initialRegion={{
           latitude: 35.1221702,
           longitude: 136.9599526,
@@ -127,9 +152,14 @@ export default function TabThreeScreen() {
                 borderRadius: 4,
                 backgroundColor: "#36C1A7",
               }}
-              onTouchStart={() =>
-                flatListRef.current?.scrollToIndex({ index: index })
-              }
+              onTouchStart={() => {
+                flatListRef.current?.scrollToIndex({ index: index });
+                mapRef.current?.animateToCoordinate({
+                  ...currentRegion,
+                  longitude: c?.longitude,
+                  latitude: c?.latitude,
+                });
+              }}
             >
               <Image
                 resizeMode="cover"
