@@ -1,9 +1,9 @@
+import * as Location from "expo-location";
 import React, { useContext, useEffect } from "react";
 import { AppState } from "react-native";
-import { useNavigation } from "src/hooks/useNavigation";
-import * as Location from "expo-location";
-import { check, PERMISSIONS, RESULTS } from "react-native-permissions";
+import { check, PERMISSIONS } from "react-native-permissions";
 import useBoolState from "src/hooks/useBoolState";
+import { useNavigation } from "src/hooks/useNavigation";
 export type NavigationRefType = ReturnType<typeof useNavigation>;
 export type AppContext = {};
 

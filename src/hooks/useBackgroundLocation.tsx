@@ -2,8 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import moment from "moment";
-import { check, PERMISSIONS, RESULTS } from "react-native-permissions";
 import { useCallback, useEffect, useState } from "react";
+import { check, PERMISSIONS } from "react-native-permissions";
 import useFocusedEffect from "./useFocusedEffect";
 import useInterval from "./useInterval";
 
