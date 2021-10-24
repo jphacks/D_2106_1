@@ -1,13 +1,13 @@
+import { AntDesign } from "@expo/vector-icons";
 import { Card } from "@ui-kitten/components";
 import * as React from "react";
 import { FlatList, Image, useWindowDimensions, View } from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
-import { AntDesign } from "@expo/vector-icons";
-import { useGetAPI } from "src/hooks/useGetAPI";
-import { useNavigation } from "src/hooks/useNavigation";
 import { Padding } from "src/components/layouts/Margin";
 import { screens } from "src/dict";
+import { useGetAPI } from "src/hooks/useGetAPI";
+import { useNavigation } from "src/hooks/useNavigation";
 
 type CoordinateType = {
   id: string;
