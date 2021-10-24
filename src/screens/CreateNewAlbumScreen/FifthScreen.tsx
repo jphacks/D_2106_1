@@ -1,5 +1,4 @@
 import { AntDesign } from "@expo/vector-icons";
-import { Card } from "@ui-kitten/components";
 import * as React from "react";
 import {
   FlatList,
@@ -10,17 +9,15 @@ import {
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
-import Margin from "src/components/layouts/Margin";
+import Margin, { Padding } from "src/components/layouts/Margin";
 import ImageGrid from "src/components/organisms/ImageGrid";
-import { useGetAPI } from "src/hooks/useGetAPI";
-import { LARGE_PX, SMALL_PX } from "src/utils/space";
-import { globalStyles } from "src/utils/style";
-import { Padding } from "src/components/layouts/Margin";
 import { screens } from "src/dict";
 import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useGetAPI } from "src/hooks/useGetAPI";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useLocation } from "src/provider/location";
+import { LARGE_PX, SMALL_PX } from "src/utils/space";
+import { globalStyles } from "src/utils/style";
 
 type CoordinateType = {
   id: string;
