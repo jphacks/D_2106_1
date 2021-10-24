@@ -52,24 +52,13 @@ const FirstScreen: React.FC = () => {
     <SafeAreaView>
       <Padding size={BASE_PX}>
         <Space vertical>
-          <H3>ステップ1. 位置情報へのアクセスを有効化</H3>
-          <Button
-            onPress={() => requirePermission()}
-            appearance="outline"
-            disabled={isPermissionOk}
-          >
-            位置情報を有効化
-          </Button>
-          <H3>ステップ2. 設定で位置情報を有効にします</H3>
-          <Button onPress={() => Linking.openSettings()} appearance="outline">
-            設定を開く
-          </Button>
+          <H3>位置情報の収集を開始します</H3>
           <SmallP>
-            バックグラウンドで情報を記録できるように、位置情報へのアクセスを「常に」に切り替えてください。
+            バックグラウンドで位置情報の収集を行い、撮影された写真がどこで撮影されたのかを追跡します。
           </SmallP>
-          <H3>ステップ3. 位置情報の収集を開始します</H3>
           <SmallP>
-            バックグラウンドで位置情報の収集を行い、撮影された写真がどこのものかをトラックします。
+            写真の撮影はこのアプリを経由する必要はありません。
+            純正のカメラやサードパーティーカメラ、スクリーンショットなどもトラックすることができます。
           </SmallP>
           <Button
             onPress={start}

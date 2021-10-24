@@ -142,11 +142,9 @@ const SecondScreen: React.FC<{
               ListHeaderComponent: (
                 <>
                   {assets.length <= 0 && (
-                    <Space vertical>
-                      <P gray>
-                        位置情報を記録し始めてから撮影が行われていません。
-                      </P>
-                      <P gray>カメラアプリで写真を撮影しましょう。</P>
+                    <Space vertical align="center">
+                      <P gray>位置情報を記録し始めてから</P>
+                      <P gray>新しく写真が追加されていません。</P>
                     </Space>
                   )}
                 </>
