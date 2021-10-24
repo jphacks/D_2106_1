@@ -223,6 +223,7 @@ export default function FifthScreen(albumId: string) {
           ref={flatListRef}
           renderItem={renderItem}
           horizontal={openStatus === "initial"}
+          showsHorizontalScrollIndicator={false}
         />
       </Modalize>
     </View>
