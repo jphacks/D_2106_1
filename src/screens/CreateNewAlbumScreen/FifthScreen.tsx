@@ -8,7 +8,9 @@ import {
 } from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
+import Margin from "src/components/layouts/Margin";
 import { useGetAPI } from "src/hooks/useGetAPI";
+import { LARGE_PX, SMALL_PX } from "src/utils/space";
 
 type CoordinateType = {
   id: string;
@@ -114,14 +116,16 @@ export default function FifthScreen(albumId: string) {
         }}
         activeOpacity={0.7}
       >
-        <Image
-          resizeMode="cover"
-          source={{
-            uri: item.imageUrls[0] ?? "",
-            height: 100,
-            width: 150,
-          }}
-        />
+        <Margin size={SMALL_PX} top={LARGE_PX}>
+          <Image
+            resizeMode="cover"
+            source={{
+              uri: item.imageUrls[0] ?? "",
+              height: 100,
+              width: 150,
+            }}
+          />
+        </Margin>
       </TouchableOpacity>
     ),
     []
