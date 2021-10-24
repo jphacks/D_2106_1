@@ -28,14 +28,19 @@ import Spinner from "react-native-loading-spinner-overlay";
 import * as Progress from "react-native-progress";
 import useAsyncCallback from "src/hooks/useAsyncCallback";
 import useUploadImage from "src/hooks/useUploadImage";
+import { usePostApi } from "src/hooks/usePostApi";
+import { useLocation } from "src/provider/location";
+import moment from "moment";
 
 const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
   selectedAssets,
 }) => {
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
+  const { locations } = useLocation();
   const [parentHeight, setParentHeight] = useState(0);
   const [previewHeight, setPreviewHeight] = useState(0);
+  const [postAlbumMetadata] = usePostApi("/album");
   const { uploadAssetImages } = useUploadImage("/upload/image");
 
   const onLayoutParent = useCallback(
@@ -56,7 +61,19 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
 
   const [postAlbum, postingAlbum] = useAsyncCallback(async () => {
     // メタデータの送信
-    const albumId = "foo-bar-far";
+    // const variables = {
+    //   title,
+    //   isPublic: true,
+    //   startedAt: locations.first()?.timestamp,
+    //   endedAt: locations.last()?.timestamp,
+    //   locations: locations.map((l) => ({
+    //     latitude: l.coordinate.latitude,
+    //     longitude: l.coordinate.longitude,
+    //     timestamp: l.timestamp,
+    //   })),
+    // };
+    // const albumId = await postAlbumMetadata(variables);
+    const albumId = "asdfasdfasdf";
     await uploadAssetImages({
       albumId,
       assets: [
@@ -157,7 +174,6 @@ const styles = StyleSheet.create({
 export default () => {
   const route = useRoute();
   const selectedAssets: Asset[] = (route.params as any)?.selected;
-  console.log("selectedAssets", selectedAssets);
 
   if (!selectedAssets?.length || selectedAssets.length <= 0)
     return <Message message="選択された画像が見つかりませんでした" />;
