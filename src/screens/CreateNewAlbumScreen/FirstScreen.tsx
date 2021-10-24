@@ -6,8 +6,9 @@ import { Padding } from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
 import { screens } from "src/dict";
 import useAsyncCallback from "src/hooks/useAsyncCallback";
-import useBackgroundLocation from "src/hooks/useBackgroundLocation";
+import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useNavigation } from "src/hooks/useNavigation";
+import { useLocation } from "src/provider/location";
 import { BASE_PX } from "src/utils/space";
 
 const FirstScreen: React.FC = () => {
@@ -19,7 +20,8 @@ const FirstScreen: React.FC = () => {
     stopLocationRecording,
     checkingIfStartedRecording,
     hasStartedRecording,
-  } = useBackgroundLocation();
+    recheckAll,
+  } = useLocation();
 
   const [start, starting] = useAsyncCallback(async () => {
     await startLocationRecording();
@@ -40,6 +42,10 @@ const FirstScreen: React.FC = () => {
   const [startDebug, startingDebug] = useAsyncCallback(async () => {
     await startLocationRecording(1);
     navigation.navigate(screens.CreateNewAlbumSecond);
+  });
+
+  useFocusedEffect(() => {
+    recheckAll();
   });
 
   return (
