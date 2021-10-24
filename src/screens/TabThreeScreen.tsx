@@ -139,8 +139,6 @@ export default function TabThreeScreen() {
         {coordinates.map((c, index) => (
           <Marker
             coordinate={c}
-            // TODO: いらないかも
-            description={c.timestamp}
             ref={(node) => {
               if (node) markerRefs.current[index] = node;
             }}
@@ -189,6 +187,7 @@ export default function TabThreeScreen() {
                 borderTopColor: "#36C1A7",
                 borderLeftColor: "transparent",
                 borderRightColor: "transparent",
+                marginBottom: imageSize / 2 + 5,
               }}
               onTouchStart={() =>
                 flatListRef.current?.scrollToIndex({ index: index })
