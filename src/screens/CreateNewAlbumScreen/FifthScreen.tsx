@@ -1,15 +1,23 @@
 import { AntDesign } from "@expo/vector-icons";
-import { Card } from "@ui-kitten/components";
 import * as React from "react";
-import { FlatList, Image, useWindowDimensions, View } from "react-native";
+import {
+  FlatList,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
-import { Padding } from "src/components/layouts/Margin";
+import Image from "src/components/atoms/Image";
+import Margin, { Padding } from "src/components/layouts/Margin";
+import ImageGrid from "src/components/organisms/ImageGrid";
 import { screens } from "src/dict";
 import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useGetAPI } from "src/hooks/useGetAPI";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useLocation } from "src/provider/location";
+import { LARGE_PX, SMALL_PX } from "src/utils/space";
+import { globalStyles } from "src/utils/style";
 
 type CoordinateType = {
   id: string;
@@ -17,6 +25,10 @@ type CoordinateType = {
   latitude: number;
   longitude: number;
   timestamp: string;
+};
+
+type CoordinateWithImageUrl = Omit<CoordinateType, "imageUrls"> & {
+  imageUrl: string;
 };
 
 export default function FifthScreen(albumId: string) {
@@ -56,7 +68,7 @@ export default function FifthScreen(albumId: string) {
       lon2: region.latitude + region.latitudeDelta / 2,
     });
 
-    setImageSize(Math.max(100, Math.min(30 / region.longitudeDelta, 200)));
+    setImageSize(Math.max(100, Math.min(30 / region.longitudeDelta, 300)));
 
     setCurrentRegion({
       ...currentRegion,
@@ -124,7 +136,7 @@ export default function FifthScreen(albumId: string) {
 
   const renderItem = React.useCallback(
     ({ item, index }) => (
-      <Card
+      <TouchableOpacity
         onPress={() => {
           markerRefs.current[index]?.showCallout();
           mapRef.current?.animateToRegion({
@@ -132,19 +144,23 @@ export default function FifthScreen(albumId: string) {
             longitude: item?.longitude,
             latitude: item?.latitude,
           });
+          flatListRef.current?.scrollToIndex({ index: index });
         }}
+        activeOpacity={0.7}
       >
-        <Image
-          resizeMode="cover"
-          source={{
-            uri: item.imageUrls[0] ?? "",
-            height: 100,
-            width: 150,
-          }}
-        />
-      </Card>
+        <Margin size={SMALL_PX} top={LARGE_PX}>
+          <View style={{ ...globalStyles.shadow, shadowOpacity: 0.15 }}>
+            <Image
+              source={{ uri: item.imageUrls[0] }}
+              height={windowDimensions.height * 0.2 - LARGE_PX}
+              width={windowDimensions.height * 0.2 - LARGE_PX}
+              style={globalStyles.rounodedImage}
+            />
+          </View>
+        </Margin>
+      </TouchableOpacity>
     ),
-    []
+    [openStatus]
   );
 
   return (
@@ -171,8 +187,8 @@ export default function FifthScreen(albumId: string) {
           >
             <View
               style={{
-                height: (imageSize + 10) / 2 - 20,
-                width: (imageSize + 10) / 2,
+                height: imageSize / 2 - 15,
+                width: imageSize / 2 - 15,
                 borderRadius: 4,
                 backgroundColor: "#36C1A7",
               }}
@@ -186,15 +202,11 @@ export default function FifthScreen(albumId: string) {
               }}
             >
               <Image
-                resizeMode="cover"
-                source={{
-                  uri: c.imageUrls[0],
-                  height: imageSize / 2 - 25,
-                  width: imageSize / 2 - 5,
-                }}
+                source={{ uri: c.imageUrls.first() }}
+                width={imageSize / 2 - 25}
+                height={imageSize / 2 - 25}
                 style={{
                   borderRadius: 4,
-                  position: "relative",
                   top: 5,
                   left: 5,
                 }}
@@ -228,13 +240,49 @@ export default function FifthScreen(albumId: string) {
         modalHeight={windowDimensions.height * 0.75}
         onPositionChange={(args) => setOpenStatus(args)}
         handlePosition="inside"
+        rootStyle={{
+          marginBottom: -20,
+        }}
+        modalStyle={[globalStyles.shadow]}
       >
-        <FlatList
-          data={coordinates}
-          ref={flatListRef}
-          renderItem={renderItem}
-          horizontal={openStatus === "initial"}
-        />
+        {openStatus === "initial" ? (
+          <FlatList
+            data={coordinates}
+            ref={flatListRef}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
+        ) : (
+          <ImageGrid
+            data={coordinates
+              .map(({ imageUrls, ...c }) => ({
+                ...c,
+                imageUrl: imageUrls.first(),
+              }))
+              .filter<CoordinateWithImageUrl>(
+                (c): c is CoordinateWithImageUrl => !!c.imageUrl
+              )}
+            extractImageUri={(item) => item.imageUrl}
+            renderImage={({ item }) => (
+              <Margin size={SMALL_PX} top={LARGE_PX}>
+                <View style={{ ...globalStyles.shadow, shadowOpacity: 0.15 }}>
+                  <Image
+                    source={{ uri: item.imageUrl }}
+                    width={windowDimensions.width / 3 - SMALL_PX * 2}
+                    height={windowDimensions.width / 3 - SMALL_PX * 2}
+                    style={globalStyles.rounodedImage}
+                  />
+                </View>
+              </Margin>
+            )}
+            flatListProps={{
+              scrollEnabled: false,
+              numColumns: 3,
+            }}
+          />
+        )}
       </Modalize>
     </View>
   );

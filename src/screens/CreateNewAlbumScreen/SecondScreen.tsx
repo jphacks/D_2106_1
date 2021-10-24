@@ -28,7 +28,7 @@ import {
   RECORDING_BEGIN_TIME,
   useLocation,
 } from "src/provider/location";
-import { BASE_PX } from "src/utils/space";
+import { BASE_PX, SMALL_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
 
 const SecondScreen: React.FC<{
@@ -129,12 +129,14 @@ const SecondScreen: React.FC<{
             data={assets}
             extractImageUri={(item) => item.uri}
             renderImage={({ item }) => (
-              <Image
-                source={{ uri: item.uri }}
-                width={width / 3}
-                height={width / 3}
-                style={styles.gridImage}
-              />
+              <Margin size={SMALL_PX}>
+                <Image
+                  source={{ uri: item.uri }}
+                  width={width / 3 - SMALL_PX * 2}
+                  height={width / 3 - SMALL_PX * 2}
+                  style={globalStyles.rounodedImage}
+                />
+              </Margin>
             )}
             flatListProps={{
               scrollEnabled: false,
@@ -170,10 +172,6 @@ const DEFAULT_REGION = {
 const styles = StyleSheet.create({
   flex1: {
     flex: 1,
-  },
-  gridImage: {
-    borderWidth: 1,
-    borderColor: "white",
   },
 });
 

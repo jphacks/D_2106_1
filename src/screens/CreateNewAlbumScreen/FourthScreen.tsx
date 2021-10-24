@@ -26,7 +26,7 @@ import { useNavigation } from "src/hooks/useNavigation";
 import useUploadImage from "src/hooks/useUploadImage";
 import { trimString } from "src/utils";
 import { BLACK_COLOR, PRIMARY_COLOR } from "src/utils/color";
-import { BASE_PX } from "src/utils/space";
+import { BASE_PX, SMALL_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
 
 const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
@@ -108,18 +108,20 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
               extractImageUri={(item) => item.uri}
               renderImage={({ item }) => (
                 <TouchableOpacity onPress={() => setThumbnail(item)}>
-                  <Image
-                    source={{ uri: item.uri }}
-                    width={width / 3}
-                    height={width / 3}
-                    style={[
-                      styles.gridImage,
-                      thumbnail?.id === item.id && {
-                        borderWidth: 4,
-                        borderColor: PRIMARY_COLOR,
-                      },
-                    ]}
-                  />
+                  <Margin size={SMALL_PX}>
+                    <Image
+                      source={{ uri: item.uri }}
+                      width={width / 3 - SMALL_PX * 2}
+                      height={width / 3 - SMALL_PX * 2}
+                      style={[
+                        globalStyles.rounodedImage,
+                        thumbnail?.id === item.id && {
+                          borderWidth: 4,
+                          borderColor: PRIMARY_COLOR,
+                        },
+                      ]}
+                    />
+                  </Margin>
                 </TouchableOpacity>
               )}
               flatListProps={{
@@ -144,10 +146,6 @@ const styles = StyleSheet.create({
   previewContainer: {
     flex: 1,
     flexDirection: "row",
-  },
-  gridImage: {
-    borderWidth: 1,
-    borderColor: "white",
   },
   howToText: {
     fontSize: 20,
