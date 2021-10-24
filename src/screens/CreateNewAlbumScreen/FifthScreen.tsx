@@ -61,7 +61,7 @@ export default function FifthScreen(albumId: string) {
       lon2: region.latitude + region.latitudeDelta / 2,
     });
 
-    setImageSize(Math.max(100, Math.min(30 / region.longitudeDelta, 200)));
+    setImageSize(Math.max(100, Math.min(30 / region.longitudeDelta, 300)));
 
     setCurrentRegion({
       ...currentRegion,
@@ -168,8 +168,8 @@ export default function FifthScreen(albumId: string) {
           >
             <View
               style={{
-                height: (imageSize + 10) / 2 - 20,
-                width: (imageSize + 10) / 2,
+                height: imageSize / 2 - 15,
+                width: imageSize / 2 - 15,
                 borderRadius: 4,
                 backgroundColor: "#36C1A7",
               }}
@@ -183,11 +183,9 @@ export default function FifthScreen(albumId: string) {
               }}
             >
               <Image
-                source={{
-                  uri: c.imageUrls[0],
-                }}
+                source={{ uri: c.imageUrls.first() }}
+                width={imageSize / 2 - 25}
                 height={imageSize / 2 - 25}
-                width={imageSize / 2 - 5}
                 style={{
                   borderRadius: 4,
                   top: 5,
