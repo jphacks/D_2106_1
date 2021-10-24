@@ -26,6 +26,8 @@ export default function TabThreeScreen() {
 
   const [imageSize, setImageSize] = React.useState<number>(50);
 
+  const [openStatus, setOpenStatus] = React.useState<string>("initial");
+
   const flatListRef = React.useRef<FlatList>(null);
 
   const getBounds = (region: Region) => {
@@ -159,12 +161,13 @@ export default function TabThreeScreen() {
       <Modalize
         alwaysOpen={windowDimensions.height * 0.25}
         modalHeight={windowDimensions.height * 0.75}
+        onPositionChange={(args) => setOpenStatus(args)}
       >
         <FlatList
           data={coordinates}
           ref={flatListRef}
           renderItem={renderItem}
-          horizontal
+          horizontal={openStatus === "initial"}
         />
       </Modalize>
     </View>
