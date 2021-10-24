@@ -17,6 +17,7 @@ import {
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
 import { screens } from "src/dict";
+import CreateNewAlbumFifthScreen from "src/screens/CreateNewAlbumScreen/FifthScreen";
 import CreateNewAlbumFirstScreen from "src/screens/CreateNewAlbumScreen/FirstScreen";
 import CreateNewAlbumFourthScreen from "src/screens/CreateNewAlbumScreen/FourthScreen";
 import CreateNewAlbumSecondScreen from "src/screens/CreateNewAlbumScreen/SecondScreen";
@@ -164,6 +165,10 @@ const CreateNewAlbumNavigator: React.FC = () => {
       <CreateNewAlbumStack.Screen
         name={screens.CreateNewAlbumFour}
         component={CreateNewAlbumFourthScreen}
+      />
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumFifth}
+        component={CreateNewAlbumFifthScreen}
       />
     </CreateNewAlbumStack.Navigator>
   );

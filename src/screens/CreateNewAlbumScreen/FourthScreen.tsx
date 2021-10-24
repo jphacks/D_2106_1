@@ -18,6 +18,8 @@ import { Center } from "src/components/layouts/Align";
 import Margin, { Padding } from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
 import ImageGrid from "src/components/organisms/ImageGrid";
+import { screens } from "src/dict";
+import { useNavigation } from "src/hooks/useNavigation";
 import { trimString } from "src/utils";
 import { BLACK_COLOR, PRIMARY_COLOR } from "src/utils/color";
 import { BASE_PX } from "src/utils/space";
@@ -27,6 +29,7 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
   selectedAssets,
 }) => {
   const { width } = useWindowDimensions();
+  const navigation = useNavigation();
   const [parentHeight, setParentHeight] = useState(0);
   const [previewHeight, setPreviewHeight] = useState(0);
 
@@ -47,7 +50,16 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
     <View style={styles.flex1} onLayout={onLayoutParent}>
       <Padding size={BASE_PX} bottom={0} onLayout={onLayoutPreview}>
         <Space vertical size={12}>
-          <Button disabled={!isFormDone}>アルバムを作成</Button>
+          <Button
+            disabled={!isFormDone}
+            onPress={() =>
+              navigation.navigate(screens.CreateNewAlbumFifth, {
+                albumId: "album_id",
+              })
+            }
+          >
+            アルバムを作成
+          </Button>
           <Input
             placeholder="アルバムのタイトル"
             value={title}
