@@ -37,9 +37,8 @@ export default function TabThreeScreen() {
       lon1: region.latitude - region.latitudeDelta / 2,
       lon2: region.latitude + region.latitudeDelta / 2,
     });
-    setImageSize(
-      Math.max(50, Math.min((20 / region.longitudeDelta) * 0.7, 100))
-    );
+
+    setImageSize(Math.max(100, Math.min(30 / region.longitudeDelta, 200)));
   };
 
   const { data } = useGetAPI("/album/detail", {
@@ -110,25 +109,25 @@ export default function TabThreeScreen() {
         }}
         style={{ flex: 1.0 }}
       >
-        {coordinates.map((c) => (
+        {coordinates.map((c, index) => (
           <Marker coordinate={c}>
             <View
               style={{
-                top: -35 - (imageSize - 50) / 2,
-                height: imageSize + 10,
-                width: imageSize + 10,
-                // alignSelf: "center",
-                // justifyContent: "center",
+                height: (imageSize + 10) / 2 - 20,
+                width: (imageSize + 10) / 2,
                 borderRadius: 4,
                 backgroundColor: "#36C1A7",
               }}
+              onTouchStart={() =>
+                flatListRef.current?.scrollToIndex({ index: index })
+              }
             >
               <Image
                 resizeMode="cover"
                 source={{
                   uri: c.imageUrls[0],
-                  height: imageSize,
-                  width: imageSize,
+                  height: imageSize / 2 - 25,
+                  width: imageSize / 2 - 5,
                 }}
                 style={{
                   borderRadius: 4,
@@ -140,7 +139,6 @@ export default function TabThreeScreen() {
             </View>
             <View
               style={{
-                top: -35 - (imageSize - 50) / 2,
                 width: 0,
                 height: 0,
                 alignSelf: "center",
@@ -153,6 +151,9 @@ export default function TabThreeScreen() {
                 borderLeftColor: "transparent",
                 borderRightColor: "transparent",
               }}
+              onTouchStart={() =>
+                flatListRef.current?.scrollToIndex({ index: index })
+              }
             />
           </Marker>
         ))}
