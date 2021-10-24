@@ -6,9 +6,9 @@ import { Padding } from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
 import { screens } from "src/dict";
 import useAsyncCallback from "src/hooks/useAsyncCallback";
-import { useLocation } from "src/provider/location";
 import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useNavigation } from "src/hooks/useNavigation";
+import { useLocation } from "src/provider/location";
 import { BASE_PX } from "src/utils/space";
 
 const FirstScreen: React.FC = () => {

@@ -19,15 +19,15 @@ import ImageGrid from "src/components/organisms/ImageGrid";
 import { View } from "src/components/Themed";
 import { screens } from "src/dict";
 import useAsyncStorage from "src/hooks/useAsyncStorage";
-import {
-  useLocation,
-  LocationData,
-  positionToLocation,
-  RECORDING_BEGIN_TIME,
-} from "src/provider/location";
 import useCameraRoll from "src/hooks/useCameraRoll";
 import useInterval from "src/hooks/useInterval";
 import { useNavigation } from "src/hooks/useNavigation";
+import {
+  LocationData,
+  positionToLocation,
+  RECORDING_BEGIN_TIME,
+  useLocation,
+} from "src/provider/location";
 import { BASE_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
 

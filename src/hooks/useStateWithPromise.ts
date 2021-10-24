@@ -28,7 +28,7 @@ const useStateWithPromise = <S>(initialState: S | (() => S)) => {
         resolverRef.current = resolve;
       });
     },
-    [setState],
+    [setState]
   );
 
   return [state, handleSetState] as [S, typeof handleSetState];
