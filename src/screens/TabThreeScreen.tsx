@@ -1,10 +1,10 @@
+import { Card } from "@ui-kitten/components";
 import * as React from "react";
-import { View } from "../components/Themed";
+import { FlatList, Image, useWindowDimensions } from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
-import { FlatList, Image, useWindowDimensions } from "react-native";
 import { useGetAPI } from "src/hooks/useGetAPI";
-import { Card } from "@ui-kitten/components";
+import { View } from "../components/Themed";
 
 type CoordinateType = {
   id: string;
