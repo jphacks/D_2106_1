@@ -1,7 +1,7 @@
 import * as React from "react";
 
 const DOMAIN_NAME =
-  "https://6e2d37c1-56a6-47de-af24-819ec4e13573.mock.pstmn.io";
+  "http://jphacks2021-server-859482516.ap-northeast-1.elb.amazonaws.com";
 
 export const useGetAPI = <T = any>(endpoint: string, variables: any) => {
   const [data, setData] = React.useState<T | null>(null);
