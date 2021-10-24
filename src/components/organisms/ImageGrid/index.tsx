@@ -6,7 +6,6 @@ import {
   ModalProps,
   StyleSheet,
   TouchableOpacity,
-  useWindowDimensions,
 } from "react-native";
 import ImageViewing from "react-native-image-viewing";
 import useBoolState from "src/hooks/useBoolState";

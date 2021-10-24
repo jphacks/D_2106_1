@@ -1,5 +1,6 @@
 import { Button } from "@ui-kitten/components";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import { Asset } from "expo-media-library";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   Animated,
   LayoutChangeEvent,
@@ -24,8 +25,6 @@ import { useNavigation } from "src/hooks/useNavigation";
 import { BASE_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
 import Card from "./Card";
-import * as Location from "expo-location";
-import { Asset } from "expo-media-library";
 
 type CardType = {
   parentPosition: Animated.ValueXY;

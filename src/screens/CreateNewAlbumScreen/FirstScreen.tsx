@@ -1,15 +1,14 @@
 import { Button } from "@ui-kitten/components";
-import React, { useEffect } from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
+import React from "react";
+import { Linking, SafeAreaView, StyleSheet } from "react-native";
+import { H3, SmallP } from "src/components/atoms/Text";
 import { Padding } from "src/components/layouts/Margin";
+import Space from "src/components/layouts/Space";
 import { screens } from "src/dict";
+import useAsyncCallback from "src/hooks/useAsyncCallback";
+import useBackgroundLocation from "src/hooks/useBackgroundLocation";
 import { useNavigation } from "src/hooks/useNavigation";
 import { BASE_PX } from "src/utils/space";
-import useBackgroundLocation from "src/hooks/useBackgroundLocation";
-import { H3, SmallP } from "src/components/atoms/Text";
-import Space from "src/components/layouts/Space";
-import useAsyncCallback from "src/hooks/useAsyncCallback";
-import { Linking } from "react-native";
 
 const FirstScreen: React.FC = () => {
   const navigation = useNavigation();

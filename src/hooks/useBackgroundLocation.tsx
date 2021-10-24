@@ -1,9 +1,9 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
-import { useCallback, useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import useInterval from "./useInterval";
 import moment from "moment";
+import { useCallback, useEffect, useState } from "react";
+import useInterval from "./useInterval";
 
 const FETCH_LOCATION = "FETCH_LOCATION";
 const TIME_INTERVAL = 1000;

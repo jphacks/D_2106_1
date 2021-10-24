@@ -1,5 +1,4 @@
-import React, { useMemo, useRef } from "react";
-import { useEffect } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import {
   Animated,
   Image as RNImage,

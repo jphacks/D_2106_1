@@ -1,4 +1,5 @@
 import { Button } from "@ui-kitten/components";
+import * as Location from "expo-location";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   LayoutChangeEvent,
@@ -28,7 +29,6 @@ import useInterval from "src/hooks/useInterval";
 import { useNavigation } from "src/hooks/useNavigation";
 import { BASE_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
-import * as Location from "expo-location";
 
 const SecondScreen: React.FC<{
   recordingBeginTime: number;

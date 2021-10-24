@@ -1,8 +1,7 @@
 import { useRoute } from "@react-navigation/native";
-import { Button } from "@ui-kitten/components";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import { Asset } from "expo-media-library";
+import React, { useCallback, useState } from "react";
 import {
-  Animated,
   LayoutChangeEvent,
   StyleSheet,
   useWindowDimensions,
@@ -10,19 +9,11 @@ import {
 import { Modalize } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
 import Message from "src/components/atoms/Message";
-import ScreenLoader from "src/components/atoms/ScreenLoader";
-import { P } from "src/components/atoms/Text";
 import { View } from "src/components/atoms/Themed";
-import { Center } from "src/components/layouts/Align";
 import Margin from "src/components/layouts/Margin";
-import Space from "src/components/layouts/Space";
 import ImageGrid from "src/components/organisms/ImageGrid";
-import useAsyncStorage from "src/hooks/useAsyncStorage";
-import { RECORDING_BEGIN_TIME } from "src/hooks/useBackgroundLocation";
-import useCameraRoll from "src/hooks/useCameraRoll";
 import { BASE_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
-import { Asset } from "expo-media-library";
 
 const FourScreen: React.FC<{ selectedAssets: Asset[] }> = ({
   selectedAssets,

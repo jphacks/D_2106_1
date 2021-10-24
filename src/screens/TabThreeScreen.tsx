@@ -1,8 +1,8 @@
 import * as React from "react";
-import { View } from "../components/Themed";
+import { useWindowDimensions } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
-import { useWindowDimensions } from "react-native";
+import { View } from "../components/Themed";
 
 export default function TabThreeScreen() {
   const windowDimensions = useWindowDimensions();
