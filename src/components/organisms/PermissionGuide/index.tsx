@@ -1,7 +1,7 @@
 import { Button, Text } from "@ui-kitten/components";
 import React from "react";
 import { Linking, StyleSheet, useWindowDimensions, View } from "react-native";
-import Image, { ScaledImage } from "src/components/atoms/Image";
+import { ScaledImage } from "src/components/atoms/Image";
 import { Center } from "src/components/layouts/Align";
 import { Padding } from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
