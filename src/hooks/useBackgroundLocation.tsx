@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import moment from "moment";
