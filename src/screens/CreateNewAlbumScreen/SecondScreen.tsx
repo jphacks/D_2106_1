@@ -19,6 +19,8 @@ import { View } from "src/components/Themed";
 import { screens } from "src/dict";
 import useAsyncStorage from "src/hooks/useAsyncStorage";
 import useBackgroundLocation, {
+  LocationData,
+  positionToLocation,
   RECORDING_BEGIN_TIME,
 } from "src/hooks/useBackgroundLocation";
 import useCameraRoll from "src/hooks/useCameraRoll";
@@ -26,18 +28,21 @@ import useInterval from "src/hooks/useInterval";
 import { useNavigation } from "src/hooks/useNavigation";
 import { BASE_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
-const SecondScreen: React.FC<{ recordingBeginTime: number }> = ({
-  recordingBeginTime,
-}) => {
+import * as Location from "expo-location";
+
+const SecondScreen: React.FC<{
+  recordingBeginTime: number;
+  startLocation: LocationData;
+}> = ({ recordingBeginTime, startLocation }) => {
   const mapRef = useRef<MapView>(null);
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
-  const [isFreeLook, setIsFreeLook] = useState(true);
+  const [isFreeLook, setIsFreeLook] = useState(false);
   const { assets, refreshAssets } = useCameraRoll({
     createdAfter: recordingBeginTime,
   });
   const { locations } = useBackgroundLocation();
-  const lastLocation = locations.last();
+  const lastLocation = locations.last() ?? startLocation;
 
   const animateToCoordinate = (coord?: Coordinate) =>
     coord &&
@@ -180,9 +185,23 @@ export default () => {
   const recordingBeginTime = recordingBeginTimeStr
     ? parseInt(recordingBeginTimeStr)
     : null;
+  const [startLocation, setStartLocation] = useState<LocationData | null>(null);
 
-  if (loading) return <ScreenLoader />;
+  useEffect(() => {
+    const fn = async () => {
+      const currentPosition = await Location.getCurrentPositionAsync();
+      setStartLocation(positionToLocation(currentPosition));
+    };
+    fn();
+  }, []);
+
+  if (loading || startLocation === null) return <ScreenLoader />;
   if (!recordingBeginTime)
     return <Message message="記録開始時間が取得できませんでした" />;
-  return <SecondScreen recordingBeginTime={recordingBeginTime} />;
+  return (
+    <SecondScreen
+      recordingBeginTime={recordingBeginTime}
+      startLocation={startLocation}
+    />
+  );
 };

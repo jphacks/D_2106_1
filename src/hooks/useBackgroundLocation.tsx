@@ -6,7 +6,7 @@ import useInterval from "./useInterval";
 import moment from "moment";
 
 const FETCH_LOCATION = "FETCH_LOCATION";
-const TIME_INTERVAL = 10000;
+const TIME_INTERVAL = 1000;
 export const LOCATION_RECORDS = "LOCATION_RECORDS";
 export const RECORDING_BEGIN_TIME = "RECORDING_BEGIN_TIME";
 
@@ -46,7 +46,9 @@ const useBackgroundLocation = () => {
     const fn = async () => {
       const locsStr = await AsyncStorage.getItem(LOCATION_RECORDS);
       const locs = locsStr ? JSON.parse(locsStr) : [];
-      setLocations(locs.map((l) => ({ ...l, timestamp: moment(l.timestamp) })));
+      setLocations(
+        locs.map((l: any) => ({ ...l, timestamp: moment(l.timestamp) }))
+      );
     };
     fn();
   }, TIME_INTERVAL);
@@ -77,19 +79,23 @@ TaskManager.defineTask(FETCH_LOCATION, async ({ data, error }) => {
     const prevLocationsStr = await AsyncStorage.getItem(LOCATION_RECORDS);
     const prevLocations = prevLocationsStr ? JSON.parse(prevLocationsStr) : [];
 
-    const locations: LocationData[] = (data as any).locations.map((l: any) => ({
-      coordinate: {
-        latitude: l.coords.latitude,
-        longitude: l.coords.longitude,
-      },
-      timestamp: l.timestamp,
-    }));
+    const locations: LocationData[] = (data as any).locations.map(
+      positionToLocation
+    );
 
     AsyncStorage.setItem(
       LOCATION_RECORDS,
       JSON.stringify([...prevLocations, ...locations])
     );
   }
+});
+
+export const positionToLocation = (l: any) => ({
+  coordinate: {
+    latitude: l.coords.latitude,
+    longitude: l.coords.longitude,
+  },
+  timestamp: l.timestamp,
 });
 
 export default useBackgroundLocation;

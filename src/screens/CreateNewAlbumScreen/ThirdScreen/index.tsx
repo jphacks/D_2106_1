@@ -16,40 +16,51 @@ import { Center } from "src/components/layouts/Align";
 import Margin from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
 import ImageGrid from "src/components/organisms/ImageGrid";
+import { screens } from "src/dict";
 import useAsyncStorage from "src/hooks/useAsyncStorage";
 import { RECORDING_BEGIN_TIME } from "src/hooks/useBackgroundLocation";
 import useCameraRoll from "src/hooks/useCameraRoll";
+import { useNavigation } from "src/hooks/useNavigation";
 import { BASE_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
 import Card from "./Card";
+import * as Location from "expo-location";
+import { Asset } from "expo-media-library";
 
 type CardType = {
-  id: string;
-  image: { uri: string };
-  position: Animated.ValueXY;
   parentPosition: Animated.ValueXY;
+  asset: Asset;
+  position: Animated.ValueXY;
 };
 
 const ThirdScreen: React.FC<{ recordingBeginTime: number }> = ({
   recordingBeginTime,
 }) => {
+  const navigation = useNavigation();
   const { width } = useWindowDimensions();
   const imgSize = width;
   const [parentHeight, setParentHeight] = useState(0);
   const [previewHeight, setPreviewHeight] = useState(0);
+  const onLayoutParent = useCallback(
+    (e: LayoutChangeEvent) => setParentHeight(e.nativeEvent.layout.height),
+    []
+  );
+  const onLayoutPreview = useCallback(
+    (e: LayoutChangeEvent) => setPreviewHeight(e.nativeEvent.layout.height),
+    []
+  );
 
   const { assets } = useCameraRoll({ createdAfter: recordingBeginTime });
-  const [likedAssetIds, setLikedAssetIds] = useState<string[]>([]);
-  const likedAssetExists = likedAssetIds.length > 0;
+  const [likedAssets, setLikedAssets] = useState<typeof assets>([]);
+  const likedAssetExists = likedAssets.length > 0;
 
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const data: CardType[] = useMemo(
+  const data = useMemo(
     () =>
       assets
         .map((a) => ({
-          id: a.id,
-          image: { uri: a.uri },
+          asset: a,
           position: new Animated.ValueXY(),
         }))
         .map((item, i, arr) => ({
@@ -60,25 +71,22 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number }> = ({
   );
   const resetSelection = useCallback(() => {
     setActiveIndex(0);
-    setLikedAssetIds([]);
+    setLikedAssets([]);
     data.forEach((item) => {
       item.position.setValue({ x: 0, y: 0 });
     });
   }, [data]);
   const likedImageUris = useMemo(
-    () =>
-      data.filter((c) => likedAssetIds.includes(c.id)).map((c) => c.image.uri),
-    [data, likedAssetIds]
+    () => likedAssets.map((v) => v.uri),
+    [likedAssets]
   );
 
-  const onLayoutParent = useCallback(
-    (e: LayoutChangeEvent) => setParentHeight(e.nativeEvent.layout.height),
-    []
-  );
-  const onLayoutPreview = useCallback(
-    (e: LayoutChangeEvent) => setPreviewHeight(e.nativeEvent.layout.height),
-    []
-  );
+  const navigateToNext = () => {
+    console.log("called");
+    navigation.navigate(screens.CreateNewAlbumFour, {
+      selected: likedAssets,
+    });
+  };
   return (
     <View style={styles.flex1} onLayout={onLayoutParent}>
       <Center
@@ -86,21 +94,27 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number }> = ({
         onLayout={onLayoutPreview}
       >
         <Space vertical>
-          <Button disabled={!likedAssetExists}>アルバムを作成</Button>
+          <Button onPress={navigateToNext} disabled={!likedAssetExists}>
+            アルバムを作成
+          </Button>
           <Button onPress={resetSelection}>もう一度やり直す</Button>
         </Space>
         {data
           .map((item, index) => (
             <Card
-              key={item.id}
-              {...item}
+              key={item.asset.id}
+              position={item.position}
+              parentPosition={item.parentPosition}
+              image={{ uri: item.asset.uri }}
               onNope={() => {
                 setActiveIndex((v) => v + 1);
-                setLikedAssetIds((v) => v.filter((vi) => vi !== item.id));
+                setLikedAssets((v) =>
+                  v.filter((vi) => vi.id !== item.asset.id)
+                );
               }}
               onLike={() => {
                 setActiveIndex((v) => v + 1);
-                setLikedAssetIds((v) => [...v, item.id]);
+                setLikedAssets((v) => [...v, item.asset]);
               }}
               isActive={activeIndex === index}
               isActiveInBackground={activeIndex < index}

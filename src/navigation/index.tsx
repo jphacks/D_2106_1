@@ -33,6 +33,7 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import CreateNewAlbumFirstScreen from "src/screens/CreateNewAlbumScreen/FirstScreen";
 import CreateNewAlbumSecondScreen from "src/screens/CreateNewAlbumScreen/SecondScreen";
 import CreateNewAlbumThirdScreen from "src/screens/CreateNewAlbumScreen/ThirdScreen";
+import CreateNewAlbumFourScreen from "src/screens/CreateNewAlbumScreen/FourScreen";
 import { screens } from "src/dict";
 
 export default function Navigation({
@@ -160,6 +161,10 @@ const CreateNewAlbumNavigator: React.FC = () => {
       <CreateNewAlbumStack.Screen
         name={screens.CreateNewAlbumThird}
         component={CreateNewAlbumThirdScreen}
+      />
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumFour}
+        component={CreateNewAlbumFourScreen}
       />
     </CreateNewAlbumStack.Navigator>
   );

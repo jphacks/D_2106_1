@@ -105,6 +105,8 @@ const Card: React.FC<Props> = ({
   }, [isActive, isActiveInBackground]);
 
   return (
+    // type instantiation is excessively deep and possibly infinite
+    // @ts-ignore
     <Animated.View
       {...panResponder.panHandlers}
       style={[rotateAndTranslate, styles.card, { width }]}
