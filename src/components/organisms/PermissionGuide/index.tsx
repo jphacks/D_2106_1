@@ -1,98 +1,72 @@
 import { Button, Text } from "@ui-kitten/components";
 import React from "react";
 import { Linking, StyleSheet, useWindowDimensions, View } from "react-native";
-import Image from "src/components/atoms/Image";
+import Image, { ScaledImage } from "src/components/atoms/Image";
+import { Center } from "src/components/layouts/Align";
 import { Padding } from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
+import { useLocation } from "src/provider/location";
+import { BORDER_COLOR } from "src/utils/color";
 import { BASE_PX } from "src/utils/space";
 
 const PermissionGuide = () => {
-  const { width, height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
+  const { requirePermission } = useLocation();
   return (
     <Padding size={BASE_PX} style={styles.flex1}>
-      <Text category="h5">
-        Mappinstagramを使用するために、位置情報の設定を変更してください
-      </Text>
+      <Text category="h5">位置情報の設定を変更してください</Text>
       <Space vertical>
-        <View style={styles.steps}>
-          <View style={{ flex: 1 }}>
-            <Text category="h6" style={styles.paragraph}>
-              1
-            </Text>
-          </View>
-          <View style={{ flex: 10 }}>
-            <Text category="h6">
-              この画面の一番下のボタンから、設定画面を開いてください
-            </Text>
-          </View>
-        </View>
-        <View style={styles.steps}>
-          <View style={{ flex: 1 }}>
-            <Text category="h6" style={styles.paragraph}>
-              2
-            </Text>
-          </View>
-          <View style={{ flex: 10 }}>
-            <Text category="h6">「位置情報」をタップしてください</Text>
-          </View>
-        </View>
-        <Image
-          source={require("src/assets/images/Location.jpeg")}
-          width={width - 50}
-          height={50}
-          resizeMode="contain"
-        />
-        <View style={styles.steps}>
-          <View style={{ flex: 1 }}>
-            <Text category="h6" style={styles.paragraph}>
-              3
-            </Text>
-          </View>
-          <View style={{ flex: 10 }}>
-            <Text category="h6">「常に」を選択してください</Text>
-          </View>
-        </View>
-        <Image
-          source={require("src/assets/images/LocationMode.jpeg")}
-          width={width - 50}
-          height={height / 4}
-          resizeMode="contain"
-        />
-        <View style={styles.steps}>
-          <View style={{ flex: 1 }}>
-            <Text category="h6" style={styles.paragraph}>
-              4
-            </Text>
-          </View>
-          <View style={{ flex: 10 }}>
-            <Text category="h6">Mappinstagramをもう一度開いてください</Text>
-          </View>
-        </View>
-      </Space>
-      <View style={styles.button}>
+        <Block index={1} content={"位置情報の利用を有効化してください"} />
+        <Button onPress={requirePermission}>位置情報の有効化</Button>
+        <Block index={2} content={"設定アプリを開きます"} />
         <Button onPress={() => Linking.openURL("app-settings:")}>
           設定画面を開く
         </Button>
-      </View>
+        <Block index={3} content={"「位置情報」の項目を開きます"} />
+        <Center>
+          <ScaledImage
+            source={require("src/assets/images/Location.jpeg")}
+            width={685}
+            height={68}
+            size={width - BASE_PX * 2}
+            style={styles.image}
+          />
+        </Center>
+        <Block index={4} content={"「常に」を選択してください"} />
+        <Center>
+          <ScaledImage
+            source={require("src/assets/images/LocationMode.jpeg")}
+            width={828}
+            height={420}
+            size={width - BASE_PX * 2}
+            style={styles.image}
+          />
+        </Center>
+      </Space>
     </Padding>
+  );
+};
+
+const Block: React.FC<{ index: number; content: string }> = ({
+  index,
+  content,
+}) => {
+  return (
+    <View style={styles.steps}>
+      <View style={{ flex: 1 }}>
+        <Text category="h6" style={styles.paragraph}>
+          {index}
+        </Text>
+      </View>
+      <View style={{ flex: 10 }}>
+        <Text category="h6">{content}</Text>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   flex1: { flex: 1 },
-  header: {
-    flexGrow: 0,
-    // backgroundColor: "white",
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-  content: {
-    flexGrow: 1,
-    // backgroundColor: "silver",
-  },
-  text: {
-    margin: 2,
-  },
   steps: {
     flexGrow: 0,
     flexShrink: 0,
@@ -103,10 +77,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  button: {
-    flexGrow: 6,
-    alignItems: "center",
-    justifyContent: "center",
+  image: {
+    borderColor: BORDER_COLOR,
+    borderWidth: 2,
   },
 });
 
