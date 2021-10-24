@@ -1,6 +1,11 @@
-import { Card } from "@ui-kitten/components";
 import * as React from "react";
-import { FlatList, Image, useWindowDimensions, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
 import { useGetAPI } from "src/hooks/useGetAPI";
@@ -97,7 +102,7 @@ export default function FifthScreen(albumId: string) {
 
   const renderItem = React.useCallback(
     ({ item, index }) => (
-      <Card
+      <TouchableOpacity
         onPress={() => {
           markerRefs.current[index]?.showCallout();
           mapRef.current?.animateToRegion({
@@ -105,7 +110,9 @@ export default function FifthScreen(albumId: string) {
             longitude: item?.longitude,
             latitude: item?.latitude,
           });
+          flatListRef.current?.scrollToIndex({ index: index });
         }}
+        activeOpacity={0.7}
       >
         <Image
           resizeMode="cover"
@@ -115,7 +122,7 @@ export default function FifthScreen(albumId: string) {
             width: 150,
           }}
         />
-      </Card>
+      </TouchableOpacity>
     ),
     []
   );
