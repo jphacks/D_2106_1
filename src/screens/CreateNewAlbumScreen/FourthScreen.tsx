@@ -9,7 +9,9 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
 import { Modalize } from "react-native-modalize";
+import * as Progress from "react-native-progress";
 import Image from "src/components/atoms/Image";
 import Message from "src/components/atoms/Message";
 import { P } from "src/components/atoms/Text";
@@ -19,15 +21,13 @@ import Margin, { Padding } from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
 import ImageGrid from "src/components/organisms/ImageGrid";
 import { screens } from "src/dict";
+import useAsyncCallback from "src/hooks/useAsyncCallback";
 import { useNavigation } from "src/hooks/useNavigation";
+import useUploadImage from "src/hooks/useUploadImage";
 import { trimString } from "src/utils";
 import { BLACK_COLOR, PRIMARY_COLOR } from "src/utils/color";
 import { BASE_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
-import Spinner from "react-native-loading-spinner-overlay";
-import * as Progress from "react-native-progress";
-import useAsyncCallback from "src/hooks/useAsyncCallback";
-import useUploadImage from "src/hooks/useUploadImage";
 
 const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
   selectedAssets,
