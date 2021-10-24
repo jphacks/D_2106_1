@@ -1,8 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
+import useFocusedEffect from "./useFocusedEffect";
 import useInterval from "./useInterval";
 
 const FETCH_LOCATION = "FETCH_LOCATION";
@@ -22,6 +24,9 @@ const useBackgroundLocation = () => {
   const [status, setStatus] =
     useState<Location.LocationPermissionResponse | null>(null);
   const [locations, setLocations] = useState<LocationData[]>([]);
+  const [hasStartedRecording, setHasStartedRecording] = useState<
+    boolean | null
+  >(null);
 
   const requirePermission = useCallback(
     async () => setStatus(await Location.requestBackgroundPermissionsAsync()),
@@ -35,11 +40,13 @@ const useBackgroundLocation = () => {
         accuracy: Location.Accuracy.Balanced,
         timeInterval: TIME_INTERVAL,
       });
+      setHasStartedRecording(true);
     },
     []
   );
   const stopLocationRecording = useCallback(async () => {
     await Location.stopLocationUpdatesAsync(FETCH_LOCATION);
+    setHasStartedRecording(false);
   }, []);
 
   useInterval(() => {
@@ -58,6 +65,15 @@ const useBackgroundLocation = () => {
     };
     fn();
   }, []);
+  useFocusedEffect(() => {
+    const fn = async () => {
+      setHasStartedRecording(null);
+      setHasStartedRecording(
+        await Location.hasStartedLocationUpdatesAsync(FETCH_LOCATION)
+      );
+    };
+    fn();
+  });
 
   // TODO: iOSの設定で Always になっているかをちゃんとチェックしたい
   // react-native-permissions で権限のチェックだけ行いたい
@@ -65,6 +81,8 @@ const useBackgroundLocation = () => {
   return {
     locations,
     status,
+    hasStartedRecording,
+    checkingIfStartedRecording: hasStartedRecording === null,
     isPermissionOk: !!status?.granted,
     requirePermission,
     startLocationRecording,

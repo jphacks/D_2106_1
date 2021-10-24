@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   LayoutChangeEvent,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   useWindowDimensions,
 } from "react-native";

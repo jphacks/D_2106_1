@@ -90,9 +90,11 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number }> = ({
       >
         <Space vertical>
           <Button onPress={navigateToNext} disabled={!likedAssetExists}>
-            アルバムを作成
+            アルバム情報を入力
           </Button>
-          <Button onPress={resetSelection}>もう一度やり直す</Button>
+          <Button onPress={resetSelection} appearance="outline">
+            もう一度やり直す
+          </Button>
         </Space>
         {data
           .map((item, index) => (
