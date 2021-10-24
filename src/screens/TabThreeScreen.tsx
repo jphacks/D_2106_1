@@ -30,6 +30,8 @@ export default function TabThreeScreen() {
 
   const flatListRef = React.useRef<FlatList>(null);
 
+  const markerRefs = React.useRef<{ [key: string]: Marker }>({});
+
   const getBounds = (region: Region) => {
     setMapCorners({
       lat1: region.longitude - region.longitudeDelta / 2,
@@ -80,8 +82,8 @@ export default function TabThreeScreen() {
   ];
 
   const renderItem = React.useCallback(
-    ({ item }) => (
-      <Card>
+    ({ item, index }) => (
+      <Card onPress={() => markerRefs.current[index]?.showCallout()}>
         <Image
           resizeMode="cover"
           source={{
@@ -110,7 +112,14 @@ export default function TabThreeScreen() {
         style={{ flex: 1.0 }}
       >
         {coordinates.map((c, index) => (
-          <Marker coordinate={c}>
+          <Marker
+            coordinate={c}
+            // TODO: いらないかも
+            description={c.timestamp}
+            ref={(node) => {
+              if (node) markerRefs.current[index] = node;
+            }}
+          >
             <View
               style={{
                 height: (imageSize + 10) / 2 - 20,
