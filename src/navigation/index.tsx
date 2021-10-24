@@ -21,6 +21,7 @@ import CreateNewAlbumFirstScreen from "src/screens/CreateNewAlbumScreen/FirstScr
 import CreateNewAlbumFourthScreen from "src/screens/CreateNewAlbumScreen/FourthScreen";
 import CreateNewAlbumSecondScreen from "src/screens/CreateNewAlbumScreen/SecondScreen";
 import CreateNewAlbumThirdScreen from "src/screens/CreateNewAlbumScreen/ThirdScreen";
+import CreateNewAlbumFifthScreen from "src/screens/CreateNewAlbumScreen/FifthScreen";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
@@ -164,6 +165,10 @@ const CreateNewAlbumNavigator: React.FC = () => {
       <CreateNewAlbumStack.Screen
         name={screens.CreateNewAlbumFour}
         component={CreateNewAlbumFourthScreen}
+      />
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumFifth}
+        component={CreateNewAlbumFifthScreen}
       />
     </CreateNewAlbumStack.Navigator>
   );
