@@ -4,6 +4,7 @@
  *
  */
 import { FontAwesome } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   DarkTheme,
@@ -11,17 +12,18 @@ import {
   NavigationContainer,
 } from "@react-navigation/native";
 import {
-  createNativeStackNavigator,
-  NativeStackNavigationOptions,
-} from "@react-navigation/native-stack";
+  createStackNavigator,
+  StackNavigationOptions,
+} from "@react-navigation/stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
+import { Padding } from "src/components/layouts/Margin";
 import { screens } from "src/dict";
-import CreateNewAlbumFifthScreen from "src/screens/CreateNewAlbumScreen/FifthScreen";
 import CreateNewAlbumFirstScreen from "src/screens/CreateNewAlbumScreen/FirstScreen";
 import CreateNewAlbumFourthScreen from "src/screens/CreateNewAlbumScreen/FourthScreen";
 import CreateNewAlbumSecondScreen from "src/screens/CreateNewAlbumScreen/SecondScreen";
 import CreateNewAlbumThirdScreen from "src/screens/CreateNewAlbumScreen/ThirdScreen";
+import CreateNewAlbumFifthScreen from "src/screens/CreateNewAlbumScreen/FifthScreen";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
@@ -55,7 +57,7 @@ export default function Navigation({
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
  */
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
@@ -141,7 +143,7 @@ function BottomTabNavigator() {
   );
 }
 
-const CreateNewAlbumStack = createNativeStackNavigator();
+const CreateNewAlbumStack = createStackNavigator();
 
 const CreateNewAlbumNavigator: React.FC = () => {
   const screenOptions = useScreenOptions();
@@ -153,29 +155,41 @@ const CreateNewAlbumNavigator: React.FC = () => {
       <CreateNewAlbumStack.Screen
         name={screens.CreateNewAlbumFirst}
         component={CreateNewAlbumFirstScreen}
+        options={{ headerTitle: "アルバムを作成" }}
       />
       <CreateNewAlbumStack.Screen
         name={screens.CreateNewAlbumSecond}
         component={CreateNewAlbumSecondScreen}
+        options={{ headerTitle: "記録の進行状況" }}
       />
       <CreateNewAlbumStack.Screen
         name={screens.CreateNewAlbumThird}
         component={CreateNewAlbumThirdScreen}
+        options={{ headerTitle: "写真の選別" }}
       />
       <CreateNewAlbumStack.Screen
         name={screens.CreateNewAlbumFour}
         component={CreateNewAlbumFourthScreen}
+        options={{ headerTitle: "情報の入力" }}
       />
       <CreateNewAlbumStack.Screen
         name={screens.CreateNewAlbumFifth}
         component={CreateNewAlbumFifthScreen}
+        options={{ headerTitle: "プレビュー" }}
       />
     </CreateNewAlbumStack.Navigator>
   );
 };
 
-const useScreenOptions = (): NativeStackNavigationOptions => {
-  return {};
+const useScreenOptions = (): StackNavigationOptions => {
+  return {
+    headerLeft: ({ canGoBack, onPress }) =>
+      canGoBack && (
+        <Padding left={4}>
+          <AntDesign name="left" onPress={onPress} size={24} color="#333" />
+        </Padding>
+      ),
+  };
 };
 
 /**
