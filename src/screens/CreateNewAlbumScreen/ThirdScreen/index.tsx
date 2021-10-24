@@ -22,7 +22,7 @@ import useAsyncStorage from "src/hooks/useAsyncStorage";
 import useCameraRoll from "src/hooks/useCameraRoll";
 import { useNavigation } from "src/hooks/useNavigation";
 import { RECORDING_BEGIN_TIME } from "src/provider/location";
-import { BASE_PX } from "src/utils/space";
+import { BASE_PX, SMALL_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
 import Card from "./Card";
 
@@ -133,12 +133,14 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number }> = ({
             data={likedAssets}
             extractImageUri={(item) => item.uri}
             renderImage={({ item }) => (
-              <Image
-                source={{ uri: item.uri }}
-                width={width / 3}
-                height={width / 3}
-                style={styles.gridImage}
-              />
+              <Margin size={SMALL_PX}>
+                <Image
+                  source={{ uri: item.uri }}
+                  width={width / 3 - SMALL_PX * 2}
+                  height={width / 3 - SMALL_PX * 2}
+                  style={globalStyles.rounodedImage}
+                />
+              </Margin>
             )}
             flatListProps={{
               scrollEnabled: false,
@@ -200,10 +202,6 @@ const styles = StyleSheet.create({
   previewContainer: {
     flex: 1,
     flexDirection: "row",
-  },
-  gridImage: {
-    borderWidth: 1,
-    borderColor: "white",
   },
   howToText: {
     fontSize: 20,

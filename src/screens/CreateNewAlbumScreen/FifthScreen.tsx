@@ -11,7 +11,7 @@ import Image from "src/components/atoms/Image";
 import Margin from "src/components/layouts/Margin";
 import ImageGrid from "src/components/organisms/ImageGrid";
 import { useGetAPI } from "src/hooks/useGetAPI";
-import { BASE_PX, LARGE_PX, SMALL_PX } from "src/utils/space";
+import { LARGE_PX, SMALL_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
 
 type CoordinateType = {
@@ -128,14 +128,7 @@ export default function FifthScreen(albumId: string) {
               source={{ uri: item.imageUrls[0] }}
               height={windowDimensions.height * 0.2 - LARGE_PX}
               width={windowDimensions.height * 0.2 - LARGE_PX}
-              style={{
-                borderRadius: BASE_PX,
-                ...globalStyles.shadow,
-                shadowOffset: {
-                  width: 3,
-                  height: 3,
-                },
-              }}
+              style={globalStyles.rounodedImage}
             />
           </View>
         </Margin>
@@ -253,14 +246,7 @@ export default function FifthScreen(albumId: string) {
                     source={{ uri: item.imageUrl }}
                     width={windowDimensions.width / 3 - SMALL_PX * 2}
                     height={windowDimensions.width / 3 - SMALL_PX * 2}
-                    style={{
-                      borderRadius: BASE_PX,
-                      ...globalStyles.shadow,
-                      shadowOffset: {
-                        width: 3,
-                        height: 3,
-                      },
-                    }}
+                    style={globalStyles.rounodedImage}
                   />
                 </View>
               </Margin>
