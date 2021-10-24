@@ -202,6 +202,7 @@ export default function TabThreeScreen() {
         alwaysOpen={windowDimensions.height * 0.25}
         modalHeight={windowDimensions.height * 0.75}
         onPositionChange={(args) => setOpenStatus(args)}
+        handlePosition="inside"
       >
         <FlatList
           data={coordinates}
