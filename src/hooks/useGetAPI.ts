@@ -8,6 +8,7 @@ export const useGetAPI = <T = any>(endpoint: string, variables: any) => {
 
   React.useEffect(() => {
     const query = new URLSearchParams(variables);
+    setLoading(true);
     fetch(`${serverHost}${endpoint}?${query}`, {
       method: "GET",
     })
@@ -15,7 +16,7 @@ export const useGetAPI = <T = any>(endpoint: string, variables: any) => {
       .then((json) => setData(json?.data))
       .catch((e) => console.error(e))
       .finally(() => setLoading(false));
-  }, []);
+  }, [JSON.stringify(variables)]);
 
   return { data, loading };
 };
