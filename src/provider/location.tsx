@@ -20,7 +20,7 @@ export type LocationData = {
     latitude: number;
     longitude: number;
   };
-  timestamp: moment.Moment;
+  timestamp: number;
 };
 
 export type LocationContext = {
@@ -131,9 +131,7 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
     const fn = async () => {
       const locsStr = await AsyncStorage.getItem(LOCATION_RECORDS);
       const locs = locsStr ? JSON.parse(locsStr) : [];
-      setLocations(
-        locs.map((l: any) => ({ ...l, timestamp: moment(l.timestamp) }))
-      );
+      setLocations(locs);
     };
     fn();
   }, TIME_INTERVAL);

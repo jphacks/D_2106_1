@@ -24,7 +24,9 @@ import ImageGrid from "src/components/organisms/ImageGrid";
 import { screens } from "src/dict";
 import useAsyncCallback from "src/hooks/useAsyncCallback";
 import { useNavigation } from "src/hooks/useNavigation";
+import { usePostAPI } from "src/hooks/usePostAPI";
 import useUploadImage from "src/hooks/useUploadImage";
+import { useLocation } from "src/provider/location";
 import { trimString } from "src/utils";
 import { BLACK_COLOR, PRIMARY_COLOR } from "src/utils/color";
 import { BASE_PX, SMALL_PX } from "src/utils/space";
@@ -35,9 +37,11 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
 }) => {
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
+  const { locations } = useLocation();
   const [parentHeight, setParentHeight] = useState(0);
   const [previewHeight, setPreviewHeight] = useState(0);
   const { uploadAssetImages } = useUploadImage("/upload/image");
+  const [postAlbumMetadata] = usePostAPI("/album");
 
   const onLayoutParent = useCallback(
     (e: LayoutChangeEvent) => setParentHeight(e.nativeEvent.layout.height),
@@ -56,24 +60,36 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
   const isFormDone = trimString(title) !== null && thumbnail !== null;
 
   const [postAlbum, postingAlbum] = useAsyncCallback(async () => {
+    let albumId: string = "-1";
     // メタデータの送信
-    const albumId = "123asdfasdf";
+    try {
+      const startedAt = locations.first()?.timestamp;
+      const endedAt = locations.last()?.timestamp;
+      const variables = {
+        title,
+        isPublic: true,
+        startedAt: startedAt && Math.round(startedAt / 1000),
+        endedAt: endedAt && Math.round(endedAt / 1000),
+        locations: locations.map((l: any) => ({
+          latitude: l.coordinate.latitude,
+          longitude: l.coordinate.longitude,
+          timestamp: Math.round(l.timestamp / 1000),
+        })),
+      };
+      const result = await postAlbumMetadata(variables);
+      albumId = result.id;
+    } catch (err) {
+      Alert.alert("情報の送信に失敗しました", err.message);
+      return;
+    }
     try {
       await uploadAssetImages({
         albumId,
-        assets: [
-          ...selectedAssets,
-          ...selectedAssets,
-          ...selectedAssets,
-          ...selectedAssets,
-          ...selectedAssets,
-          ...selectedAssets,
-          ...selectedAssets,
-        ],
+        assets: selectedAssets,
         onProgress: (r) => setProgress(r),
       });
     } catch (err) {
-      Alert.alert("送信に失敗しました", err.message);
+      Alert.alert("写真の送信に失敗しました", err.message);
       return;
     }
     navigation.navigate(screens.CreateNewAlbumFifth, { albumId });

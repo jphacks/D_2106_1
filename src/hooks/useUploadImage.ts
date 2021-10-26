@@ -42,7 +42,7 @@ const useUploadImage = (endpoint: string) => {
         formData.append(`image${assetIdx + 1}`, {
           // @ts-ignore
           uri: localJpgUri,
-          name: `${assetInfo.creationTime}.jpg`,
+          name: `${Math.round(assetInfo.creationTime / 1000)}.jpg`,
           type: "image/jpeg",
         });
       }
@@ -56,8 +56,6 @@ const useUploadImage = (endpoint: string) => {
       }).then((res) => res.json());
       if (result.status !== 200) {
         throw new Error(result.err);
-        console.log("result", result);
-        return;
       }
       onProgress?.((groupIdx + 1) / groups.length);
     }
