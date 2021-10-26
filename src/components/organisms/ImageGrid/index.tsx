@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { PropsWithChildren, useCallback, useState } from "react";
 import {
   FlatList,
   FlatListProps,
@@ -6,13 +6,13 @@ import {
   ModalProps,
   StyleSheet,
   TouchableOpacity,
-  useWindowDimensions,
 } from "react-native";
 import ImageViewing from "react-native-image-viewing";
 import useBoolState from "src/hooks/useBoolState";
 
-export type Props = {
-  images: string[];
+export type Props<T> = {
+  data: T[];
+  extractImageUri: (item: T) => string;
   shift?: number;
   onLongPress?: (image: ImageSourcePropType) => void;
   onImageIndexChange?: (imageIndex: number) => void;
@@ -24,18 +24,18 @@ export type Props = {
   delayLongPress?: number;
   HeaderComponent?: React.FC<{ imageIndex: number }>;
   FooterComponent?: React.FC<{ imageIndex: number }>;
-  flatListProps?: Partial<FlatListProps<string>>;
-  renderImage: ({ imageUri: string }) => React.ReactNode;
+  flatListProps?: Partial<FlatListProps<T>>;
+  renderImage: ({ item }: { item: T }) => React.ReactNode;
 };
 
-const ImageGrid: React.FC<Props> = ({
-  images,
+const ImageGrid = <T,>({
+  data,
+  extractImageUri,
   shift = 0,
   flatListProps,
   renderImage,
   ...props
-}) => {
-  const { width } = useWindowDimensions();
+}: PropsWithChildren<Props<T>>) => {
   const { state: visible, setTrue, setFalse } = useBoolState(false);
   const [currentImageIndex, setImageIndex] = useState(0);
 
@@ -51,21 +51,21 @@ const ImageGrid: React.FC<Props> = ({
     <>
       <FlatList
         {...flatListProps}
-        data={images}
-        keyExtractor={(uri) => uri}
+        data={data}
         renderItem={({ item, index }) => (
           <TouchableOpacity
             key={`${item}_${index}`}
             activeOpacity={0.8}
             onPress={() => onSelect(index)}
           >
-            {renderImage({ imageUri: item })}
+            {renderImage({ item })}
           </TouchableOpacity>
         )}
+        keyExtractor={(item) => extractImageUri(item)}
         contentContainerStyle={styles.gridContainer}
       />
       <ImageViewing
-        images={images.map((uri) => ({ uri }))}
+        images={data.map((item) => ({ uri: extractImageUri(item) }))}
         imageIndex={currentImageIndex}
         visible={visible}
         presentationStyle="overFullScreen"

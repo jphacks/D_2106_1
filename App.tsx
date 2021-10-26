@@ -6,7 +6,14 @@ import useCachedResources from "./src/hooks/useCachedResources";
 import useColorScheme from "./src/hooks/useColorScheme";
 import Navigation from "./src/navigation";
 import * as eva from "@eva-design/eva";
-import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
+import {
+  ApplicationProvider as UIKittenProvider,
+  Layout,
+  Text,
+} from "@ui-kitten/components";
+import "src/utils/extension";
+import AppProvider from "src/provider/app";
+import LocationProvider from "src/provider/location";
 
 LogBox.ignoreAllLogs(true);
 export default function App() {
@@ -17,12 +24,16 @@ export default function App() {
     return null;
   } else {
     return (
-      <ApplicationProvider {...eva} theme={eva.light}>
-        <SafeAreaProvider>
-          <Navigation colorScheme={colorScheme} />
-          <StatusBar />
-        </SafeAreaProvider>
-      </ApplicationProvider>
+      <UIKittenProvider {...eva} theme={eva.light}>
+        <AppProvider serverHost="https://6e2d37c1-56a6-47de-af24-819ec4e13573.mock.pstmn.io">
+          <SafeAreaProvider>
+            <LocationProvider>
+              <Navigation colorScheme={colorScheme} />
+              <StatusBar />
+            </LocationProvider>
+          </SafeAreaProvider>
+        </AppProvider>
+      </UIKittenProvider>
     );
   }
 }

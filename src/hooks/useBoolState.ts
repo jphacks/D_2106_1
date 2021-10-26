@@ -16,7 +16,7 @@ export type Options = {
 
 const useBoolState = (
   initialState: boolean = false,
-  { onTrue, onFalse, onChange }: Options = {},
+  { onTrue, onFalse, onChange }: Options = {}
 ) => {
   const [state, setState] = useState<boolean>(!!initialState);
   const [setTrue, handling1] = useAsyncCallback(async () => {
@@ -43,7 +43,7 @@ const useBoolState = (
       if (onChange && isFalse(await onChange(nextV))) return;
       return setState(nextV);
     },
-    [onTrue, onFalse, onChange],
+    [onTrue, onFalse, onChange]
   );
 
   const handling = handling1 || handling2 || handling3 || handling4;

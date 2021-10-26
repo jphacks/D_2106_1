@@ -1,10 +1,10 @@
-import React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
 import { Card, Text } from "@ui-kitten/components";
-import Image from "src/components/atoms/Image";
-import Space from "src/components/layouts/Space";
-import { Padding } from "src/components/layouts/Margin";
 import moment from "moment";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import Image from "src/components/atoms/Image";
+import { Padding } from "src/components/layouts/Margin";
+import Space from "src/components/layouts/Space";
 
 export type Props = {
   title?: string;

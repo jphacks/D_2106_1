@@ -3,6 +3,7 @@ import React from "react";
 import { FlatList, SafeAreaView, StyleSheet } from "react-native";
 import PostedCard from "src/components/atoms/PostedCard";
 import { Padding } from "src/components/layouts/Margin";
+
 import Space from "src/components/layouts/Space";
 
 const SampleUser = {
