@@ -10,7 +10,8 @@ import useInterval from "src/hooks/useInterval";
 import useIsLocationAlways from "src/hooks/useIsLocationAlways";
 import { emptyAsyncFn } from "src/utils";
 
-const TIME_INTERVAL = 1000;
+const TIME_INTERVAL = 5000;
+const DISTANCE_INTERVAL = 10;
 export const FETCH_LOCATION = "FETCH_LOCATION";
 export const LOCATION_RECORDS = "LOCATION_RECORDS";
 export const RECORDING_BEGIN_TIME = "RECORDING_BEGIN_TIME";
@@ -82,7 +83,9 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
       await AsyncStorage.setItem(LOCATION_RECORDS, JSON.stringify([]));
       await Location.startLocationUpdatesAsync(FETCH_LOCATION, {
         accuracy: Location.Accuracy.Balanced,
-        timeInterval: TIME_INTERVAL,
+        distanceInterval: DISTANCE_INTERVAL,
+        deferredUpdatesInterval: TIME_INTERVAL,
+        deferredUpdatesDistance: DISTANCE_INTERVAL,
       });
       setHasStartedRecording(true);
     },
@@ -165,15 +168,27 @@ TaskManager.defineTask(FETCH_LOCATION, async ({ data, error }) => {
   if (error) return console.log("FETCH_LOCATION error:", error);
   if (data) {
     const prevLocationsStr = await AsyncStorage.getItem(LOCATION_RECORDS);
-    const prevLocations = prevLocationsStr ? JSON.parse(prevLocationsStr) : [];
+    const prevLocations: LocationData[] = prevLocationsStr
+      ? JSON.parse(prevLocationsStr)
+      : [];
 
     const locations: LocationData[] = (data as any).locations.map(
       positionToLocation
     );
+    const [, ...locationsWithTimeInterval] = locations.reduce<LocationData[]>(
+      (acc, val) => {
+        const accLast = acc.last();
+        return accLast?.timestamp &&
+          val.timestamp < accLast.timestamp + TIME_INTERVAL
+          ? acc
+          : [...acc, val];
+      },
+      [prevLocations.last()].filter<LocationData>((l): l is LocationData => !!l)
+    );
 
     AsyncStorage.setItem(
       LOCATION_RECORDS,
-      JSON.stringify([...prevLocations, ...locations])
+      JSON.stringify([...prevLocations, ...locationsWithTimeInterval])
     );
   }
 });
