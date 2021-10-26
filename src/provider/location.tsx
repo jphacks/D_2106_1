@@ -4,6 +4,7 @@ import * as TaskManager from "expo-task-manager";
 import moment from "moment";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AppState } from "react-native";
+import { check } from "react-native-permissions";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PermissionGuide from "src/components/organisms/PermissionGuide";
 import useInterval from "src/hooks/useInterval";
@@ -115,14 +116,22 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
       hasStartedRecording: nextHasStartedRecording,
     };
   };
+  const recheckAllAndApply = async () => {
+    const result = await recheckAll();
+    if (!result.status?.granted || !result.isAlways)
+      setPermissionGuideVisible(true);
+  };
   useEffect(() => {
-    recheckAll();
+    recheckAllAndApply();
   }, []);
   useEffect(() => {
     const onChangeAppState = async (state: string) => {
-      if (state !== "active") return;
-      const result = await recheckAll();
-      setPermissionGuideVisible(!result.status?.granted || !result.isAlways);
+      if (state == "active") {
+        recheckAllAndApply();
+      } else {
+        const isAlw = await checkIsLocationAlways();
+        console.log("isAlw", isAlw);
+      }
     };
     AppState.addEventListener("change", onChangeAppState);
     return () => {
@@ -155,7 +164,10 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
     >
       {permissionGuideVisible ? (
         <SafeAreaView style={{ flex: 1 }}>
-          <PermissionGuide />
+          <PermissionGuide
+            onClose={() => setPermissionGuideVisible(false)}
+            canClose={status?.granted}
+          />
         </SafeAreaView>
       ) : (
         children
