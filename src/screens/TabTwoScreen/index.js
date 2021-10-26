@@ -4,6 +4,7 @@ import { Image, StyleSheet, Text, TextInput } from "react-native";
 import { Center } from "src/components/layouts/Align";
 import Space from "src/components/layouts/Space";
 import * as ImagePicker from "expo-image-picker";
+import { Padding } from "src/components/layouts/Margin";
 
 const SampleUser = {
   userid: "shinjibaka2021",
@@ -35,9 +36,10 @@ export default function TabTwoScreen({ navigation }) {
     <Space direction="vertical" style={{ marginTop: 20, flex: 1 }}>
       <Center style={{ padding: 10 }}>
         <Text>プロフィール画像</Text>
-        <Avatar size="giant" source={{ uri: image }} />
+        <Avatar marginTop={10} size="giant" source={{ uri: image }} />
         <Button
-          size="tiny"
+          marginTop={10}
+          size="small"
           onPress={() => {
             pickImage();
             console.log("pushed");
@@ -61,6 +63,7 @@ export default function TabTwoScreen({ navigation }) {
         maxLength={128}
         multiline={"True"}
       />
+      <Button>変更を保存する</Button>
     </Space>
   );
 }
