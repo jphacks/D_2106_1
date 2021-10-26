@@ -4,6 +4,7 @@ import { Button, Input } from "@ui-kitten/components";
 import { Asset } from "expo-media-library";
 import React, { useCallback, useState } from "react";
 import {
+  Alert,
   LayoutChangeEvent,
   StyleSheet,
   TouchableOpacity,
@@ -56,23 +57,26 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
 
   const [postAlbum, postingAlbum] = useAsyncCallback(async () => {
     // メタデータの送信
-    const albumId = "foo-bar-far";
-    await uploadAssetImages({
-      albumId,
-      assets: [
-        ...selectedAssets,
-        ...selectedAssets,
-        ...selectedAssets,
-        ...selectedAssets,
-        ...selectedAssets,
-        ...selectedAssets,
-        ...selectedAssets,
-      ],
-      onProgress: (r) => setProgress(r),
-    });
-    navigation.navigate(screens.CreateNewAlbumFifth, {
-      albumId: "album_id",
-    });
+    const albumId = "123asdfasdf";
+    try {
+      await uploadAssetImages({
+        albumId,
+        assets: [
+          ...selectedAssets,
+          ...selectedAssets,
+          ...selectedAssets,
+          ...selectedAssets,
+          ...selectedAssets,
+          ...selectedAssets,
+          ...selectedAssets,
+        ],
+        onProgress: (r) => setProgress(r),
+      });
+    } catch (err) {
+      Alert.alert("送信に失敗しました", err.message);
+      return;
+    }
+    navigation.navigate(screens.CreateNewAlbumFifth, { albumId });
   });
   return (
     <>

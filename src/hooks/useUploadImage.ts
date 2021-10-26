@@ -53,8 +53,12 @@ const useUploadImage = (endpoint: string) => {
         method: "POST",
         body: formData,
         headers: { "Content-Type": "multipart/form-data" },
-      });
-      if (result.status !== 200) return;
+      }).then((res) => res.json());
+      if (result.status !== 200) {
+        throw new Error(result.err);
+        console.log("result", result);
+        return;
+      }
       onProgress?.((groupIdx + 1) / groups.length);
     }
   };
