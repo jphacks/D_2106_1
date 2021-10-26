@@ -1,36 +1,38 @@
+import { Button } from "@ui-kitten/components";
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import useCameraRoll from "src/hooks/useCameraRoll";
+import useUploadImage from "src/hooks/useUploadImage";
+import { View } from "../components/Themed";
 
-import EditScreenInfo from "../components/EditScreenInfo";
-import { Text, View } from "../components/Themed";
+function TabThreeScreenBackup() {
+  const { assets } = useCameraRoll();
+  const { uploadAssetImages } = useUploadImage("/upload/image");
 
-export default function TabThreeScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Three</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <EditScreenInfo path="/screens/TabThreeScreen.tsx" />
+    <View style={{ flex: 1.5 }}>
+      <Button
+        onPress={() => {
+          uploadAssetImages({
+            albumId: "asdfasdf",
+            assets: [
+              ...assets,
+              ...assets,
+              ...assets,
+              ...assets,
+              ...assets,
+              ...assets,
+              ...assets,
+              ...assets,
+              ...assets,
+              ...assets,
+              ...assets,
+            ],
+          });
+        }}
+      >
+        test
+      </Button>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});
+export default TabThreeScreenBackup;

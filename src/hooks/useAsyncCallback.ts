@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from "react";
 // 重複の実行を防ぐ
 const useAsyncCallback = <T extends Array<any>, U>(
   fn: (...args: T) => Promise<U>,
-  deps: any[] | null = null,
+  deps: any[] | null = null
 ): [(...args: T) => Promise<U | null>, boolean] => {
   const [handling, setHandling] = useState(false);
 
@@ -21,7 +21,7 @@ const useAsyncCallback = <T extends Array<any>, U>(
 
 // 重複の実行を防ぐ
 export const useSingleCallback = <T extends Array<any>, U>(
-  fn: (...args: T) => Promise<U>,
+  fn: (...args: T) => Promise<U>
 ): ((...args: T) => Promise<U | null>) => {
   const handlingRef = useRef(false);
   const wrapperFn = patchedAsyncFn<T, U | null>(fn, async (origFn, ...args) => {
@@ -43,7 +43,7 @@ export const useSingleCallback = <T extends Array<any>, U>(
 export const patchedAsyncFn =
   <T extends Array<any>, U>(
     fn: (...args: T) => Promise<U>,
-    process: (fn: (...args: T) => Promise<U>, ...args: T) => Promise<U>,
+    process: (fn: (...args: T) => Promise<U>, ...args: T) => Promise<U>
   ): ((...args: T) => Promise<U>) =>
   async (...args: T) =>
     await process(fn, ...args);
@@ -51,7 +51,7 @@ export const patchedAsyncFn =
 export const patchedFn =
   <T extends Array<any>, U>(
     fn: (...args: T) => U,
-    process: (fn: (...args: T) => U, ...args: T) => U,
+    process: (fn: (...args: T) => U, ...args: T) => U
   ): ((...args: T) => U) =>
   (...args: T) =>
     process(fn, ...args);

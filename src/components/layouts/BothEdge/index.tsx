@@ -24,11 +24,15 @@ const BothEdge: React.FC<Props> = React.memo(
       <Left fixed={fixed === "left"} fullHeight={fullHeight} style={leftStyle}>
         {left}
       </Left>
-      <Right fixed={fixed === "right"} fullHeight={fullHeight} style={rightStyle}>
+      <Right
+        fixed={fixed === "right"}
+        fullHeight={fullHeight}
+        style={rightStyle}
+      >
         {right}
       </Right>
     </Container>
-  ),
+  )
 );
 
 const Container = styled(View)<{

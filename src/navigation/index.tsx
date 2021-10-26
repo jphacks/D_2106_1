@@ -3,31 +3,39 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from "@expo/vector-icons";
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
-  NavigationContainer,
-  DefaultTheme,
   DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
 } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+} from "@react-navigation/stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
-
+import { Padding } from "src/components/layouts/Margin";
+import { screens } from "src/dict";
+import CreateNewAlbumFifthScreen from "src/screens/CreateNewAlbumScreen/FifthScreen";
+import CreateNewAlbumFirstScreen from "src/screens/CreateNewAlbumScreen/FirstScreen";
+import CreateNewAlbumFourthScreen from "src/screens/CreateNewAlbumScreen/FourthScreen";
+import CreateNewAlbumSecondScreen from "src/screens/CreateNewAlbumScreen/SecondScreen";
+import CreateNewAlbumThirdScreen from "src/screens/CreateNewAlbumScreen/ThirdScreen";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
 import TabThreeScreen from "../screens/TabThreeScreen";
+import TabTwoScreen from "../screens/TabTwoScreen";
 import {
   RootStackParamList,
   RootTabParamList,
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
-import TabFourScreen from "src/screens/TabFourScreen";
 
 export default function Navigation({
   colorScheme,
@@ -48,7 +56,7 @@ export default function Navigation({
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
  */
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
@@ -127,15 +135,61 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="TabFour"
-        component={TabFourScreen}
-        options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
+        component={CreateNewAlbumNavigator}
+        options={{ headerShown: false }}
       />
     </BottomTab.Navigator>
   );
 }
+
+const CreateNewAlbumStack = createStackNavigator();
+
+const CreateNewAlbumNavigator: React.FC = () => {
+  const screenOptions = useScreenOptions();
+  return (
+    <CreateNewAlbumStack.Navigator
+      initialRouteName={screens.CreateNewAlbumFirst}
+      screenOptions={screenOptions}
+    >
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumFirst}
+        component={CreateNewAlbumFirstScreen}
+        options={{ headerTitle: "アルバムを作成" }}
+      />
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumSecond}
+        component={CreateNewAlbumSecondScreen}
+        options={{ headerTitle: "記録の進行状況" }}
+      />
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumThird}
+        component={CreateNewAlbumThirdScreen}
+        options={{ headerTitle: "写真の選別" }}
+      />
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumFour}
+        component={CreateNewAlbumFourthScreen}
+        options={{ headerTitle: "情報の入力" }}
+      />
+      <CreateNewAlbumStack.Screen
+        name={screens.CreateNewAlbumFifth}
+        component={CreateNewAlbumFifthScreen}
+        options={{ headerTitle: "プレビュー" }}
+      />
+    </CreateNewAlbumStack.Navigator>
+  );
+};
+
+const useScreenOptions = (): StackNavigationOptions => {
+  return {
+    headerLeft: ({ canGoBack, onPress }) =>
+      canGoBack && (
+        <Padding left={4}>
+          <AntDesign name="left" onPress={onPress} size={24} color="#333" />
+        </Padding>
+      ),
+  };
+};
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
