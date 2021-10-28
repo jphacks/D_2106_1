@@ -43,7 +43,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     lat2: number;
     lon1: number;
     lon2: number;
-  }>({ lat1: 45, lat2: 46, lon1: 135, lon2: 136 });
+  }>({ lat1: 30, lat2: 40, lon1: 130, lon2: 140 });
 
   const [imageSize, setImageSize] = React.useState<number>(50);
 
@@ -140,10 +140,10 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
       <MapView
         ref={mapRef}
         initialRegion={{
-          latitude: 35.1221702,
-          longitude: 136.9599526,
-          latitudeDelta: 0.5,
-          longitudeDelta: 0.5,
+          latitude: 37.1234,
+          longitude: 137.1234,
+          latitudeDelta: 10,
+          longitudeDelta: 10,
         }}
         onRegionChange={(region) => {
           getBounds(region);
