@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useAppContext } from "src/provider/app";
 
-export const useGetAPI = <T = any>(endpoint: string, variables: any) => {
+export const useGetAPI = <T = any>(endpoint: string, variables?: any) => {
   const { serverHost } = useAppContext();
   const [data, setData] = React.useState<T | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
