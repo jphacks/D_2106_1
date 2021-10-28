@@ -42,7 +42,7 @@ const useUploadImage = (endpoint: string) => {
         formData.append(`image${assetIdx + 1}`, {
           // @ts-ignore
           uri: localJpgUri,
-          name: `${assetInfo.creationTime}.jpg`,
+          name: `${Math.round(assetInfo.creationTime / 1000)}.jpg`,
           type: "image/jpeg",
         });
       }
@@ -53,8 +53,10 @@ const useUploadImage = (endpoint: string) => {
         method: "POST",
         body: formData,
         headers: { "Content-Type": "multipart/form-data" },
-      });
-      if (result.status !== 200) return;
+      }).then((res) => res.json());
+      if (result.status !== 200) {
+        throw new Error(result.err);
+      }
       onProgress?.((groupIdx + 1) / groups.length);
     }
   };

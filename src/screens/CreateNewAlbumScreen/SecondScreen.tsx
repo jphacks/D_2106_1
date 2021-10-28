@@ -7,7 +7,7 @@ import {
   StyleSheet,
   useWindowDimensions,
 } from "react-native";
-import MapView, { Polyline } from "react-native-maps";
+import MapView, { Marker, Polyline } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
 import Message from "src/components/atoms/Message";
@@ -28,6 +28,7 @@ import {
   RECORDING_BEGIN_TIME,
   useLocation,
 } from "src/provider/location";
+import { PRIMARY_COLOR } from "src/utils/color";
 import { BASE_PX, SMALL_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
 
@@ -87,6 +88,11 @@ const SecondScreen: React.FC<{
             coordinates={locations.map((l) => l.coordinate)}
             strokeWidth={8}
           />
+          {locations.map((l) => (
+            <Marker coordinate={l.coordinate}>
+              <View style={styles.pointMarker} />
+            </Marker>
+          ))}
         </MapView>
         <Space
           style={{
@@ -108,7 +114,7 @@ const SecondScreen: React.FC<{
                 setIsFreeLook(false);
                 animateToCoordinate(lastLocation?.coordinate);
               }}
-              disabled={assets.length <= 0}
+              disabled={!isFreeLook}
             >
               現在地に戻る
             </Button>
@@ -172,6 +178,12 @@ const DEFAULT_REGION = {
 const styles = StyleSheet.create({
   flex1: {
     flex: 1,
+  },
+  pointMarker: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: PRIMARY_COLOR,
   },
 });
 
