@@ -85,37 +85,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     ...mapCorners,
   });
 
-  // TODO: 実データに置き換える
-  // const coordinates = data?.locations;
-  const coordinates: CoordinateType[] = [
-    {
-      id: "gpsId1",
-      imageUrls: [
-        "https://www.nagoyajo.city.nagoya.jp/images/content/guide/tenshu/index_img01.jpg",
-      ],
-      latitude: 35.1221702,
-      longitude: 136.9682402,
-      timestamp: "2021-10-05T12:34:56.123456+00:00",
-    },
-    {
-      id: "gpsId2",
-      imageUrls: [
-        "https://www.nagoyajo.city.nagoya.jp/images/content/guide/tenshu/index_img01.jpg",
-      ],
-      latitude: 35.1221702,
-      longitude: 136.9115014,
-      timestamp: "2021-10-05T12:34:56.123456+00:00",
-    },
-    {
-      id: "gpsId3",
-      imageUrls: [
-        "https://www.nagoyajo.city.nagoya.jp/images/content/guide/tenshu/index_img01.jpg",
-      ],
-      latitude: 35.1159824,
-      longitude: 136.9797153,
-      timestamp: "2021-10-05T12:34:56.123456+00:00",
-    },
-  ];
+  const coordinates: CoordinateType[] = data?.location;
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -180,7 +150,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
         }}
         style={{ flex: 1.0 }}
       >
-        {coordinates.map((c, index) => (
+        {coordinates?.map((c, index) => (
           <Marker
             coordinate={c}
             ref={(node) => {
