@@ -21,7 +21,6 @@
     "@react-navigation/stack": "^6.0.11",
     "@types/styled-components": "^5.1.15",
     "@ui-kitten/components": "^5.1.1",
-    "EventEmitter": "^1.0.0",
     "axios": "^0.23.0",
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-styled-components": "^1.13.3",

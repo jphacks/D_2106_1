@@ -57,7 +57,11 @@ PODS:
     - React-jsi (= 0.64.2)
     - ReactCommon/turbomodule/core (= 0.64.2)
   - glog (0.3.5)
+  - Permission-LocationAccuracy (3.1.0):
+    - RNPermissions
   - Permission-LocationAlways (3.1.0):
+    - RNPermissions
+  - Permission-LocationWhenInUse (3.1.0):
     - RNPermissions
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
@@ -393,7 +397,9 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - Permission-LocationAccuracy (from `../node_modules/react-native-permissions/ios/LocationAccuracy`)
   - Permission-LocationAlways (from `../node_modules/react-native-permissions/ios/LocationAlways`)
+  - Permission-LocationWhenInUse (from `../node_modules/react-native-permissions/ios/LocationWhenInUse`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -485,8 +491,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/React/FBReactNativeSpec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  Permission-LocationAccuracy:
+    :path: "../node_modules/react-native-permissions/ios/LocationAccuracy"
   Permission-LocationAlways:
     :path: "../node_modules/react-native-permissions/ios/LocationAlways"
+  Permission-LocationWhenInUse:
+    :path: "../node_modules/react-native-permissions/ios/LocationWhenInUse"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -584,7 +594,9 @@ SPEC CHECKSUMS:
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
   FBReactNativeSpec: 8bcff5601f197daa7fb4f0722cf348436fd66646
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
+  Permission-LocationAccuracy: f2fa6140c0362473a061b771dd1b702db581138c
   Permission-LocationAlways: f1e021c3b348946cd7c5760172925b749e5d07a6
+  Permission-LocationWhenInUse: d98db702ec75e93a3ff94bc297d0b66ea04231e1
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 6d3e854f0e7260a648badd0d44fc364bc9da9728
   RCTTypeSafety: c1f31d19349c6b53085766359caac425926fafaa
@@ -621,6 +633,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: 5654c50e68af11b19b9d05452bacf23d19b3f30f
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
 
-PODFILE CHECKSUM: 3483398f1c1596ddf8e38517352127afac59df25
+PODFILE CHECKSUM: 17800965ea01539633b5dac2bbc1a3b105bac7a4
 
 COCOAPODS: 1.10.1
