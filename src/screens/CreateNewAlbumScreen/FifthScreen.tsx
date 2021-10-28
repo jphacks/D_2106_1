@@ -166,7 +166,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
               }}
               onTouchStart={() => {
                 flatListRef.current?.scrollToIndex({ index: index });
-                mapRef.current?.animateToCoordinate({
+                mapRef.current?.animateToRegion({
                   ...currentRegion,
                   longitude: c?.longitude,
                   latitude: c?.latitude,
