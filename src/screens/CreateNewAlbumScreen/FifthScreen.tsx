@@ -1,4 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/core";
 import * as React from "react";
 import {
   FlatList,
@@ -9,6 +10,7 @@ import {
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
+import Message from "src/components/atoms/Message";
 import Margin, { Padding } from "src/components/layouts/Margin";
 import ImageGrid from "src/components/organisms/ImageGrid";
 import { screens } from "src/dict";
@@ -31,7 +33,7 @@ type CoordinateWithImageUrl = Omit<CoordinateType, "imageUrls"> & {
   imageUrl: string;
 };
 
-export default function FifthScreen(albumId: string) {
+const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
   const navigation = useNavigation();
   const windowDimensions = useWindowDimensions();
   const { stopLocationRecording } = useLocation();
@@ -286,4 +288,13 @@ export default function FifthScreen(albumId: string) {
       </Modalize>
     </View>
   );
-}
+};
+
+export default () => {
+  const route = useRoute();
+  const albumId: string = (route.params as any)?.albumId;
+
+  if (!albumId) return <Message message="アルバムの取得に失敗しました" />;
+
+  return <FifthScreen albumId={albumId} />;
+};
