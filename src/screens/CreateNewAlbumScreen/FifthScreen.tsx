@@ -64,10 +64,10 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
 
   const getBounds = (region: Region) => {
     setMapCorners({
-      lat1: region.longitude - region.longitudeDelta / 2,
-      lat2: region.longitude + region.longitudeDelta / 2,
-      lon1: region.latitude - region.latitudeDelta / 2,
-      lon2: region.latitude + region.latitudeDelta / 2,
+      lon1: region.longitude - region.longitudeDelta / 2,
+      lon2: region.longitude + region.longitudeDelta / 2,
+      lat1: region.latitude - region.latitudeDelta / 2,
+      lat2: region.latitude + region.latitudeDelta / 2,
     });
 
     setImageSize(Math.max(100, Math.min(30 / region.longitudeDelta, 300)));
