@@ -65,7 +65,7 @@ const ImageGrid = <T,>({
         contentContainerStyle={styles.gridContainer}
       />
       <ImageViewing
-        images={data.map((item) => ({ uri: extractImageUri(item) }))}
+        images={data?.map((item) => ({ uri: extractImageUri(item) }))}
         imageIndex={currentImageIndex}
         visible={visible}
         presentationStyle="overFullScreen"
