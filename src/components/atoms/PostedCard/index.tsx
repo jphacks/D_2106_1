@@ -3,7 +3,6 @@ import moment from "moment";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import Image from "src/components/atoms/Image";
-import { Padding } from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
 
 export type Props = {
@@ -13,29 +12,40 @@ export type Props = {
   timestamp?: number;
 };
 
-const PostedCard = ({ title, imageUrl, createdAt, timestamp }) => {
+const PostedCard = ({
+  title,
+  imageUrl,
+  createdAt,
+  timestamp,
+  width,
+  height,
+  onPress = () => {},
+}) => {
   const header = (
     <Image
       source={{ uri: imageUrl }}
       resizeMode="cover"
-      width={360}
-      height={210}
+      width={width}
+      height={height}
     />
   );
   return (
-    <Padding size={30}>
-      <Card header={header}>
-        <View style={styles.reverse}>
-          <Text appearance="hint">{moment(timestamp).format("MMM Do YY")}</Text>
-        </View>
-        <Space align="end">
-          <Text category="h6">{title}</Text>
-          <Text status="info" category="label">
-            {createdAt.join(",")}
-          </Text>
-        </Space>
-      </Card>
-    </Padding>
+    <Card
+      header={header}
+      style={{ width: width, height: height * 1.5 }}
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
+      <View style={styles.reverse}>
+        <Text appearance="hint">{moment(timestamp).format("MMM Do YY")}</Text>
+      </View>
+      <Space align="end">
+        <Text category="h6">{title}</Text>
+        <Text status="info" category="label">
+          {createdAt.join(",")}
+        </Text>
+      </Space>
+    </Card>
   );
 };
 export default PostedCard;
