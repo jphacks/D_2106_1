@@ -1,20 +1,20 @@
 import { Button } from "@ui-kitten/components";
+import * as MediaLibrary from "expo-media-library";
 import React, { useEffect, useRef } from "react";
-import { Alert, SafeAreaView, StyleSheet } from "react-native";
+import { Alert, SafeAreaView } from "react-native";
+import { Modalize } from "react-native-modalize";
+import { Portal } from "react-native-portalize";
 import { H3, SmallP } from "src/components/atoms/Text";
 import { Padding } from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
+import ModalizeHeader from "src/components/molecules/ModalizeHeader";
+import PermissionGuide from "src/components/organisms/PermissionGuide";
 import { screens } from "src/dict";
 import useAsyncCallback from "src/hooks/useAsyncCallback";
 import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useLocation } from "src/provider/location";
 import { BASE_PX } from "src/utils/space";
-import * as MediaLibrary from "expo-media-library";
-import { Modalize } from "react-native-modalize";
-import PermissionGuide from "src/components/organisms/PermissionGuide";
-import { Portal } from "react-native-portalize";
-import ModalizeHeader from "src/components/molecules/ModalizeHeader";
 
 const FirstScreen: React.FC = () => {
   const modalizeRef = useRef<Modalize>(null);
