@@ -1,3 +1,4 @@
+import { useRoute } from "@react-navigation/core";
 import { Button } from "@ui-kitten/components";
 import * as Location from "expo-location";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -31,7 +32,6 @@ import {
 import { PRIMARY_COLOR } from "src/utils/color";
 import { BASE_PX, SMALL_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
-import { useRoute } from "@react-navigation/core";
 
 const SecondScreen: React.FC<{
   recordingBeginTime: number;
