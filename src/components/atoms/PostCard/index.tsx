@@ -9,7 +9,7 @@ import { H3, SmallP } from "../Text";
 export type Props = {
   title?: string;
   imageUrl?: string;
-  locations?: string[];
+  locations?: string[] | string;
   timestamp?: number;
   onPress?: () => void;
   width: number;
@@ -52,7 +52,7 @@ const PostCard: React.FC<Props> = ({
           <Space align="center" style={{ margin: -8 }}>
             <H3>{title}</H3>
             <SmallP bold gray>
-              {locations?.join(",")}
+              {typeof locations === "string" ? locations : locations?.join(",")}
             </SmallP>
           </Space>
           <SmallP bold gray>
