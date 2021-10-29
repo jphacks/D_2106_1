@@ -1,4 +1,5 @@
 import { Button } from "@ui-kitten/components";
+import * as MediaLibrary from "expo-media-library";
 import React from "react";
 import { Alert, SafeAreaView, StyleSheet } from "react-native";
 import { H3, SmallP } from "src/components/atoms/Text";
@@ -10,7 +11,6 @@ import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useLocation } from "src/provider/location";
 import { BASE_PX } from "src/utils/space";
-import * as MediaLibrary from "expo-media-library";
 
 const FirstScreen: React.FC = () => {
   const navigation = useNavigation();
