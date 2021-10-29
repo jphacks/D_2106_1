@@ -75,6 +75,7 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
           longitude: l.coordinate.longitude,
           timestamp: Math.round(l.timestamp / 1000),
         })),
+        userId: "user",
       };
       const result = await postAlbumMetadata(variables);
       albumId = result.id;
@@ -175,7 +176,6 @@ const styles = StyleSheet.create({
 export default () => {
   const route = useRoute();
   const selectedAssets: Asset[] = (route.params as any)?.selected;
-  console.log("selectedAssets", selectedAssets);
 
   if (!selectedAssets?.length || selectedAssets.length <= 0)
     return <Message message="選択された画像が見つかりませんでした" />;
