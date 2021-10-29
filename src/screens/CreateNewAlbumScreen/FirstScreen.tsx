@@ -64,6 +64,11 @@ const FirstScreen: React.FC = () => {
     await startLocationRecording(1);
     navigation.navigate(screens.CreateNewAlbumSecond);
   });
+  const [startDemo, startingDemo] = useAsyncCallback(async () => {
+    navigation.navigate(screens.CreateNewAlbumSecond, {
+      isDemo: true,
+    });
+  });
 
   useFocusedEffect(() => {
     recheckAll();
@@ -118,6 +123,19 @@ const FirstScreen: React.FC = () => {
             >
               位置情報の記録を開始（デバッグモード）
             </Button>
+            <Button status="basic" appearance="outline" onPress={startDemo}>
+              デモを開始
+            </Button>
+            <Button
+              status="basic"
+              appearance="outline"
+              onPress={() =>
+                navigation.navigate(screens.CreateNewAlbumFifth, { albumId: 2 })
+              }
+              disabled={!isAllPermissionOk || startingDebug}
+            >
+              最終画面
+            </Button>
           </Space>
         </Padding>
       </SafeAreaView>
@@ -137,3 +155,46 @@ const FirstScreen: React.FC = () => {
 };
 
 export default FirstScreen;
+
+const demoCoordinates = [
+  {
+    latitude: 35.1221702,
+    longitude: 136.9599526,
+  },
+  {
+    latitude: 35.0221702,
+    longitude: 136.9599526,
+  },
+  {
+    latitude: 35.1221702,
+    longitude: 136.9599526,
+  },
+  {
+    latitude: 35.2221702,
+    longitude: 136.9599526,
+  },
+  {
+    latitude: 35.2221702,
+    longitude: 136.9599526,
+  },
+  {
+    latitude: 35.2221702,
+    longitude: 136.9599526,
+  },
+  {
+    latitude: 35.1221702,
+    longitude: 136.9599526,
+  },
+  {
+    latitude: 35.0221702,
+    longitude: 136.9599526,
+  },
+  {
+    latitude: 35.2221702,
+    longitude: 136.9599526,
+  },
+  {
+    latitude: 35.1221702,
+    longitude: 136.9599526,
+  },
+];

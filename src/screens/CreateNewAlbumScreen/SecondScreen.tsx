@@ -1,3 +1,4 @@
+import { useRoute } from "@react-navigation/core";
 import { Button } from "@ui-kitten/components";
 import * as Location from "expo-location";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -34,16 +35,21 @@ import { globalStyles } from "src/utils/style";
 const SecondScreen: React.FC<{
   recordingBeginTime: number;
   startLocation: LocationData;
-}> = ({ recordingBeginTime, startLocation }) => {
+  isDemo?: boolean;
+}> = ({ recordingBeginTime, startLocation, isDemo }) => {
   const mapRef = useRef<MapView>(null);
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
   const windowDimensions = useWindowDimensions();
   const [isFreeLook, setIsFreeLook] = useState(false);
-  const { assets, refreshAssets } = useCameraRoll({
-    createdAfter: recordingBeginTime,
-  });
-  const { locations } = useLocation();
+  const { assets, refreshAssets } = useCameraRoll(
+    {
+      createdAfter: recordingBeginTime,
+    },
+    isDemo
+  );
+
+  const { locations } = useLocation(isDemo);
   const lastLocation = locations.last() ?? startLocation;
 
   const animateToCoordinate = (coord?: Coordinate) =>
@@ -60,7 +66,7 @@ const SecondScreen: React.FC<{
 
   useInterval(() => refreshAssets(), 5000);
   useEffect(() => {
-    if (!isFreeLook) animateToCoordinate(lastLocation?.coordinate);
+    if (!isFreeLook && !isDemo) animateToCoordinate(lastLocation?.coordinate);
   }, [lastLocation]);
 
   // モーダル用に高さを取得
@@ -105,7 +111,11 @@ const SecondScreen: React.FC<{
           }}
         >
           <Button
-            onPress={() => navigation.navigate(screens.CreateNewAlbumThird)}
+            onPress={() =>
+              navigation.navigate(screens.CreateNewAlbumThird, {
+                isDemo: isDemo,
+              })
+            }
             disabled={assets.length <= 0}
           >
             アルバムの作成に進む
@@ -190,6 +200,10 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  const route = useRoute();
+
+  const isDemo: boolean = (route.params as any)?.isDemo;
+
   const [recordingBeginTimeStr, , loading] = useAsyncStorage<string | null>(
     RECORDING_BEGIN_TIME,
     null
@@ -214,6 +228,7 @@ export default () => {
     <SecondScreen
       recordingBeginTime={recordingBeginTime}
       startLocation={startLocation}
+      isDemo={isDemo}
     />
   );
 };

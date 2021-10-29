@@ -65,8 +65,6 @@ PODS:
     - RNPermissions
   - Permission-LocationWhenInUse (3.1.0):
     - RNPermissions
-  - Permission-PhotoLibrary (3.1.0):
-    - RNPermissions
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
     - DoubleConversion
@@ -371,6 +369,8 @@ PODS:
     - React-RCTImage
   - RNSVG (12.1.1):
     - React
+  - RNVectorIcons (9.0.0):
+    - React-Core
   - UMAppLoader (3.0.0)
   - UMTaskManagerInterface (7.0.3):
     - ExpoModulesCore
@@ -405,7 +405,6 @@ DEPENDENCIES:
   - Permission-LocationAccuracy (from `../node_modules/react-native-permissions/ios/LocationAccuracy`)
   - Permission-LocationAlways (from `../node_modules/react-native-permissions/ios/LocationAlways`)
   - Permission-LocationWhenInUse (from `../node_modules/react-native-permissions/ios/LocationWhenInUse`)
-  - Permission-PhotoLibrary (from `../node_modules/react-native-permissions/ios/PhotoLibrary`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -440,6 +439,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - UMAppLoader (from `../node_modules/unimodules-app-loader/ios`)
   - UMTaskManagerInterface (from `../node_modules/unimodules-task-manager-interface/ios`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -505,8 +505,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-permissions/ios/LocationAlways"
   Permission-LocationWhenInUse:
     :path: "../node_modules/react-native-permissions/ios/LocationWhenInUse"
-  Permission-PhotoLibrary:
-    :path: "../node_modules/react-native-permissions/ios/PhotoLibrary"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -571,6 +569,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   UMAppLoader:
     :path: "../node_modules/unimodules-app-loader/ios"
   UMTaskManagerInterface:
@@ -608,7 +608,6 @@ SPEC CHECKSUMS:
   Permission-LocationAccuracy: f2fa6140c0362473a061b771dd1b702db581138c
   Permission-LocationAlways: f1e021c3b348946cd7c5760172925b749e5d07a6
   Permission-LocationWhenInUse: d98db702ec75e93a3ff94bc297d0b66ea04231e1
-  Permission-PhotoLibrary: 9dcf80d1353d81b9f1e210c34291591236aaf2b6
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 6d3e854f0e7260a648badd0d44fc364bc9da9728
   RCTTypeSafety: c1f31d19349c6b53085766359caac425926fafaa
@@ -641,10 +640,11 @@ SPEC CHECKSUMS:
   RNReanimated: 64c38d47ffcc29c97fc1d8cfde9e8a73d7be7cc8
   RNScreens: 6e1ea5787989f92b0671049b808aef64fa1ef98c
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
+  RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   UMAppLoader: 671576daa3fd3017d4879a5f23fc0dd3b36422a8
   UMTaskManagerInterface: 5654c50e68af11b19b9d05452bacf23d19b3f30f
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
 
-PODFILE CHECKSUM: 5766df96ab12e72342631d196cfc3ddd0f0c3784
+PODFILE CHECKSUM: 17800965ea01539633b5dac2bbc1a3b105bac7a4
 
 COCOAPODS: 1.10.1

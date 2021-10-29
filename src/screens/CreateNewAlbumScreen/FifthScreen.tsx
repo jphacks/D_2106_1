@@ -75,6 +75,8 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     ...mapCorners,
   });
 
+  console.log(data);
+
   const coordinates: CoordinateType[] = data?.location;
 
   React.useEffect(() => {

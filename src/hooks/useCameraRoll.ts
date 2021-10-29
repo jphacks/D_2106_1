@@ -1,9 +1,13 @@
 import * as MediaLibrary from "expo-media-library";
 import { useCallback, useEffect, useState } from "react";
 import { Alert } from "react-native";
+import { assetsData } from "src/assets/demo/assets";
 import useAsyncCallback from "./useAsyncCallback";
 
-const useCameraRoll = (options: MediaLibrary.AssetsOptions = {}) => {
+const useCameraRoll = (
+  options: MediaLibrary.AssetsOptions = {},
+  isDemo?: boolean
+) => {
   const [status, requestPermissionBase] = MediaLibrary.usePermissions();
   const [assets, setAssets] = useState<MediaLibrary.Asset[]>([]);
   const [requestPermission, reqestingPermission] = useAsyncCallback(
@@ -25,6 +29,12 @@ const useCameraRoll = (options: MediaLibrary.AssetsOptions = {}) => {
   useEffect(() => {
     refreshAssets();
   }, [status, reqestingPermission]);
+
+  const demoAssets = assetsData;
+
+  if (isDemo) {
+    return { assets: demoAssets, refreshAssets: () => {} };
+  }
 
   return { assets, refreshAssets };
 };
