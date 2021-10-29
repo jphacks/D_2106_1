@@ -1,3 +1,4 @@
+import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import Divider from "src/components/atoms/Divider";
 import { H2 } from "src/components/atoms/Text";
@@ -5,7 +6,6 @@ import BothEdge from "src/components/layouts/BothEdge";
 import Margin from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
 import { BASE_PX, SMALL_PX } from "src/utils/space";
-import { AntDesign } from "@expo/vector-icons";
 
 type Props = {
   title?: string;
