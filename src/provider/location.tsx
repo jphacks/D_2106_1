@@ -9,9 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Divider from "src/components/atoms/Divider";
 import { TinyP } from "src/components/atoms/Text";
 import Space from "src/components/layouts/Space";
-import PermissionGuide, {
-  Block as PermissionGuideBlock,
-} from "src/components/organisms/PermissionGuide";
+import PermissionGuide from "src/components/organisms/PermissionGuide";
 import useInterval from "src/hooks/useInterval";
 import useIsLocationAlways from "src/hooks/useIsLocationAlways";
 import { emptyAsyncFn } from "src/utils";

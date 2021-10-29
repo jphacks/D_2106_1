@@ -1,4 +1,5 @@
 import { Button, Text } from "@ui-kitten/components";
+import * as MediaLibrary from "expo-media-library";
 import React, { useEffect } from "react";
 import {
   Linking,
@@ -8,14 +9,13 @@ import {
   View,
 } from "react-native";
 import { ScaledImage } from "src/components/atoms/Image";
+import { P } from "src/components/atoms/Text";
 import { Center } from "src/components/layouts/Align";
 import { Padding } from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
 import { useLocation } from "src/provider/location";
 import { BORDER_COLOR } from "src/utils/color";
 import { BASE_PX } from "src/utils/space";
-import * as MediaLibrary from "expo-media-library";
-import { P } from "src/components/atoms/Text";
 
 const PermissionGuide: React.FC<{ onClose: () => void }> = ({
   onClose,
