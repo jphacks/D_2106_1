@@ -79,67 +79,72 @@ const FirstScreen: React.FC = () => {
   }, [isAllPermissionOk]);
 
   return (
-    <><SafeAreaView>
-      <Padding size={BASE_PX}>
-        <Space vertical>
-          <H3>位置情報の収集を開始します</H3>
-          <SmallP>
-            バックグラウンドで位置情報の収集を行い、撮影された写真がどこで撮影されたのかを追跡します。
-          </SmallP>
-          <SmallP>
-            写真の撮影はこのアプリを経由する必要はありません。
-            純正のカメラやサードパーティーカメラ、スクリーンショットなどもトラックすることができます。
-          </SmallP>
-          <Button
-            onPress={hasStartedRecording ? continueRecording : startWithCheckingPermission}
-            disabled={
-              !isPermissionOk ||
-              starting ||
-              stopping ||
-              checkingIfStartedRecording
-            }
-          >
-            {hasStartedRecording
-              ? "アルバム作成を続ける"
-              : "位置情報の記録を開始"}
-          </Button>
-          <Button
-            onPress={stopWithAlert}
-            appearance="outline"
-            disabled={
-              !hasStartedRecording ||
-              checkingIfStartedRecording ||
-              starting ||
-              stopping
-            }
-          >
-            位置情報の記録を停止
-          </Button>
-          <Button
-            status="basic"
-            appearance="outline"
-            onPress={startDebug}
-            disabled={!isPermissionOk || startingDebug}
-          >
-            位置情報の記録を開始（デバッグモード）
-          </Button>
-          <Button status="basic" appearance="outline" onPress={startDemo}>
-            デモを開始
-          </Button>
-          <Button
-            status="basic"
-            appearance="outline"
-            onPress={() =>
-              navigation.navigate(screens.CreateNewAlbumFifth, { albumId: 2 })
-            }
-            disabled={!isPermissionOk || startingDebug}
-          >
-            最終画面
-          </Button>
-        </Space>
-      </Padding>
-    </SafeAreaView>
-        <Portal>
+    <>
+      <SafeAreaView>
+        <Padding size={BASE_PX}>
+          <Space vertical>
+            <H3>位置情報の収集を開始します</H3>
+            <SmallP>
+              バックグラウンドで位置情報の収集を行い、撮影された写真がどこで撮影されたのかを追跡します。
+            </SmallP>
+            <SmallP>
+              写真の撮影はこのアプリを経由する必要はありません。
+              純正のカメラやサードパーティーカメラ、スクリーンショットなどもトラックすることができます。
+            </SmallP>
+            <Button
+              onPress={
+                hasStartedRecording
+                  ? continueRecording
+                  : startWithCheckingPermission
+              }
+              disabled={
+                !isPermissionOk ||
+                starting ||
+                stopping ||
+                checkingIfStartedRecording
+              }
+            >
+              {hasStartedRecording
+                ? "アルバム作成を続ける"
+                : "位置情報の記録を開始"}
+            </Button>
+            <Button
+              onPress={stopWithAlert}
+              appearance="outline"
+              disabled={
+                !hasStartedRecording ||
+                checkingIfStartedRecording ||
+                starting ||
+                stopping
+              }
+            >
+              位置情報の記録を停止
+            </Button>
+            <Button
+              status="basic"
+              appearance="outline"
+              onPress={startDebug}
+              disabled={!isPermissionOk || startingDebug}
+            >
+              位置情報の記録を開始（デバッグモード）
+            </Button>
+            <Button status="basic" appearance="outline" onPress={startDemo}>
+              デモを開始
+            </Button>
+            <Button
+              status="basic"
+              appearance="outline"
+              onPress={() =>
+                navigation.navigate(screens.CreateNewAlbumFifth, { albumId: 2 })
+              }
+              disabled={!isPermissionOk || startingDebug}
+            >
+              最終画面
+            </Button>
+          </Space>
+        </Padding>
+      </SafeAreaView>
+      <Portal>
         <Modalize
           ref={modalizeRef}
           handlePosition="inside"
@@ -150,7 +155,7 @@ const FirstScreen: React.FC = () => {
           <PermissionGuide onClose={() => modalizeRef.current?.close()} />
         </Modalize>
       </Portal>
-      </>
+    </>
   );
 };
 
