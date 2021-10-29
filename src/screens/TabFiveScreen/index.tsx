@@ -258,7 +258,7 @@ const AlbumDetail: React.FC = () => {
   const dynamicModalizeState = useDynamicModalizeState();
   if (globalValues === null) return null;
   const { currentRegion, mapRef, coordinates, flatListRef } = globalValues;
-  const { contentHeight } = dynamicModalizeState;
+  const { initialHeight } = dynamicModalizeState;
   return (
     <ImageList
       data={coordinates
@@ -280,7 +280,7 @@ const AlbumDetail: React.FC = () => {
       }}
       extractImageUri={(item) => item.imageUrl}
       keyExtractor={(item) => item.id}
-      previewSize={contentHeight - 60}
+      previewSize={initialHeight - 60}
     />
   );
 };

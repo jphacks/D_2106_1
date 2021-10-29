@@ -4,6 +4,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import Image from "src/components/atoms/Image";
 import Space from "src/components/layouts/Space";
+import { H3, SmallP } from "../Text";
 
 export type Props = {
   title?: string;
@@ -13,6 +14,7 @@ export type Props = {
   onPress?: () => void;
   width: number;
   height: number;
+  small?: boolean;
 };
 
 const PostCard: React.FC<Props> = ({
@@ -23,6 +25,7 @@ const PostCard: React.FC<Props> = ({
   width,
   height,
   onPress,
+  small,
 }) => {
   return (
     <Card
@@ -38,15 +41,25 @@ const PostCard: React.FC<Props> = ({
       onPress={onPress}
       activeOpacity={0.7}
     >
-      <View style={styles.reverse}>
-        <Text appearance="hint">{moment(timestamp).format("MMM Do YY")}</Text>
-      </View>
-      <Space align="end">
-        <Text category="h6">{title}</Text>
-        <Text status="info" category="label">
-          {locations?.join(",")}
-        </Text>
-      </Space>
+      {small ? (
+        <Space style={{ margin: -8 }}>
+          <SmallP gray bold numberOfLines={1}>
+            {title}
+          </SmallP>
+        </Space>
+      ) : (
+        <Space vertical>
+          <Space align="center" style={{ margin: -8 }}>
+            <H3>{title}</H3>
+            <SmallP bold gray>
+              {locations?.join(",")}
+            </SmallP>
+          </Space>
+          <SmallP bold gray>
+            {moment(timestamp).format("YYYY-MM-DD HH:mm")}
+          </SmallP>
+        </Space>
+      )}
     </Card>
   );
 };
