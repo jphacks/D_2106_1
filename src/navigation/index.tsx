@@ -111,7 +111,7 @@ function BottomTabNavigator() {
         name="TabFour"
         component={CreateNewAlbumNavigator}
         options={{
-          title: "アルバム作成",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="pencil-square-o" color={color} />
           ),
