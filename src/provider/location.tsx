@@ -119,6 +119,7 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
 
   const applyDemoData = useCallback(async () => {
     setLocations(demoLocations);
+    await AsyncStorage.setItem(RECORDING_BEGIN_TIME, String(0));
     await AsyncStorage.setItem(LOCATION_RECORDS, JSON.stringify(demoLocations));
   }, []);
 

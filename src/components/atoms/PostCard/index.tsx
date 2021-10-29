@@ -1,7 +1,6 @@
 import { Card } from "@ui-kitten/components";
 import moment from "moment";
 import React from "react";
-import { StyleSheet } from "react-native";
 import Image from "src/components/atoms/Image";
 import Space from "src/components/layouts/Space";
 import { H3, SmallP } from "../Text";
@@ -64,13 +63,3 @@ const PostCard: React.FC<Props> = ({
   );
 };
 export default PostCard;
-
-const styles = StyleSheet.create({
-  reverse: {
-    flexDirection: "row-reverse",
-  },
-  title: {
-    alignItems: "flex-end",
-    flexDirection: "row",
-  },
-});

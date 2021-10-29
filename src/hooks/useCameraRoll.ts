@@ -4,10 +4,12 @@ import { Alert } from "react-native";
 import { assetsData } from "src/assets/demo/assets";
 import useAsyncCallback from "./useAsyncCallback";
 
-const useCameraRoll = (
-  options: MediaLibrary.AssetsOptions = {},
-  isDemo?: boolean
-) => {
+export type Options = {
+  options?: MediaLibrary.AssetsOptions;
+  isDemo?: boolean;
+};
+
+const useCameraRoll = ({ options = {}, isDemo }: Options) => {
   const [status, requestPermissionBase] = MediaLibrary.usePermissions();
   const [assets, setAssets] = useState<MediaLibrary.Asset[]>([]);
   const [requestPermission, reqestingPermission] = useAsyncCallback(
