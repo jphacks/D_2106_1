@@ -16,6 +16,7 @@ import {
 } from "@react-navigation/stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
+import { Host } from "react-native-portalize";
 import { Padding } from "src/components/layouts/Margin";
 import { screens } from "src/dict";
 import CreateNewAlbumFifthScreen from "src/screens/CreateNewAlbumScreen/FifthScreen";
@@ -23,6 +24,7 @@ import CreateNewAlbumFirstScreen from "src/screens/CreateNewAlbumScreen/FirstScr
 import CreateNewAlbumFourthScreen from "src/screens/CreateNewAlbumScreen/FourthScreen";
 import CreateNewAlbumSecondScreen from "src/screens/CreateNewAlbumScreen/SecondScreen";
 import CreateNewAlbumThirdScreen from "src/screens/CreateNewAlbumScreen/ThirdScreen";
+import TabFiveScreen from "src/screens/TabFiveScreen";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
@@ -47,7 +49,9 @@ export default function Navigation({
       linking={LinkingConfiguration}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
-      <RootNavigator />
+      <Host>
+        <RootNavigator />
+      </Host>
     </NavigationContainer>
   );
 }
@@ -137,6 +141,14 @@ function BottomTabNavigator() {
         name="TabFour"
         component={CreateNewAlbumNavigator}
         options={{ headerShown: false }}
+      />
+      <BottomTab.Screen
+        name="TabFive"
+        component={TabFiveScreen}
+        options={{
+          title: "Tab Five",
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
       />
     </BottomTab.Navigator>
   );
