@@ -20,18 +20,16 @@ export default function App() {
     return null;
   } else {
     return (
-      <PaperProvider>
-        <UIKittenProvider {...eva} theme={eva.light}>
-          <AppProvider serverHost="http://jphacks2021-server-859482516.ap-northeast-1.elb.amazonaws.com">
-            <SafeAreaProvider>
-              <LocationProvider>
-                <Navigation colorScheme={colorScheme} />
-                <StatusBar />
-              </LocationProvider>
-            </SafeAreaProvider>
-          </AppProvider>
-        </UIKittenProvider>
-      </PaperProvider>
+      <UIKittenProvider {...eva} theme={eva.light}>
+        <AppProvider serverHost="http://jphacks2021-server-859482516.ap-northeast-1.elb.amazonaws.com">
+          <SafeAreaProvider>
+            <LocationProvider>
+              <Navigation colorScheme={colorScheme} />
+              <StatusBar />
+            </LocationProvider>
+          </SafeAreaProvider>
+        </AppProvider>
+      </UIKittenProvider>
     );
   }
 }
