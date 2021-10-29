@@ -1,19 +1,15 @@
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider as UIKittenProvider } from "@ui-kitten/components";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { LogBox } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import AppProvider from "src/provider/app";
+import LocationProvider from "src/provider/location";
+import "src/utils/extension";
 import useCachedResources from "./src/hooks/useCachedResources";
 import useColorScheme from "./src/hooks/useColorScheme";
 import Navigation from "./src/navigation";
-import * as eva from "@eva-design/eva";
-import {
-  ApplicationProvider as UIKittenProvider,
-  Layout,
-  Text,
-} from "@ui-kitten/components";
-import "src/utils/extension";
-import AppProvider from "src/provider/app";
-import LocationProvider from "src/provider/location";
 
 LogBox.ignoreAllLogs(true);
 export default function App() {
