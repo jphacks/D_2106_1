@@ -16,6 +16,7 @@ import {
 } from "@react-navigation/stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
+import { Host } from "react-native-portalize";
 import { Padding } from "src/components/layouts/Margin";
 import { screens } from "src/dict";
 import CreateNewAlbumFifthScreen from "src/screens/CreateNewAlbumScreen/FifthScreen";
@@ -47,7 +48,9 @@ export default function Navigation({
       linking={LinkingConfiguration}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
-      <RootNavigator />
+      <Host>
+        <RootNavigator />
+      </Host>
     </NavigationContainer>
   );
 }

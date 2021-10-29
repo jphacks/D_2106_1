@@ -16,7 +16,7 @@ import { BORDER_COLOR } from "src/utils/color";
 import { BASE_PX } from "src/utils/space";
 
 const PermissionGuide: React.FC<{ onClose?: () => void; canClose?: boolean }> =
-  ({ onClose, canClose }) => {
+  ({ children }) => {
     const { width } = useWindowDimensions();
     const { requirePermission } = useLocation();
     return (
@@ -50,9 +50,7 @@ const PermissionGuide: React.FC<{ onClose?: () => void; canClose?: boolean }> =
                 style={styles.image}
               />
             </Center>
-            <Button onPress={onClose} disabled={!canClose}>
-              続ける
-            </Button>
+            {children}
           </Space>
         </Padding>
       </ScrollView>
