@@ -278,7 +278,7 @@ const AlbumDetail: React.FC = () => {
       }}
       extractImageUri={(item) => item.imageUrl}
       keyExtractor={(item) => item.id}
-      previewSize={initialHeight - 60}
+      previewSize={initialHeight - 50}
     />
   );
 };
