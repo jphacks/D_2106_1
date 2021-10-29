@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import {
   ActivityIndicator,
   Animated,
-  Easing,
   FlatList,
   TouchableOpacity,
   useWindowDimensions,
