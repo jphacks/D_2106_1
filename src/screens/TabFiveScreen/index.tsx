@@ -115,15 +115,13 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     });
   };
 
-  const { data } = useGetAPI("/albums");
+  const { data } = useGetAPI<{ albums: Album[] }>("/albums");
   const { data: data2 } = useGetAPI("/album/detail", {
     album_id: currentAlbum,
     ...mapCorners,
   });
 
-  console.log("data", JSON.stringify(data, null, 2));
-
-  const albums: Album[] | null = data;
+  const { albums } = data ?? {};
 
   const coordinates: CoordinateType[] = data2?.location;
 
