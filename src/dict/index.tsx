@@ -5,3 +5,8 @@ export const screens = {
   CreateNewAlbumFour: "/create-new-album/four",
   CreateNewAlbumFifth: "/create-new-album/five",
 };
+
+export const profileScreens = {
+  ProfileView: "/profile/view",
+  ProfileEdit: "/profile/edit",
+};

@@ -15,10 +15,10 @@ import {
   StackNavigationOptions,
 } from "@react-navigation/stack";
 import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { ColorSchemeName } from "react-native";
 import { Host } from "react-native-portalize";
 import { Padding } from "src/components/layouts/Margin";
-import { screens } from "src/dict";
+import { profileScreens, screens } from "src/dict";
 import CreateNewAlbumFifthScreen from "src/screens/CreateNewAlbumScreen/FifthScreen";
 import CreateNewAlbumFirstScreen from "src/screens/CreateNewAlbumScreen/FirstScreen";
 import CreateNewAlbumFourthScreen from "src/screens/CreateNewAlbumScreen/FourthScreen";
@@ -100,59 +100,57 @@ function BottomTabNavigator() {
     >
       <BottomTab.Screen
         name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<"TabOne">) => ({
-          title: "Tab One",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate("Modal")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
-        })}
-      />
-      <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
+        component={ProfileStackNavigator}
         options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-      <BottomTab.Screen
-        name="TabThree"
-        component={TabThreeScreen}
-        options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "マイページ",
+          headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
       <BottomTab.Screen
         name="TabFour"
         component={CreateNewAlbumNavigator}
-        options={{ headerShown: false }}
+        options={{
+          title: "アルバム作成",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="pencil-square-o" color={color} />
+          ),
+        }}
       />
       <BottomTab.Screen
         name="TabFive"
         component={TabFiveScreen}
         options={{
-          title: "Tab Five",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "アルバム閲覧",
+          tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
         }}
       />
     </BottomTab.Navigator>
   );
 }
+
+const ProfileStack = createStackNavigator();
+
+const ProfileStackNavigator: React.FC = () => {
+  const screenOptions = useScreenOptions();
+  return (
+    <ProfileStack.Navigator
+      initialRouteName={profileScreens.ProfileView}
+      screenOptions={screenOptions}
+    >
+      <ProfileStack.Screen
+        name={profileScreens.ProfileView}
+        component={TabOneScreen}
+        options={{ headerTitle: "マイページ" }}
+      />
+      <ProfileStack.Screen
+        name={profileScreens.ProfileEdit}
+        component={TabTwoScreen}
+        options={{ headerTitle: "プロフィール編集" }}
+      />
+    </ProfileStack.Navigator>
+  );
+};
 
 const CreateNewAlbumStack = createStackNavigator();
 

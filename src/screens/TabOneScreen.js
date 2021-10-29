@@ -4,6 +4,7 @@ import { FlatList, StyleSheet, useWindowDimensions } from "react-native";
 import PostCard from "src/components/atoms/PostCard";
 import { Padding } from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
+import { profileScreens } from "src/dict";
 
 const SampleUser = {
   userid: "shinjibaka2021",
@@ -77,7 +78,12 @@ export default function TabOneScreen({ navigation }) {
               </Space>
             </Space>
             <Text>{SampleUser.introduction}</Text>
-            <Button size="small">プロフィールを編集する</Button>
+            <Button
+              size="small"
+              onPress={() => navigation.navigate(profileScreens.ProfileEdit)}
+            >
+              プロフィールを編集する
+            </Button>
           </Space>
         }
       />
