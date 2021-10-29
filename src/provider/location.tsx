@@ -4,9 +4,9 @@ import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import moment from "moment";
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { AppState } from "react-native";
+import { Alert, AppState } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { locationsData } from "src/assets/demo/locations";
+import { locationsData as demoLocations } from "src/assets/demo/locations";
 import Divider from "src/components/atoms/Divider";
 import { TinyP } from "src/components/atoms/Text";
 import Space from "src/components/layouts/Space";
@@ -43,6 +43,8 @@ export type LocationContext = {
     isAlways: boolean;
     hasStartedRecording: boolean;
   }>;
+  applyDemoData: () => Promise<void>;
+  clearCurrentData: () => Promise<void>;
 };
 
 const defaultLocationContext: LocationContext = {
@@ -59,20 +61,14 @@ const defaultLocationContext: LocationContext = {
     isAlways: false,
     hasStartedRecording: false,
   }),
+  applyDemoData: emptyAsyncFn,
+  clearCurrentData: emptyAsyncFn,
 };
-
-const demoLocations = locationsData;
 
 export const locationContext = React.createContext<LocationContext>(
   defaultLocationContext
 );
-export const useLocation = (isDemo?: boolean) => {
-  const context = useContext(locationContext);
-  if (isDemo) {
-    return { ...context, locations: demoLocations, isPermissionOk: true };
-  }
-  return context;
-};
+export const useLocation = () => useContext(locationContext);
 
 const LocationProvider: React.FC = React.memo(({ children }) => {
   const [status, setStatus] =
@@ -90,23 +86,40 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
   const requirePermission = useCallback(async () => {
     setStatus(await Location.requestBackgroundPermissionsAsync());
   }, []);
+  const clearCurrentData = useCallback(async () => {
+    setLocations([]);
+    await AsyncStorage.setItem(LOCATION_RECORDS, JSON.stringify([]));
+  }, []);
   const startLocationRecording = useCallback(
     async (beginTime: number = moment().unix() * 1000) => {
       await AsyncStorage.setItem(RECORDING_BEGIN_TIME, String(beginTime));
-      await AsyncStorage.setItem(LOCATION_RECORDS, JSON.stringify([]));
-      await Location.startLocationUpdatesAsync(FETCH_LOCATION, {
-        accuracy: Location.Accuracy.Balanced,
-        distanceInterval: DISTANCE_INTERVAL,
-        deferredUpdatesInterval: TIME_INTERVAL,
-        deferredUpdatesDistance: DISTANCE_INTERVAL,
-      });
-      setHasStartedRecording(true);
+      await clearCurrentData();
+      try {
+        await Location.startLocationUpdatesAsync(FETCH_LOCATION, {
+          accuracy: Location.Accuracy.Balanced,
+          distanceInterval: DISTANCE_INTERVAL,
+          deferredUpdatesInterval: TIME_INTERVAL,
+          deferredUpdatesDistance: DISTANCE_INTERVAL,
+        });
+        setHasStartedRecording(true);
+      } catch {
+        Alert.alert("この機能は Expo Go 経由ではサポートされていません。");
+        throw new Error("権限エラー, ExpoGoで起動していると思われる");
+      }
     },
     []
   );
   const stopLocationRecording = useCallback(async () => {
-    await Location.stopLocationUpdatesAsync(FETCH_LOCATION);
+    try {
+      await Location.stopLocationUpdatesAsync(FETCH_LOCATION);
+      await clearCurrentData();
+    } catch {}
     setHasStartedRecording(false);
+  }, []);
+
+  const applyDemoData = useCallback(async () => {
+    setLocations(demoLocations);
+    await AsyncStorage.setItem(LOCATION_RECORDS, JSON.stringify(demoLocations));
   }, []);
 
   // 権限等をチェックするタイミング
@@ -171,6 +184,8 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
         startLocationRecording,
         stopLocationRecording,
         recheckAll,
+        applyDemoData,
+        clearCurrentData,
       }}
     >
       {permissionGuideVisible ? (
