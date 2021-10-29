@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
-import Image from "src/components/atoms/Image";
+import MapPing from "src/components/atoms/MapPing";
 import Message from "src/components/atoms/Message";
 import { Padding } from "src/components/layouts/Margin";
 import DynamicModalizeContainer, {
@@ -23,7 +23,7 @@ import { useGetAPI } from "src/hooks/useGetAPI";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useValueContext, ValueProvider } from "src/hooks/useValueContext";
 import { useLocation } from "src/provider/location";
-import { SMALL_PX } from "src/utils/space";
+import { BASE_PX, SMALL_PX } from "src/utils/space";
 
 type CoordinateType = {
   id: string;
@@ -115,13 +115,13 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     });
   };
 
-  const { data } = useGetAPI("/albums");
+  const { data } = useGetAPI<{ albums: Album[] }>("/albums");
   const { data: data2 } = useGetAPI("/album/detail", {
     album_id: currentAlbum,
     ...mapCorners,
   });
 
-  const albums: Album[] | null = data?.albums;
+  const { albums } = data ?? {};
 
   const coordinates: CoordinateType[] = data2?.location;
 
@@ -170,14 +170,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
               }}
             >
               <View
-                style={{
-                  height: imageSize / 2 - 15,
-                  width: imageSize / 2 - 15,
-                  borderRadius: 4,
-                  backgroundColor: "#36C1A7",
-                }}
                 onTouchStart={() => {
-                  flatListRef.current?.scrollToIndex({ index: index });
                   mapRef.current?.animateToRegion({
                     ...currentRegion,
                     longitude: c?.longitude,
@@ -186,34 +179,13 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
                   navigationRef?.navigate("ImageFlatList");
                 }}
               >
-                <Image
-                  source={{ uri: c.imageUrls.first() }}
-                  width={imageSize / 2 - 25}
-                  height={imageSize / 2 - 25}
-                  style={{
-                    borderRadius: 4,
-                    top: 5,
-                    left: 5,
-                  }}
-                />
+                <MapPing uri={c?.imageUrls.first()} size={imageSize / 2 - 25} />
               </View>
               <View
                 style={{
-                  width: 0,
-                  height: 0,
-                  alignSelf: "center",
-                  backgroundColor: "transparent",
-                  borderLeftWidth: 10,
-                  borderRightWidth: 10,
-                  borderTopWidth: 20,
-                  borderBottomWidth: 0,
-                  borderTopColor: "#36C1A7",
-                  borderLeftColor: "transparent",
-                  borderRightColor: "transparent",
-                  marginBottom: imageSize / 2 + 5,
+                  marginBottom: imageSize / 2 - BASE_PX,
                 }}
                 onTouchStart={() => {
-                  flatListRef.current?.scrollToIndex({ index: index });
                   navigation.navigate("Albums");
                 }}
               />
