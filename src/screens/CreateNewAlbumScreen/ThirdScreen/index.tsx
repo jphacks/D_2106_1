@@ -92,7 +92,11 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number }> = ({
           <Button onPress={navigateToNext} disabled={!likedAssetExists}>
             アルバム情報を入力
           </Button>
-          <Button onPress={resetSelection} appearance="outline">
+          <Button
+            onPress={resetSelection}
+            appearance="outline"
+            style={{ borderColor: "#8ac75a" }}
+          >
             もう一度やり直す
           </Button>
         </Space>

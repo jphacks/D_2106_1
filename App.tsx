@@ -10,6 +10,7 @@ import {
   ApplicationProvider as UIKittenProvider,
   Layout,
   Text,
+  ThemeType,
 } from "@ui-kitten/components";
 import { Provider as PaperProvider } from "react-native-paper";
 import "src/utils/extension";
@@ -21,12 +22,18 @@ export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
+  const customTheme = {
+    ...eva.light,
+    "color-primary-default": "#8ac75a",
+    "color-primary-active": "rgba(138, 199, 90, 0.8)",
+  };
+
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
       <PaperProvider>
-        <UIKittenProvider {...eva} theme={eva.light}>
+        <UIKittenProvider {...eva} theme={customTheme}>
           <AppProvider serverHost="http://jphacks2021-server-859482516.ap-northeast-1.elb.amazonaws.com">
             <SafeAreaProvider>
               <LocationProvider>
