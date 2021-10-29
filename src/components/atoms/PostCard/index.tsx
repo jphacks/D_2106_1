@@ -44,7 +44,7 @@ const PostCard: React.FC<Props> = ({
       <Space align="end">
         <Text category="h6">{title}</Text>
         <Text status="info" category="label">
-          {locations?.join(",")}
+          {locations}
         </Text>
       </Space>
     </Card>
