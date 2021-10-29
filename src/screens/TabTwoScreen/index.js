@@ -1,9 +1,10 @@
-import { Avatar, Button, Input } from "@ui-kitten/components";
+import { Avatar, Button, Input, Text } from "@ui-kitten/components";
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, TextInput } from "react-native";
+import { Image, StyleSheet, TextInput } from "react-native";
 import { Center } from "src/components/layouts/Align";
 import Space from "src/components/layouts/Space";
 import * as ImagePicker from "expo-image-picker";
+import { Padding } from "src/components/layouts/Margin";
 
 const SampleUser = {
   userid: "shinjibaka2021",
@@ -11,10 +12,11 @@ const SampleUser = {
   profile_image_url:
     "https://amd-pctr.c.yimg.jp/r/iwiz-amd/20211020-00000048-chuspo-000-2-view.jpg",
   introduction:
-    "しんじ22歳　座右の銘は、「毎日が学び」                            #春から東京大学大学院 #有料物件 #学歴ロンダリングしてる人と繋がりたい #来世はゴリラになりたい #シャバーニ",
+    "しんじ22歳　座右の銘は、「毎日がz学び」                            #春から東京大学大学院 #有料物件 #学歴ロンダリングしてる人と繋がりたい #来世はゴリラになりたい #シャバーニ",
 };
 
 export default function TabTwoScreen({ navigation }) {
+  //useState の初期値 : 変更前のプロフィール情報
   const [image, setImage] = useState(SampleUser.profile_image_url);
   const [name, setName] = useState(SampleUser.name);
   const [introduction, setIntrodution] = useState(SampleUser.introduction);
@@ -32,12 +34,18 @@ export default function TabTwoScreen({ navigation }) {
   };
 
   return (
-    <Space direction="vertical" style={{ marginTop: 20, flex: 1 }}>
+    <Padding>
       <Center style={{ padding: 10 }}>
-        <Text>プロフィール画像</Text>
-        <Avatar size="giant" source={{ uri: image }} />
+        <Text category="h6">プロフィール画像</Text>
+        <Avatar
+          marginBottom={10}
+          marginTop={10}
+          size="giant"
+          source={{ uri: image }}
+        />
         <Button
-          size="tiny"
+          marginTop={10}
+          size="small"
           onPress={() => {
             pickImage();
             console.log("pushed");
@@ -46,14 +54,14 @@ export default function TabTwoScreen({ navigation }) {
           画像を選択する
         </Button>
       </Center>
-      <Text>名前</Text>
+      <Text category="h6">名前</Text>
       <TextInput
         style={styles.name}
         onChangeText={setName}
         value={name}
         maxLength={12}
       />
-      <Text>自己紹介</Text>
+      <Text category="h6">自己紹介</Text>
       <TextInput
         style={styles.introduction}
         onChangeText={setIntrodution}
@@ -61,7 +69,14 @@ export default function TabTwoScreen({ navigation }) {
         maxLength={128}
         multiline={"True"}
       />
-    </Space>
+      <Button
+        onPress={() => {
+          console.log("まだなんもできないよ");
+        }}
+      >
+        変更を保存する
+      </Button>
+    </Padding>
   );
 }
 

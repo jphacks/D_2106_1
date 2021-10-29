@@ -1,9 +1,9 @@
 import { Avatar, Button, Text } from "@ui-kitten/components";
 import React from "react";
-import { FlatList, StyleSheet, useWindowDimensions } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import PostedCard from "src/components/atoms/PostedCard";
 import { Padding } from "src/components/layouts/Margin";
-
+import { useWindowDimensions } from "react-native";
 import Space from "src/components/layouts/Space";
 
 const SampleUser = {
@@ -12,7 +12,7 @@ const SampleUser = {
   profile_image_url:
     "https://amd-pctr.c.yimg.jp/r/iwiz-amd/20211020-00000048-chuspo-000-2-view.jpg",
   introduction:
-    "しんじ22歳　座右の銘は、「毎日が学び」                            #春から東京大学大学院 #有料物件 #学歴ロンダリングしてる人と繋がりたい #来世はゴリラになりたい #シャバーニ",
+    "しんじ22歳　座右の銘は、「毎日が学び」                            #春から東京大学大学院 #有料物件 #学歴ロンダリングしてる人と繋がりたい #動物園年パス勢 #40歳でFIREする人 #IPO(新規公開株)ガチ勢 #フリーエンジニア #機械学習 #来世はゴリラになりたい #シャバーニ",
 };
 
 const sampleData = [
