@@ -125,6 +125,8 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
 
   const coordinates: CoordinateType[] = data2?.location;
 
+  const routes: CoordinateType[] = data2?.route;
+
   useFocusedEffect(() => {
     stopLocationRecording();
   });
@@ -230,7 +232,7 @@ const Albums: React.FC = () => {
   const { albums, setCurrentAlbum, flatListRef } = globalValues;
   return (
     <AlbumList
-      data={albums.map((a) => ({
+      data={albums?.map((a) => ({
         ...a,
         title: a.title,
         locations: ["愛知県", "名古屋市"],
@@ -254,7 +256,7 @@ const AlbumDetail: React.FC = () => {
   const dynamicModalizeState = useDynamicModalizeState();
   if (globalValues === null) return null;
   const { currentRegion, mapRef, coordinates, flatListRef } = globalValues;
-  const { contentHeight } = dynamicModalizeState;
+  const { initialHeight } = dynamicModalizeState;
   return (
     <ImageList
       data={coordinates
@@ -276,7 +278,7 @@ const AlbumDetail: React.FC = () => {
       }}
       extractImageUri={(item) => item.imageUrl}
       keyExtractor={(item) => item.id}
-      previewSize={contentHeight - 60}
+      previewSize={initialHeight - 60}
     />
   );
 };
