@@ -3,7 +3,6 @@ import * as Location from "expo-location";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   LayoutChangeEvent,
-  SafeAreaView,
   StyleSheet,
   useWindowDimensions,
 } from "react-native";
