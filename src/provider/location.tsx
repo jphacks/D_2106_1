@@ -5,6 +5,7 @@ import moment from "moment";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AppState } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { locationsData } from "src/assets/demo/locations";
 import PermissionGuide from "src/components/organisms/PermissionGuide";
 import useInterval from "src/hooks/useInterval";
 import useIsLocationAlways from "src/hooks/useIsLocationAlways";
@@ -56,10 +57,18 @@ const defaultLocationContext: LocationContext = {
   }),
 };
 
+const demoLocations = locationsData;
+
 export const locationContext = React.createContext<LocationContext>(
   defaultLocationContext
 );
-export const useLocation = () => useContext(locationContext);
+export const useLocation = (isDemo?: boolean) => {
+  const context = useContext(locationContext);
+  if (isDemo) {
+    return { ...context, locations: demoLocations, isPermissionOk: true };
+  }
+  return context;
+};
 
 const LocationProvider: React.FC = React.memo(({ children }) => {
   const [status, setStatus] =
