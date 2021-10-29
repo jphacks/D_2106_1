@@ -76,6 +76,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
   });
 
   const coordinates: CoordinateType[] = data?.location;
+  const routes: CoordinateType[] = data?.route;
 
   const routes: CoordinateType[] = data?.route;
 
