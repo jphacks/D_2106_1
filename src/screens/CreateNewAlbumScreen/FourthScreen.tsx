@@ -37,7 +37,7 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
 }) => {
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
-  const { locations } = useLocation();
+  const { locations, clearCurrentData } = useLocation();
   const [parentHeight, setParentHeight] = useState(0);
   const [previewHeight, setPreviewHeight] = useState(0);
   const { uploadAssetImages } = useUploadImage("/upload/image");
@@ -60,6 +60,12 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
   const isFormDone = trimString(title) !== null && thumbnail !== null;
 
   const [postAlbum, postingAlbum] = useAsyncCallback(async () => {
+    if (locations.length <= 0) {
+      return Alert.alert(
+        "位置情報がありません",
+        "収集された位置情報データが空のためデータを送信できませんでした"
+      );
+    }
     let albumId: string = "-1";
     // メタデータの送信
     try {
@@ -75,7 +81,9 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
           longitude: l.coordinate.longitude,
           timestamp: Math.round(l.timestamp / 1000),
         })),
+        userId: "user",
       };
+      console.log("variables", variables);
       const result = await postAlbumMetadata(variables);
       albumId = result.id;
     } catch (err) {
@@ -92,6 +100,7 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
       Alert.alert("写真の送信に失敗しました", err.message);
       return;
     }
+    await clearCurrentData();
     navigation.navigate(screens.CreateNewAlbumFifth, { albumId });
   });
   return (
@@ -175,7 +184,6 @@ const styles = StyleSheet.create({
 export default () => {
   const route = useRoute();
   const selectedAssets: Asset[] = (route.params as any)?.selected;
-  console.log("selectedAssets", selectedAssets);
 
   if (!selectedAssets?.length || selectedAssets.length <= 0)
     return <Message message="選択された画像が見つかりませんでした" />;
