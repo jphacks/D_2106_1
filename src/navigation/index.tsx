@@ -23,6 +23,7 @@ import CreateNewAlbumFirstScreen from "src/screens/CreateNewAlbumScreen/FirstScr
 import CreateNewAlbumFourthScreen from "src/screens/CreateNewAlbumScreen/FourthScreen";
 import CreateNewAlbumSecondScreen from "src/screens/CreateNewAlbumScreen/SecondScreen";
 import CreateNewAlbumThirdScreen from "src/screens/CreateNewAlbumScreen/ThirdScreen";
+import TabFiveScreen from "src/screens/TabFiveScreen";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
@@ -137,6 +138,14 @@ function BottomTabNavigator() {
         name="TabFour"
         component={CreateNewAlbumNavigator}
         options={{ headerShown: false }}
+      />
+      <BottomTab.Screen
+        name="TabFive"
+        component={TabFiveScreen}
+        options={{
+          title: "Tab Five",
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
       />
     </BottomTab.Navigator>
   );

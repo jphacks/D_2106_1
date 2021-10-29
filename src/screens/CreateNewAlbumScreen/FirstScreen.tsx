@@ -95,6 +95,16 @@ const FirstScreen: React.FC = () => {
           >
             位置情報の記録を開始（デバッグモード）
           </Button>
+          <Button
+            status="basic"
+            appearance="outline"
+            onPress={() =>
+              navigation.navigate(screens.CreateNewAlbumFifth, { albumId: 2 })
+            }
+            disabled={!isPermissionOk || startingDebug}
+          >
+            最終画面
+          </Button>
         </Space>
       </Padding>
     </SafeAreaView>

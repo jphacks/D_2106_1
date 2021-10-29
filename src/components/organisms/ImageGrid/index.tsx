@@ -61,11 +61,11 @@ const ImageGrid = <T,>({
             {renderImage({ item })}
           </TouchableOpacity>
         )}
-        keyExtractor={(item) => extractImageUri(item)}
+        keyExtractor={(item, i) => `${i}`}
         contentContainerStyle={styles.gridContainer}
       />
       <ImageViewing
-        images={data.map((item) => ({ uri: extractImageUri(item) }))}
+        images={data?.map((item) => ({ uri: extractImageUri(item) }))}
         imageIndex={currentImageIndex}
         visible={visible}
         presentationStyle="overFullScreen"

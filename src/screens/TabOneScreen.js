@@ -1,7 +1,7 @@
 import { Avatar, Button, Text } from "@ui-kitten/components";
 import React from "react";
-import { FlatList, SafeAreaView, StyleSheet } from "react-native";
-import PostedCard from "src/components/atoms/PostedCard";
+import { FlatList, StyleSheet, useWindowDimensions } from "react-native";
+import PostCard from "src/components/atoms/PostCard";
 import { Padding } from "src/components/layouts/Margin";
 
 import Space from "src/components/layouts/Space";
@@ -47,13 +47,18 @@ const sampleData = [
 ];
 
 export default function TabOneScreen({ navigation }) {
+  const windowDimensions = useWindowDimensions();
   const renderItem = ({ item }) => (
-    <PostedCard
-      title={item.title}
-      imageUrl={item.imageUrl}
-      createdAt={item.createdAt}
-      timestamp={item.timestamp}
-    />
+    <Padding size={30}>
+      <PostCard
+        title={item.title}
+        imageUrl={item.imageUrl}
+        createdAt={item.createdAt}
+        timestamp={item.timestamp}
+        width={windowDimensions.width - 80}
+        height={210}
+      />
+    </Padding>
   );
   return (
     <Padding size={10}>
