@@ -10,12 +10,12 @@ import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useLocation } from "src/provider/location";
 import { BASE_PX } from "src/utils/space";
+import * as MediaLibrary from "expo-media-library";
 
 const FirstScreen: React.FC = () => {
   const navigation = useNavigation();
   const {
     isPermissionOk,
-    requirePermission,
     startLocationRecording,
     stopLocationRecording,
     checkingIfStartedRecording,
@@ -23,6 +23,8 @@ const FirstScreen: React.FC = () => {
     recheckAll,
   } = useLocation();
 
+  const [mlPermissionStatus, requestMLPermission] =
+    MediaLibrary.usePermissions();
   const [start, starting] = useAsyncCallback(async () => {
     await startLocationRecording();
     navigation.navigate(screens.CreateNewAlbumSecond);
