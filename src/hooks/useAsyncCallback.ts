@@ -8,9 +8,14 @@ const useAsyncCallback = <T extends Array<any>, U>(
 ): [(...args: T) => Promise<U | null>, boolean] => {
   const [handling, setHandling] = useState(false);
 
-  const fn1 = patchedAsyncFn<T, U>(fn, async (origFn, ...args) => {
+  const fn1 = patchedAsyncFn<T, U | null>(fn, async (origFn, ...args) => {
     setHandling(true);
-    const result = await origFn(...args);
+    let result: U | null = null;
+    try {
+      result = await origFn(...args);
+    } catch (e) {
+      console.error(e);
+    }
     setHandling(false);
     return result;
   });

@@ -23,7 +23,7 @@ import { useGetAPI } from "src/hooks/useGetAPI";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useValueContext, ValueProvider } from "src/hooks/useValueContext";
 import { useLocation } from "src/provider/location";
-import { SMALL_PX } from "src/utils/space";
+import { BASE_PX, SMALL_PX } from "src/utils/space";
 
 type CoordinateType = {
   id: string;
@@ -115,15 +115,14 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     });
   };
 
-  const { data } = useGetAPI("/albums");
+  const { data } = useGetAPI<{ albums: Album[] }>("/albums");
   const { data: data2 } = useGetAPI("/album/detail", {
     album_id: currentAlbum,
     ...mapCorners,
   });
 
-  console.log("data", JSON.stringify(data, null, 2));
 
-  const albums: Album[] | null = data?.albums;
+  const { albums } = data ?? {};
 
   const coordinates: CoordinateType[] = data2?.location;
 
@@ -183,26 +182,6 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
                 uri={c.imageUrls.first()}
                 imageSize={imageSize}
               />
-              {/* <View
-                style={{
-                  width: 0,
-                  height: 0,
-                  alignSelf: "center",
-                  backgroundColor: "transparent",
-                  borderLeftWidth: 10,
-                  borderRightWidth: 10,
-                  borderTopWidth: 20,
-                  borderBottomWidth: 0,
-                  borderTopColor: "#36C1A7",
-                  borderLeftColor: "transparent",
-                  borderRightColor: "transparent",
-                  marginBottom: imageSize / 2 + 5,
-                }}
-                onTouchStart={() => {
-                  flatListRef.current?.scrollToIndex({ index: index });
-                  navigation.navigate("Albums");
-                }}
-              /> */}
             </Marker>
           ))}
           <Polyline
@@ -292,7 +271,7 @@ const AlbumDetail: React.FC = () => {
         mapRef.current?.animateToRegion({
           ...currentRegion,
           longitude: item?.longitude,
-          latitude: item?.latitude,
+          latitude: item?.latitude - currentRegion.latitudeDelta * 0.125,
         });
         flatListRef.current?.scrollToIndex({ index: index });
       }}

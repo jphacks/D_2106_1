@@ -28,33 +28,42 @@ const useUploadImage = (endpoint: string) => {
       const formData = new FormData();
       for (let assetIdx = 0; assetIdx < group.length; assetIdx++) {
         const a = group[assetIdx];
-        const assetInfo = await MediaLibrary.getAssetInfoAsync(
-          a.uri.replace("ph://", "")
-        );
-        const imageSize = { width: assetInfo.width, height: assetInfo.height };
-        const displaySize = clampImageSize(imageSize);
-        const localJpgUri = await ImageEditor.cropImage(a.uri, {
-          size: imageSize,
-          displaySize,
-          offset: { x: 0, y: 0 },
-          resizeMode: "stretch",
-        });
+        let localJpgUri: string | null = null;
+        if ((a.uri as string).startsWith("ph://")) {
+          const assetInfo = await MediaLibrary.getAssetInfoAsync(
+            a.uri.replace("ph://", "")
+          );
+          const imageSize = {
+            width: assetInfo.width,
+            height: assetInfo.height,
+          };
+          const displaySize = clampImageSize(imageSize);
+          localJpgUri = await ImageEditor.cropImage(a.uri, {
+            size: imageSize,
+            displaySize,
+            offset: { x: 0, y: 0 },
+            resizeMode: "stretch",
+          });
+        } else {
+          localJpgUri = a.uri;
+        }
         formData.append(`image${assetIdx + 1}`, {
           // @ts-ignore
           uri: localJpgUri,
-          name: `${Math.round(assetInfo.creationTime / 1000)}.jpg`,
+          name: `${Math.round(a.creationTime / 1000)}.jpg`,
           type: "image/jpeg",
         });
       }
       formData.append("album_id", albumId);
       formData.append("image_num", `${group.length}`);
 
-      const result = await fetch(`${serverHost}${endpoint}`, {
+      const rawResult = await fetch(`${serverHost}${endpoint}`, {
         method: "POST",
         body: formData,
         headers: { "Content-Type": "multipart/form-data" },
-      }).then((res) => res.json());
-      if (result.status !== 200) {
+      });
+      const result = await rawResult.json();
+      if (rawResult.status !== 200) {
         throw new Error(result.err);
       }
       onProgress?.((groupIdx + 1) / groups.length);

@@ -14,6 +14,8 @@ PODS:
     - ExpoModulesCore
   - EXFont (10.0.3):
     - ExpoModulesCore
+  - EXImagePicker (11.0.3):
+    - ExpoModulesCore
   - EXJSONUtils (0.2.0)
   - EXKeepAwake (10.0.0):
     - ExpoModulesCore
@@ -367,6 +369,8 @@ PODS:
     - React-RCTImage
   - RNSVG (12.1.1):
     - React
+  - RNVectorIcons (9.0.0):
+    - React-Core
   - UMAppLoader (3.0.0)
   - UMTaskManagerInterface (7.0.3):
     - ExpoModulesCore
@@ -380,6 +384,7 @@ DEPENDENCIES:
   - EXErrorRecovery (from `../node_modules/expo-error-recovery/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
   - EXFont (from `../node_modules/expo-font/ios`)
+  - EXImagePicker (from `../node_modules/expo-image-picker/ios`)
   - EXJSONUtils (from `../node_modules/expo-json-utils/ios`)
   - EXKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - EXLocation (from `../node_modules/expo-location/ios`)
@@ -434,6 +439,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - UMAppLoader (from `../node_modules/unimodules-app-loader/ios`)
   - UMTaskManagerInterface (from `../node_modules/unimodules-task-manager-interface/ios`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -457,6 +463,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-file-system/ios"
   EXFont:
     :path: "../node_modules/expo-font/ios"
+  EXImagePicker:
+    :path: "../node_modules/expo-image-picker/ios"
   EXJSONUtils:
     :path: "../node_modules/expo-json-utils/ios"
   EXKeepAwake:
@@ -561,6 +569,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   UMAppLoader:
     :path: "../node_modules/unimodules-app-loader/ios"
   UMTaskManagerInterface:
@@ -577,6 +587,7 @@ SPEC CHECKSUMS:
   EXErrorRecovery: ac2622400a32be84604591f70d0efff416e4b9a2
   EXFileSystem: 99aac7962c11c680681819dd9cbca24e20e5b1e7
   EXFont: 2e1c6fe726d008a039db80df95f48b4921b7fe59
+  EXImagePicker: bf704ef8e9171b05696a24114b44c6629565b45d
   EXJSONUtils: f515cf71710855d7ba5bfc6752af3b9a6f6aad01
   EXKeepAwake: 8aa32396a5972d26e75e538603aad0f032396503
   EXLocation: 192eaee761c159d1479111a0ced3bab7ad8475a3
@@ -629,6 +640,7 @@ SPEC CHECKSUMS:
   RNReanimated: 64c38d47ffcc29c97fc1d8cfde9e8a73d7be7cc8
   RNScreens: 6e1ea5787989f92b0671049b808aef64fa1ef98c
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
+  RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   UMAppLoader: 671576daa3fd3017d4879a5f23fc0dd3b36422a8
   UMTaskManagerInterface: 5654c50e68af11b19b9d05452bacf23d19b3f30f
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac

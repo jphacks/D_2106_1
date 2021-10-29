@@ -1,10 +1,15 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Button } from "@ui-kitten/components";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import moment from "moment";
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { AppState } from "react-native";
+import { Alert, AppState } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { locationsData as demoLocations } from "src/assets/demo/locations";
+import Divider from "src/components/atoms/Divider";
+import { TinyP } from "src/components/atoms/Text";
+import Space from "src/components/layouts/Space";
 import PermissionGuide from "src/components/organisms/PermissionGuide";
 import useInterval from "src/hooks/useInterval";
 import useIsLocationAlways from "src/hooks/useIsLocationAlways";
@@ -38,6 +43,8 @@ export type LocationContext = {
     isAlways: boolean;
     hasStartedRecording: boolean;
   }>;
+  applyDemoData: () => Promise<void>;
+  clearCurrentData: () => Promise<void>;
 };
 
 const defaultLocationContext: LocationContext = {
@@ -54,6 +61,8 @@ const defaultLocationContext: LocationContext = {
     isAlways: false,
     hasStartedRecording: false,
   }),
+  applyDemoData: emptyAsyncFn,
+  clearCurrentData: emptyAsyncFn,
 };
 
 export const locationContext = React.createContext<LocationContext>(
@@ -77,23 +86,40 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
   const requirePermission = useCallback(async () => {
     setStatus(await Location.requestBackgroundPermissionsAsync());
   }, []);
+  const clearCurrentData = useCallback(async () => {
+    setLocations([]);
+    await AsyncStorage.setItem(LOCATION_RECORDS, JSON.stringify([]));
+  }, []);
   const startLocationRecording = useCallback(
     async (beginTime: number = moment().unix() * 1000) => {
       await AsyncStorage.setItem(RECORDING_BEGIN_TIME, String(beginTime));
-      await AsyncStorage.setItem(LOCATION_RECORDS, JSON.stringify([]));
-      await Location.startLocationUpdatesAsync(FETCH_LOCATION, {
-        accuracy: Location.Accuracy.Balanced,
-        distanceInterval: DISTANCE_INTERVAL,
-        deferredUpdatesInterval: TIME_INTERVAL,
-        deferredUpdatesDistance: DISTANCE_INTERVAL,
-      });
-      setHasStartedRecording(true);
+      await clearCurrentData();
+      try {
+        await Location.startLocationUpdatesAsync(FETCH_LOCATION, {
+          accuracy: Location.Accuracy.Balanced,
+          distanceInterval: DISTANCE_INTERVAL,
+          deferredUpdatesInterval: TIME_INTERVAL,
+          deferredUpdatesDistance: DISTANCE_INTERVAL,
+        });
+        setHasStartedRecording(true);
+      } catch {
+        Alert.alert("この機能は Expo Go 経由ではサポートされていません。");
+        throw new Error("権限エラー, ExpoGoで起動していると思われる");
+      }
     },
     []
   );
   const stopLocationRecording = useCallback(async () => {
-    await Location.stopLocationUpdatesAsync(FETCH_LOCATION);
+    try {
+      await Location.stopLocationUpdatesAsync(FETCH_LOCATION);
+      await clearCurrentData();
+    } catch {}
     setHasStartedRecording(false);
+  }, []);
+
+  const applyDemoData = useCallback(async () => {
+    setLocations(demoLocations);
+    await AsyncStorage.setItem(LOCATION_RECORDS, JSON.stringify(demoLocations));
   }, []);
 
   // 権限等をチェックするタイミング
@@ -117,7 +143,11 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
   };
   const recheckAllAndApply = async () => {
     const result = await recheckAll();
-    if (!result.status?.granted || !result.isAlways)
+    // 記録開始した後にパーミッションが変更した場合
+    if (
+      result.hasStartedRecording &&
+      (!result.status?.granted || !result.isAlways)
+    )
       setPermissionGuideVisible(true);
   };
   useEffect(() => {
@@ -154,14 +184,40 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
         startLocationRecording,
         stopLocationRecording,
         recheckAll,
+        applyDemoData,
+        clearCurrentData,
       }}
     >
       {permissionGuideVisible ? (
         <SafeAreaView style={{ flex: 1 }}>
-          <PermissionGuide
-            onClose={() => setPermissionGuideVisible(false)}
-            canClose={status?.granted}
-          />
+          <PermissionGuide onClose={() => setPermissionGuideVisible(false)}>
+            <Space vertical>
+              <Button
+                onPress={() => setPermissionGuideVisible(false)}
+                disabled={!status?.granted}
+              >
+                続ける
+              </Button>
+
+              <Divider />
+
+              <TinyP center gray>
+                または
+              </TinyP>
+              <Button
+                status="danger"
+                appearance="outline"
+                onPress={async () => {
+                  try {
+                    await stopLocationRecording();
+                  } catch {}
+                  setPermissionGuideVisible(false);
+                }}
+              >
+                進行している記録を停止
+              </Button>
+            </Space>
+          </PermissionGuide>
         </SafeAreaView>
       ) : (
         children
