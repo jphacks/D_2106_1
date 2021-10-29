@@ -164,7 +164,7 @@ const CreateNewAlbumNavigator: React.FC = () => {
       <CreateNewAlbumStack.Screen
         name={screens.CreateNewAlbumFirst}
         component={CreateNewAlbumFirstScreen}
-        options={{ headerTitle: "アルバムを作成" }}
+        options={{ headerShown: false }}
       />
       <CreateNewAlbumStack.Screen
         name={screens.CreateNewAlbumSecond}
