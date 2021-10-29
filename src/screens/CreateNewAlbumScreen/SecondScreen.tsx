@@ -42,12 +42,10 @@ const SecondScreen: React.FC<{
   const navigation = useNavigation();
   const windowDimensions = useWindowDimensions();
   const [isFreeLook, setIsFreeLook] = useState(false);
-  const { assets, refreshAssets } = useCameraRoll(
-    {
-      createdAfter: recordingBeginTime,
-    },
-    isDemo
-  );
+  const { assets, refreshAssets } = useCameraRoll({
+    options: { createdAfter: recordingBeginTime },
+    isDemo,
+  });
 
   const { locations } = useLocation();
   const lastLocation = locations.last() ?? startLocation;
@@ -208,9 +206,8 @@ export default () => {
     RECORDING_BEGIN_TIME,
     null
   );
-  const recordingBeginTime = recordingBeginTimeStr
-    ? parseInt(recordingBeginTimeStr)
-    : null;
+  const recordingBeginTime =
+    recordingBeginTimeStr !== null ? parseInt(recordingBeginTimeStr) : null;
   const [startLocation, setStartLocation] = useState<LocationData | null>(null);
 
   useEffect(() => {
@@ -223,9 +220,8 @@ export default () => {
     };
     fn();
   }, [isDemo]);
-
   if (loading) return <ScreenLoader />;
-  if (!recordingBeginTime)
+  if (recordingBeginTime === null)
     return <Message message="記録開始時間が取得できませんでした" />;
   return (
     <SecondScreen

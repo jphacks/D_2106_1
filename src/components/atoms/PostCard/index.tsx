@@ -64,13 +64,3 @@ const PostCard: React.FC<Props> = ({
   );
 };
 export default PostCard;
-
-const styles = StyleSheet.create({
-  reverse: {
-    flexDirection: "row-reverse",
-  },
-  title: {
-    alignItems: "flex-end",
-    flexDirection: "row",
-  },
-});
