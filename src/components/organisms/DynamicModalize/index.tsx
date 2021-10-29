@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -11,17 +11,10 @@ import {
   ModalizeProps as ModalizePropsOrig,
 } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
-import PostCard, { Props as PostProps } from "src/components/atoms/PostCard";
+import PostCard from "src/components/atoms/PostCard";
 import Margin, { Padding } from "src/components/layouts/Margin";
 import ImageGrid from "src/components/organisms/ImageGrid";
-import { useValueContext, ValueProvider } from "src/hooks/useValueContext";
-import {
-  LARGE_PX,
-  SMALL_PX,
-  TINY_PX,
-  X_HUGE_PX,
-  X_LARGE,
-} from "src/utils/space";
+import { LARGE_PX, SMALL_PX, TINY_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
 
 type ModalizeProps = Omit<
