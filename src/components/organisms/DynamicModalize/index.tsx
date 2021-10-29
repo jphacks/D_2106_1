@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Animated,
@@ -129,6 +129,7 @@ export const ImageList = <T,>({
   if (dynamicModalizeState === null) return null;
   const { direction, contentHeight, initialHeight, topHeight, animated } =
     dynamicModalizeState;
+  const detailListRef = useRef<FlatList>(null);
   const { width } = useWindowDimensions();
 
   const inputRange = [0, 1];
@@ -141,6 +142,11 @@ export const ImageList = <T,>({
     inputRange,
     outputRange: [0, 1],
   });
+
+  useEffect(() => {
+    if (direction === "horizontal")
+      detailListRef.current?.scrollToOffset({ animated: true, offset: 0 });
+  }, [direction]);
 
   return (
     <>
@@ -200,6 +206,7 @@ export const ImageList = <T,>({
             </Margin>
           )}
           flatListProps={{ numColumns: 3 }}
+          flatListRef={detailListRef}
         />
       </AnimatedView>
     </>
@@ -230,6 +237,7 @@ export const AlbumList = <
   if (dynamicModalizeState === null) return null;
   const { initialHeight, topHeight, direction, animated } =
     dynamicModalizeState;
+  const detailListRef = useRef<FlatList>(null);
   const { width } = useWindowDimensions();
 
   const cardAspectRatio = 5 / 4;
@@ -283,6 +291,11 @@ export const AlbumList = <
     ref: previewFlatListRef,
     keyExtractor,
   };
+
+  useEffect(() => {
+    if (direction === "horizontal")
+      detailListRef.current?.scrollToOffset({ animated: true, offset: 0 });
+  }, [direction]);
   return (
     <>
       <AnimatedView
@@ -304,6 +317,7 @@ export const AlbumList = <
       >
         <FlatList
           {...common}
+          ref={detailListRef}
           renderItem={renderVerticalItem}
           style={{ overflow: "visible" }}
         />
