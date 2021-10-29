@@ -1,5 +1,5 @@
 import { Button, Text } from "@ui-kitten/components";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Linking,
   ScrollView,
@@ -14,60 +14,103 @@ import Space from "src/components/layouts/Space";
 import { useLocation } from "src/provider/location";
 import { BORDER_COLOR } from "src/utils/color";
 import { BASE_PX } from "src/utils/space";
+import * as MediaLibrary from "expo-media-library";
+import { P } from "src/components/atoms/Text";
 
-const PermissionGuide: React.FC<{ onClose?: () => void; canClose?: boolean }> =
-  ({ children }) => {
-    const { width } = useWindowDimensions();
-    const { requirePermission } = useLocation();
-    return (
-      <ScrollView>
-        <Padding size={BASE_PX} style={styles.flex1}>
-          <Text category="h5">位置情報の設定を変更してください</Text>
-          <Space vertical>
-            <Block index={1} content={"位置情報の利用を有効化してください"} />
-            <Button onPress={requirePermission}>位置情報の有効化</Button>
-            <Block index={2} content={"設定アプリを開きます"} />
-            <Button onPress={() => Linking.openURL("app-settings:")}>
-              設定画面を開く
-            </Button>
-            <Block index={3} content={"「位置情報」の項目を開きます"} />
-            <Center>
-              <ScaledImage
-                source={require("src/assets/images/Location.jpeg")}
-                width={685}
-                height={68}
-                size={width - BASE_PX * 2}
-                style={styles.image}
-              />
-            </Center>
-            <Block index={4} content={"「常に」を選択してください"} />
-            <Center>
-              <ScaledImage
-                source={require("src/assets/images/LocationMode.jpeg")}
-                width={828}
-                height={420}
-                size={width - BASE_PX * 2}
-                style={styles.image}
-              />
-            </Center>
-            {children}
-          </Space>
-        </Padding>
-      </ScrollView>
-    );
-  };
-
-const Block: React.FC<{ index: number; content: string }> = ({
-  index,
-  content,
+const PermissionGuide: React.FC<{ onClose: () => void }> = ({
+  onClose,
+  children,
 }) => {
+  const { width } = useWindowDimensions();
+  const { requirePermission, isPermissionOk } = useLocation();
+  const [mlPermissionStatus, requestMLPermission] =
+    MediaLibrary.usePermissions();
+
+  useEffect(() => {
+    if (!isPermissionOk) return;
+    if (mlPermissionStatus?.accessPrivileges !== "all") return;
+    onClose();
+  }, [mlPermissionStatus?.accessPrivileges, isPermissionOk]);
+  return (
+    <ScrollView>
+      <Padding size={BASE_PX} style={styles.flex1} bottom={40}>
+        <Text category="h5">アプリの権限設定を変更してください</Text>
+        <Space vertical>
+          {!isPermissionOk && (
+            <Space vertical>
+              <Block content={"位置情報の利用を有効化してください"} />
+              <Button onPress={requirePermission}>位置情報の有効化</Button>
+              <Block content={"設定アプリを開きます"} />
+              <Button onPress={() => Linking.openURL("app-settings:")}>
+                設定画面を開く
+              </Button>
+              <Block content={"「位置情報」の項目を開きます"} />
+              <Center>
+                <ScaledImage
+                  source={require("src/assets/images/settings-location.png")}
+                  width={1029}
+                  height={132}
+                  size={width - BASE_PX * 2}
+                  style={styles.image}
+                />
+              </Center>
+              <Block content={"「常に」を選択してください"} />
+              <Center>
+                <ScaledImage
+                  source={require("src/assets/images/settings-location-detail.png")}
+                  width={1101}
+                  height={567}
+                  size={width - BASE_PX * 2}
+                  style={styles.image}
+                />
+              </Center>
+            </Space>
+          )}
+          {mlPermissionStatus?.accessPrivileges !== "all" &&
+            (mlPermissionStatus?.status === "undetermined" ? (
+              <Space vertical>
+                <Block content={"カメラロールの利用を有効化してください"} />
+                <P>
+                  このアプリを利用するには「すべての写真へのアクセスを許可」を選んでください
+                </P>
+                <Button onPress={() => requestMLPermission()}>
+                  カメラロールの有効化
+                </Button>
+              </Space>
+            ) : (
+              <Space vertical>
+                <Block content={"「写真」の項目を開きます"} />
+                <Center>
+                  <ScaledImage
+                    source={require("src/assets/images/settings-photo.png")}
+                    width={1029}
+                    height={132}
+                    size={width - BASE_PX * 2}
+                    style={styles.image}
+                  />
+                </Center>
+                <Block content={"「すべての写真」を選択してください"} />
+                <Center>
+                  <ScaledImage
+                    source={require("src/assets/images/settings-photo-detail.png")}
+                    width={1101}
+                    height={428}
+                    size={width - BASE_PX * 2}
+                    style={styles.image}
+                  />
+                </Center>
+              </Space>
+            ))}
+          {children}
+        </Space>
+      </Padding>
+    </ScrollView>
+  );
+};
+
+export const Block: React.FC<{ content: string }> = ({ content }) => {
   return (
     <View style={styles.steps}>
-      <View style={{ flex: 1 }}>
-        <Text category="h6" style={styles.paragraph}>
-          {index}
-        </Text>
-      </View>
       <View style={{ flex: 10 }}>
         <Text category="h6">{content}</Text>
       </View>

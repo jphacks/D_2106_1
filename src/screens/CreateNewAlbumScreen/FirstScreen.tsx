@@ -20,7 +20,7 @@ const FirstScreen: React.FC = () => {
   const modalizeRef = useRef<Modalize>(null);
   const navigation = useNavigation();
   const {
-    isPermissionOk,
+    isPermissionOk: isLocationPermissionOk,
     startLocationRecording,
     stopLocationRecording,
     checkingIfStartedRecording,
@@ -28,16 +28,24 @@ const FirstScreen: React.FC = () => {
     recheckAll,
   } = useLocation();
 
-  const [mlPermissionStatus, requestMLPermission] =
-    MediaLibrary.usePermissions();
+  const [mlPermissionStatus] = MediaLibrary.usePermissions();
+
+  const isAllPermissionOk =
+    isLocationPermissionOk &&
+    mlPermissionStatus?.granted &&
+    mlPermissionStatus.accessPrivileges === "all";
+
   const [start, starting] = useAsyncCallback(async () => {
-    if (!isPermissionOk) {
-      modalizeRef.current?.open();
-      return;
-    }
     await startLocationRecording();
     navigation.navigate(screens.CreateNewAlbumSecond);
   });
+  const startWithCheckingPermission = () => {
+    if (!isAllPermissionOk) {
+      modalizeRef.current?.open();
+      return;
+    }
+    start();
+  };
   const continueRecording = () =>
     navigation.navigate(screens.CreateNewAlbumSecond);
   const [stop, stopping] = useAsyncCallback(async () => {
@@ -62,8 +70,8 @@ const FirstScreen: React.FC = () => {
   });
 
   useEffect(() => {
-    if (isPermissionOk) modalizeRef.current?.close();
-  }, [isPermissionOk]);
+    if (isAllPermissionOk) modalizeRef.current?.close();
+  }, [isAllPermissionOk]);
 
   return (
     <>
@@ -79,7 +87,11 @@ const FirstScreen: React.FC = () => {
               純正のカメラやサードパーティーカメラ、スクリーンショットなどもトラックすることができます。
             </SmallP>
             <Button
-              onPress={hasStartedRecording ? continueRecording : start}
+              onPress={
+                hasStartedRecording
+                  ? continueRecording
+                  : startWithCheckingPermission
+              }
               disabled={starting || stopping || checkingIfStartedRecording}
             >
               {hasStartedRecording
@@ -102,7 +114,7 @@ const FirstScreen: React.FC = () => {
               status="basic"
               appearance="outline"
               onPress={startDebug}
-              disabled={!isPermissionOk || startingDebug}
+              disabled={!isAllPermissionOk || startingDebug}
             >
               位置情報の記録を開始（デバッグモード）
             </Button>
@@ -117,7 +129,7 @@ const FirstScreen: React.FC = () => {
             <ModalizeHeader onClose={() => modalizeRef.current?.close()} />
           }
         >
-          <PermissionGuide />
+          <PermissionGuide onClose={() => modalizeRef.current?.close()} />
         </Modalize>
       </Portal>
     </>

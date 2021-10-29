@@ -6,7 +6,12 @@ import moment from "moment";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AppState } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import PermissionGuide from "src/components/organisms/PermissionGuide";
+import Divider from "src/components/atoms/Divider";
+import { TinyP } from "src/components/atoms/Text";
+import Space from "src/components/layouts/Space";
+import PermissionGuide, {
+  Block as PermissionGuideBlock,
+} from "src/components/organisms/PermissionGuide";
 import useInterval from "src/hooks/useInterval";
 import useIsLocationAlways from "src/hooks/useIsLocationAlways";
 import { emptyAsyncFn } from "src/utils";
@@ -163,16 +168,33 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
     >
       {permissionGuideVisible ? (
         <SafeAreaView style={{ flex: 1 }}>
-          <PermissionGuide
-            onClose={() => setPermissionGuideVisible(false)}
-            canClose={status?.granted}
-          >
-            <Button
-              onPress={() => setPermissionGuideVisible(false)}
-              disabled={!status?.granted}
-            >
-              続ける
-            </Button>
+          <PermissionGuide onClose={() => setPermissionGuideVisible(false)}>
+            <Space vertical>
+              <Button
+                onPress={() => setPermissionGuideVisible(false)}
+                disabled={!status?.granted}
+              >
+                続ける
+              </Button>
+
+              <Divider />
+
+              <TinyP center gray>
+                または
+              </TinyP>
+              <Button
+                status="danger"
+                appearance="outline"
+                onPress={async () => {
+                  try {
+                    await stopLocationRecording();
+                  } catch {}
+                  setPermissionGuideVisible(false);
+                }}
+              >
+                進行している記録を停止
+              </Button>
+            </Space>
           </PermissionGuide>
         </SafeAreaView>
       ) : (
