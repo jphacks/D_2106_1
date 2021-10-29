@@ -16,6 +16,12 @@ export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
+  const customTheme = {
+    ...eva.light,
+    "color-primary-default": "#8ac75a",
+    "color-primary-active": "rgba(138, 199, 90, 0.8)",
+  };
+
   if (!isLoadingComplete) {
     return null;
   } else {
