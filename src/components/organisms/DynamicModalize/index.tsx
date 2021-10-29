@@ -3,10 +3,12 @@ import {
   ActivityIndicator,
   Animated,
   FlatList,
+  StyleProp,
   StyleSheet,
   TouchableOpacity,
   useWindowDimensions,
   View,
+  ViewStyle,
 } from "react-native";
 import {
   Modalize,
@@ -14,6 +16,7 @@ import {
 } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
 import PostCard from "src/components/atoms/PostCard";
+import { ViewProps } from "src/components/atoms/Themed";
 import { Center } from "src/components/layouts/Align";
 import Margin, { Padding } from "src/components/layouts/Margin";
 import ImageGrid from "src/components/organisms/ImageGrid";
@@ -115,6 +118,7 @@ export type ImageListProps<T> = {
   extractImageUri: (item: T) => string;
   keyExtractor: (item: T) => string;
   previewSize?: number;
+  style?: StyleProp<ViewStyle>;
 };
 
 export const ImageList = <T,>({
@@ -124,6 +128,7 @@ export const ImageList = <T,>({
   extractImageUri,
   keyExtractor,
   previewSize,
+  style,
 }: ImageListProps<T>) => {
   const dynamicModalizeState = useDynamicModalizeState();
   if (dynamicModalizeState === null) return null;
@@ -148,12 +153,19 @@ export const ImageList = <T,>({
       detailListRef.current?.scrollToOffset({ animated: true, offset: 0 });
   }, [direction]);
 
+  const horizontalHeight = previewSize ?? initialHeight - 40;
+
   return (
     <>
       <AnimatedView
         style={[
           styles.fitToParent,
-          { opacity: increase, height: initialHeight },
+          {
+            opacity: increase,
+            height: horizontalHeight,
+            paddingBottom: 0,
+          },
+          style,
         ]}
       >
         <FlatList
@@ -164,18 +176,13 @@ export const ImageList = <T,>({
               onPress={() => onPressItem?.({ item, index })}
               activeOpacity={0.7}
             >
-              <Margin size={SMALL_PX} top={SMALL_PX}>
-                <View
-                  style={{
-                    ...globalStyles.shadow,
-                    shadowOpacity: 0.15,
-                  }}
-                >
+              <Margin size={SMALL_PX}>
+                <View style={[globalStyles.shadow, { shadowOpacity: 0.15 }]}>
                   <Image
                     source={{ uri: extractImageUri(item) }}
-                    height={previewSize ?? initialHeight - 2 * SMALL_PX}
-                    width={previewSize ?? initialHeight - 2 * SMALL_PX}
-                    style={globalStyles.rounodedImage}
+                    height={horizontalHeight - 2 * SMALL_PX}
+                    width={horizontalHeight - 2 * SMALL_PX}
+                    style={[globalStyles.rounodedImage]}
                   />
                 </View>
               </Margin>

@@ -193,6 +193,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
           }}
           extractImageUri={(item) => item.imageUrl}
           keyExtractor={(item) => item.id}
+          style={{ marginTop: 24 }}
         />
       </DynamicModalizeContainer>
     </View>
