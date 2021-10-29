@@ -12,6 +12,7 @@ import {
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
+import MapPing from "src/components/atoms/MapPing";
 import Message from "src/components/atoms/Message";
 import PostedCard from "src/components/atoms/PostedCard";
 import Margin, { Padding } from "src/components/layouts/Margin";
@@ -22,7 +23,7 @@ import { useGetAPI } from "src/hooks/useGetAPI";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useValueContext, ValueProvider } from "src/hooks/useValueContext";
 import { useLocation } from "src/provider/location";
-import { LARGE_PX, SMALL_PX } from "src/utils/space";
+import { BASE_PX, LARGE_PX, SMALL_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
 
 type CoordinateType = {
@@ -212,12 +213,6 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
               }}
             >
               <View
-                style={{
-                  height: imageSize / 2 - 15,
-                  width: imageSize / 2 - 15,
-                  borderRadius: 4,
-                  backgroundColor: "#36C1A7",
-                }}
                 onTouchStart={() => {
                   flatListRef.current?.scrollToIndex({ index: index });
                   mapRef.current?.animateToRegion({
@@ -228,31 +223,11 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
                   navigationRef?.navigate("ImageFlatList");
                 }}
               >
-                <Image
-                  source={{ uri: c.imageUrls.first() }}
-                  width={imageSize / 2 - 25}
-                  height={imageSize / 2 - 25}
-                  style={{
-                    borderRadius: 4,
-                    top: 5,
-                    left: 5,
-                  }}
-                />
+                <MapPing uri={c?.imageUrls.first()} size={imageSize / 2 - 25} />
               </View>
               <View
                 style={{
-                  width: 0,
-                  height: 0,
-                  alignSelf: "center",
-                  backgroundColor: "transparent",
-                  borderLeftWidth: 10,
-                  borderRightWidth: 10,
-                  borderTopWidth: 20,
-                  borderBottomWidth: 0,
-                  borderTopColor: "#36C1A7",
-                  borderLeftColor: "transparent",
-                  borderRightColor: "transparent",
-                  marginBottom: imageSize / 2 + 5,
+                  marginBottom: imageSize / 2 - BASE_PX,
                 }}
                 onTouchStart={() => {
                   flatListRef.current?.scrollToIndex({ index: index });
