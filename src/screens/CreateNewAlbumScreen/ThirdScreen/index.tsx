@@ -49,10 +49,10 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number; isDemo?: boolean }> =
       []
     );
 
-    const { assets } = useCameraRoll(
-      { createdAfter: recordingBeginTime },
-      isDemo
-    );
+    const { assets } = useCameraRoll({
+      options: { createdAfter: recordingBeginTime },
+      isDemo,
+    });
 
     const [likedAssets, setLikedAssets] = useState<typeof assets>([]);
     const likedAssetExists = likedAssets.length > 0;
