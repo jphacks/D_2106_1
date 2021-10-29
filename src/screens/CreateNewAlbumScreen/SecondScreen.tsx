@@ -39,6 +39,7 @@ const SecondScreen: React.FC<{
   const mapRef = useRef<MapView>(null);
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
+  const windowDimensions = useWindowDimensions();
   const [isFreeLook, setIsFreeLook] = useState(false);
   const { assets, refreshAssets } = useCameraRoll({
     createdAfter: recordingBeginTime,
@@ -49,7 +50,12 @@ const SecondScreen: React.FC<{
   const animateToCoordinate = (coord?: Coordinate) =>
     coord &&
     mapRef.current?.animateToRegion(
-      { ...coord, latitudeDelta: 0.005, longitudeDelta: 0.005 },
+      {
+        ...coord,
+        latitude: coord.latitude - 0.005 * 0.125,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+      },
       500
     );
 
@@ -72,17 +78,14 @@ const SecondScreen: React.FC<{
   );
 
   return (
-    <SafeAreaView style={styles.flex1}>
-      <View
-        style={[styles.flex1, { position: "relative" }]}
-        onLayout={onLayoutParent}
-      >
+    <>
+      <View style={{ flex: 1 }}>
         <MapView
           ref={mapRef}
-          style={{ flex: 0.5 }}
           initialRegion={DEFAULT_REGION}
           onPanDrag={() => setIsFreeLook(true)}
           onLayout={onLayoutMap}
+          style={{ flex: 1 }}
         >
           <Polyline
             coordinates={locations.map((l) => l.coordinate)}
@@ -120,48 +123,48 @@ const SecondScreen: React.FC<{
             </Button>
           )}
         </Space>
+        <Modalize
+          snapPoint={100}
+          withHandle={true}
+          handlePosition="inside"
+          alwaysOpen={windowDimensions.height * 0.25}
+          modalHeight={windowDimensions.height * 0.75}
+          HeaderComponent={<View style={{ margin: BASE_PX }} />}
+          modalStyle={globalStyles.shadow}
+        >
+          <Margin top={BASE_PX}>
+            <ImageGrid
+              data={assets}
+              extractImageUri={(item) => item.uri}
+              renderImage={({ item }) => (
+                <Margin size={SMALL_PX}>
+                  <Image
+                    source={{ uri: item.uri }}
+                    width={width / 3 - SMALL_PX * 2}
+                    height={width / 3 - SMALL_PX * 2}
+                    style={globalStyles.rounodedImage}
+                  />
+                </Margin>
+              )}
+              flatListProps={{
+                scrollEnabled: false,
+                numColumns: 3,
+                ListHeaderComponent: (
+                  <>
+                    {assets.length <= 0 && (
+                      <Space vertical align="center">
+                        <P gray>位置情報を記録し始めてから</P>
+                        <P gray>新しく写真が追加されていません。</P>
+                      </Space>
+                    )}
+                  </>
+                ),
+              }}
+            />
+          </Margin>
+        </Modalize>
       </View>
-      <Modalize
-        snapPoint={100}
-        withHandle={true}
-        handlePosition="inside"
-        alwaysOpen={parentHeight - mapHeight + 4}
-        modalTopOffset={150}
-        HeaderComponent={<View style={{ margin: BASE_PX }} />}
-        modalStyle={globalStyles.shadow}
-      >
-        <Margin top={BASE_PX}>
-          <ImageGrid
-            data={assets}
-            extractImageUri={(item) => item.uri}
-            renderImage={({ item }) => (
-              <Margin size={SMALL_PX}>
-                <Image
-                  source={{ uri: item.uri }}
-                  width={width / 3 - SMALL_PX * 2}
-                  height={width / 3 - SMALL_PX * 2}
-                  style={globalStyles.rounodedImage}
-                />
-              </Margin>
-            )}
-            flatListProps={{
-              scrollEnabled: false,
-              numColumns: 3,
-              ListHeaderComponent: (
-                <>
-                  {assets.length <= 0 && (
-                    <Space vertical align="center">
-                      <P gray>位置情報を記録し始めてから</P>
-                      <P gray>新しく写真が追加されていません。</P>
-                    </Space>
-                  )}
-                </>
-              ),
-            }}
-          />
-        </Margin>
-      </Modalize>
-    </SafeAreaView>
+    </>
   );
 };
 
