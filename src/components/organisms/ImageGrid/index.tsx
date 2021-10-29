@@ -25,6 +25,7 @@ export type Props<T> = {
   HeaderComponent?: React.FC<{ imageIndex: number }>;
   FooterComponent?: React.FC<{ imageIndex: number }>;
   flatListProps?: Partial<FlatListProps<T>>;
+  flatListRef?: React.RefObject<FlatList<any>>;
   renderImage: ({ item }: { item: T }) => React.ReactNode;
 };
 
@@ -34,6 +35,7 @@ const ImageGrid = <T,>({
   shift = 0,
   flatListProps,
   renderImage,
+  flatListRef,
   ...props
 }: PropsWithChildren<Props<T>>) => {
   const { state: visible, setTrue, setFalse } = useBoolState(false);
@@ -51,6 +53,7 @@ const ImageGrid = <T,>({
     <>
       <FlatList
         {...flatListProps}
+        ref={flatListRef}
         data={data}
         renderItem={({ item, index }) => (
           <TouchableOpacity

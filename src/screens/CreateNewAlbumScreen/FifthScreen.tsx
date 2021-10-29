@@ -78,6 +78,8 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
   const coordinates: CoordinateType[] = data?.location;
   const routes: CoordinateType[] = data?.route;
 
+  const routes: CoordinateType[] = data?.route;
+
   React.useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
@@ -192,6 +194,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
           }}
           extractImageUri={(item) => item.imageUrl}
           keyExtractor={(item) => item.id}
+          style={{ marginTop: 24 }}
         />
       </DynamicModalizeContainer>
     </View>

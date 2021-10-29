@@ -106,6 +106,7 @@ function BottomTabNavigator() {
         name="TabFour"
         component={CreateNewAlbumNavigator}
         options={{
+          title: "アルバム作成",
           headerShown: false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="pencil-square-o" color={color} />
@@ -116,7 +117,7 @@ function BottomTabNavigator() {
         name="TabFive"
         component={TabFiveScreen}
         options={{
-          title: "アルバム閲覧",
+          title: "探す",
           tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
         }}
       />
