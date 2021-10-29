@@ -23,7 +23,7 @@ import { useGetAPI } from "src/hooks/useGetAPI";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useValueContext, ValueProvider } from "src/hooks/useValueContext";
 import { useLocation } from "src/provider/location";
-import { BASE_PX, SMALL_PX } from "src/utils/space";
+import { SMALL_PX } from "src/utils/space";
 
 type CoordinateType = {
   id: string;
@@ -106,7 +106,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
       lat2: region.latitude + region.latitudeDelta / 2,
     });
 
-    setImageSize(Math.max(100, Math.min(30 / region.longitudeDelta, 300)));
+    setImageSize(Math.max(40, Math.min(15 / region.longitudeDelta, 120)));
 
     setCurrentRegion({
       ...currentRegion,
@@ -146,6 +146,15 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     setCurrentAlbum,
   };
 
+  const onPressMapPin = (c: CoordinateType, index: number) => {
+    flatListRef.current?.scrollToIndex({ index: index });
+    mapRef.current?.animateToRegion({
+      ...currentRegion,
+      longitude: c?.longitude,
+      latitude: c?.latitude,
+    });
+    navigationRef?.navigate("ImageFlatList");
+  };
   return (
     <ValueProvider values={globalValues}>
       <View style={{ flex: 1.5 }}>
@@ -169,29 +178,18 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
                 if (node) markerRefs.current[index] = node;
               }}
             >
-              <View
-                onTouchStart={() => {
-                  mapRef.current?.animateToRegion({
-                    ...currentRegion,
-                    longitude: c?.longitude,
-                    latitude: c?.latitude - currentRegion.latitudeDelta * 0.125,
-                  });
-                  navigationRef?.navigate("ImageFlatList");
-                }}
-              >
-                <MapPing uri={c?.imageUrls.first()} size={imageSize / 2 - 25} />
-              </View>
-              <View
-                style={{
-                  marginBottom: imageSize / 2 - BASE_PX,
-                }}
-                onTouchStart={() => {
-                  navigation.navigate("Albums");
-                }}
+              <MapPing
+                onPress={() => onPressMapPin(c, index)}
+                uri={c.imageUrls.first()}
+                imageSize={imageSize}
               />
             </Marker>
           ))}
-          <Polyline coordinates={routes} strokeWidth={3} strokeColor="red" />
+          <Polyline
+            coordinates={coordinates}
+            strokeWidth={3}
+            strokeColor="#ee82ee"
+          />
         </MapView>
         <DynamicModalizeContainer
           onLayout={({ layout: { height } }) => setModalHeight(height)}
