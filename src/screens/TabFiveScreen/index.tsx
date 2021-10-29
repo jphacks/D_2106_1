@@ -181,7 +181,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
                   mapRef.current?.animateToRegion({
                     ...currentRegion,
                     longitude: c?.longitude,
-                    latitude: c?.latitude,
+                    latitude: c?.latitude - currentRegion.latitudeDelta * 0.125,
                   });
                   navigationRef?.navigate("ImageFlatList");
                 }}
@@ -306,7 +306,7 @@ const AlbumDetail: React.FC = () => {
         mapRef.current?.animateToRegion({
           ...currentRegion,
           longitude: item?.longitude,
-          latitude: item?.latitude,
+          latitude: item?.latitude - currentRegion.latitudeDelta * 0.125,
         });
         flatListRef.current?.scrollToIndex({ index: index });
       }}
