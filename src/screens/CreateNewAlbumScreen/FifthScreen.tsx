@@ -11,14 +11,17 @@ import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Modalize } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
 import Message from "src/components/atoms/Message";
+import ScreenLoader from "src/components/atoms/ScreenLoader";
+import { P } from "src/components/atoms/Text";
 import Margin, { Padding } from "src/components/layouts/Margin";
+import Space from "src/components/layouts/Space";
 import ImageGrid from "src/components/organisms/ImageGrid";
 import { screens } from "src/dict";
 import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useGetAPI } from "src/hooks/useGetAPI";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useLocation } from "src/provider/location";
-import { LARGE_PX, SMALL_PX } from "src/utils/space";
+import { BASE_PX, LARGE_PX, SMALL_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
 
 type CoordinateType = {
@@ -79,11 +82,13 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     });
   };
 
-  const { data } = useGetAPI("/album/detail", {
+  const { data, loading } = useGetAPI("/album/detail", {
     // TODO: 実データに置き換える
     album_id: albumId,
     ...mapCorners,
   });
+
+  console.log(data);
 
   const coordinates: CoordinateType[] = data?.location;
 
@@ -207,6 +212,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
         ))}
         <Polyline coordinates={coordinates} strokeWidth={3} strokeColor="red" />
       </MapView>
+      {loading && <ScreenLoader />}
       <Modalize
         alwaysOpen={windowDimensions.height * 0.25}
         modalHeight={windowDimensions.height * 0.75}
@@ -217,6 +223,26 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
         }}
         modalStyle={[globalStyles.shadow]}
       >
+        {coordinates?.length === 0 && (
+          <Space
+            vertical
+            align="center"
+            size={BASE_PX}
+            style={{
+              marginTop: (windowDimensions.height * 0.25) / 2 - 20 + BASE_PX,
+            }}
+          >
+            <P
+              gray
+              style={{
+                fontSize: 20,
+              }}
+            >
+              周辺に写真がありません
+            </P>
+          </Space>
+        )}
+
         {openStatus === "initial" ? (
           <FlatList
             data={coordinates}
