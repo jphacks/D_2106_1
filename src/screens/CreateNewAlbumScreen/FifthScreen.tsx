@@ -76,6 +76,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
   });
 
   const coordinates: CoordinateType[] = data?.location;
+  const routes: CoordinateType[] = data?.route;
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -166,7 +167,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
             />
           </Marker>
         ))}
-        <Polyline coordinates={coordinates} strokeWidth={3} strokeColor="red" />
+        <Polyline coordinates={routes} strokeWidth={3} strokeColor="red" />
       </MapView>
 
       <DynamicModalizeContainer>
