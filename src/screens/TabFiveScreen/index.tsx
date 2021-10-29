@@ -121,11 +121,11 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     ...mapCorners,
   });
 
-  console.log("data", JSON.stringify(data, null, 2));
-
-  const albums: Album[] | null = data;
+  const albums: Album[] | null = data?.albums;
 
   const coordinates: CoordinateType[] = data2?.location;
+
+  const routes: CoordinateType[] = data2?.route;
 
   useFocusedEffect(() => {
     stopLocationRecording();
@@ -219,11 +219,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
               />
             </Marker>
           ))}
-          <Polyline
-            coordinates={coordinates}
-            strokeWidth={3}
-            strokeColor="red"
-          />
+          <Polyline coordinates={routes} strokeWidth={3} strokeColor="red" />
         </MapView>
         <DynamicModalizeContainer
           onLayout={({ layout: { height } }) => setModalHeight(height)}
@@ -266,7 +262,7 @@ const Albums: React.FC = () => {
   const { albums, setCurrentAlbum, flatListRef } = globalValues;
   return (
     <AlbumList
-      data={albums.map((a) => ({
+      data={albums?.map((a) => ({
         ...a,
         title: a.title,
         locations: ["愛知県", "名古屋市"],
