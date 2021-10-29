@@ -61,7 +61,7 @@ const ImageGrid = <T,>({
             {renderImage({ item })}
           </TouchableOpacity>
         )}
-        keyExtractor={(item) => extractImageUri(item)}
+        keyExtractor={(item, i) => `${i}`}
         contentContainerStyle={styles.gridContainer}
       />
       <ImageViewing
