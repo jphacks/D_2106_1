@@ -23,7 +23,7 @@ import { useGetAPI } from "src/hooks/useGetAPI";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useValueContext, ValueProvider } from "src/hooks/useValueContext";
 import { useLocation } from "src/provider/location";
-import { BASE_PX, SMALL_PX } from "src/utils/space";
+import { SMALL_PX } from "src/utils/space";
 
 type CoordinateType = {
   id: string;
@@ -120,7 +120,6 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     album_id: currentAlbum,
     ...mapCorners,
   });
-
 
   const { albums } = data ?? {};
 
