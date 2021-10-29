@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import {
   ActivityIndicator,
+  Animated,
+  Easing,
   FlatList,
   TouchableOpacity,
   useWindowDimensions,
@@ -34,6 +36,7 @@ export type DynamicModalizeState = {
   loading: boolean;
   direction: "vertical" | "horizontal";
   contentHeight: number;
+  animated: Animated.Value;
   // animatedValueをここに追加
 };
 
@@ -41,6 +44,7 @@ const dynamicModalizeContext = React.createContext<DynamicModalizeState>({
   loading: false,
   direction: "horizontal",
   contentHeight: 100,
+  animated: new Animated.Value(0),
 });
 
 export const useDynamicModalizeState = () =>
@@ -64,6 +68,8 @@ const DynamicModalizeContainer = ({
     if (pos === "top") setHeight(topHeight);
   };
 
+  const animated: Animated.Value = React.useRef(new Animated.Value(0)).current;
+
   return (
     <Modalize
       alwaysOpen={initialHeight}
@@ -74,6 +80,10 @@ const DynamicModalizeContainer = ({
       modalStyle={[globalStyles.shadow]}
       onLayout={({ layout }) => setHeight(layout.height)}
       {...props}
+      onOpened={() => {
+        console.log("opened");
+      }}
+      panGestureAnimatedValue={animated}
     >
       {loading && <ActivityIndicator />}
       <dynamicModalizeContext.Provider
@@ -81,6 +91,7 @@ const DynamicModalizeContainer = ({
           loading: !!loading,
           direction: openStatus === "initial" ? "horizontal" : "vertical",
           contentHeight: height,
+          animated: animated,
         }}
       >
         <View style={{ height }}>{children}</View>
