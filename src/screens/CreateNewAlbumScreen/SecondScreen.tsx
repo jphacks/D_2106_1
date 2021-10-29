@@ -34,7 +34,7 @@ import { globalStyles } from "src/utils/style";
 
 const SecondScreen: React.FC<{
   recordingBeginTime: number;
-  startLocation: LocationData;
+  startLocation: LocationData | null;
   isDemo?: boolean;
 }> = ({ recordingBeginTime, startLocation, isDemo }) => {
   const mapRef = useRef<MapView>(null);
@@ -49,7 +49,7 @@ const SecondScreen: React.FC<{
     isDemo
   );
 
-  const { locations } = useLocation(isDemo);
+  const { locations } = useLocation();
   const lastLocation = locations.last() ?? startLocation;
 
   const animateToCoordinate = (coord?: Coordinate) =>
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
 
 export default () => {
   const route = useRoute();
-
+  const { applyDemoData } = useLocation();
   const isDemo: boolean = (route.params as any)?.isDemo;
 
   const [recordingBeginTimeStr, , loading] = useAsyncStorage<string | null>(
@@ -215,13 +215,16 @@ export default () => {
 
   useEffect(() => {
     const fn = async () => {
-      const currentPosition = await Location.getCurrentPositionAsync();
-      setStartLocation(positionToLocation(currentPosition));
+      try {
+        const currentPosition = await Location.getCurrentPositionAsync();
+        setStartLocation(positionToLocation(currentPosition));
+      } catch {}
+      if (isDemo) applyDemoData();
     };
     fn();
-  }, []);
+  }, [isDemo]);
 
-  if (loading || startLocation === null) return <ScreenLoader />;
+  if (loading) return <ScreenLoader />;
   if (!recordingBeginTime)
     return <Message message="記録開始時間が取得できませんでした" />;
   return (
