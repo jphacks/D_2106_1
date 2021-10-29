@@ -1,10 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Button } from "@ui-kitten/components";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import moment from "moment";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AppState } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Divider from "src/components/atoms/Divider";
+import { TinyP } from "src/components/atoms/Text";
+import Space from "src/components/layouts/Space";
 import PermissionGuide from "src/components/organisms/PermissionGuide";
 import useInterval from "src/hooks/useInterval";
 import useIsLocationAlways from "src/hooks/useIsLocationAlways";
@@ -117,7 +121,11 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
   };
   const recheckAllAndApply = async () => {
     const result = await recheckAll();
-    if (!result.status?.granted || !result.isAlways)
+    // 記録開始した後にパーミッションが変更した場合
+    if (
+      result.hasStartedRecording &&
+      (!result.status?.granted || !result.isAlways)
+    )
       setPermissionGuideVisible(true);
   };
   useEffect(() => {
@@ -158,10 +166,34 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
     >
       {permissionGuideVisible ? (
         <SafeAreaView style={{ flex: 1 }}>
-          <PermissionGuide
-            onClose={() => setPermissionGuideVisible(false)}
-            canClose={status?.granted}
-          />
+          <PermissionGuide onClose={() => setPermissionGuideVisible(false)}>
+            <Space vertical>
+              <Button
+                onPress={() => setPermissionGuideVisible(false)}
+                disabled={!status?.granted}
+              >
+                続ける
+              </Button>
+
+              <Divider />
+
+              <TinyP center gray>
+                または
+              </TinyP>
+              <Button
+                status="danger"
+                appearance="outline"
+                onPress={async () => {
+                  try {
+                    await stopLocationRecording();
+                  } catch {}
+                  setPermissionGuideVisible(false);
+                }}
+              >
+                進行している記録を停止
+              </Button>
+            </Space>
+          </PermissionGuide>
         </SafeAreaView>
       ) : (
         children
