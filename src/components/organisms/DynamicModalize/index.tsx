@@ -3,11 +3,10 @@ import {
   ActivityIndicator,
   Animated,
   FlatList,
+  StyleSheet,
   TouchableOpacity,
   useWindowDimensions,
   View,
-  StyleSheet,
-  Easing,
 } from "react-native";
 import {
   Modalize,
@@ -18,7 +17,6 @@ import PostCard from "src/components/atoms/PostCard";
 import { Center } from "src/components/layouts/Align";
 import Margin, { Padding } from "src/components/layouts/Margin";
 import ImageGrid from "src/components/organisms/ImageGrid";
-import useInterval from "src/hooks/useInterval";
 import { LARGE_PX, SMALL_PX, TINY_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
 
