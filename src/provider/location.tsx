@@ -125,12 +125,7 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
   }, []);
   useEffect(() => {
     const onChangeAppState = async (state: string) => {
-      if (state == "active") {
-        recheckAllAndApply();
-      } else {
-        const isAlw = await checkIsLocationAlways();
-        console.log("isAlw", isAlw);
-      }
+      if (state == "active") recheckAllAndApply();
     };
     AppState.addEventListener("change", onChangeAppState);
     return () => {
@@ -186,7 +181,7 @@ TaskManager.defineTask(FETCH_LOCATION, async ({ data, error }) => {
     const locations: LocationData[] = (data as any).locations.map(
       positionToLocation
     );
-    const [, ...locationsWithTimeInterval] = locations.reduce<LocationData[]>(
+    const locationsWithTimeInterval = locations.reduce<LocationData[]>(
       (acc, val) => {
         const accLast = acc.last();
         return accLast?.timestamp &&
@@ -197,10 +192,11 @@ TaskManager.defineTask(FETCH_LOCATION, async ({ data, error }) => {
       [prevLocations.last()].filter<LocationData>((l): l is LocationData => !!l)
     );
 
-    AsyncStorage.setItem(
-      LOCATION_RECORDS,
-      JSON.stringify([...prevLocations, ...locationsWithTimeInterval])
-    );
+    const merged =
+      prevLocations.length > 0
+        ? [...prevLocations, ...locationsWithTimeInterval.slice(1)]
+        : locationsWithTimeInterval;
+    AsyncStorage.setItem(LOCATION_RECORDS, JSON.stringify(merged));
   }
 });
 
