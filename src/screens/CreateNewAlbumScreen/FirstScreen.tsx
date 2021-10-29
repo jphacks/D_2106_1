@@ -1,9 +1,14 @@
 import { Button } from "@ui-kitten/components";
-import React from "react";
-import { Alert, SafeAreaView, StyleSheet } from "react-native";
+import * as MediaLibrary from "expo-media-library";
+import React, { useEffect, useRef } from "react";
+import { Alert, SafeAreaView } from "react-native";
+import { Modalize } from "react-native-modalize";
+import { Portal } from "react-native-portalize";
 import { H3, SmallP } from "src/components/atoms/Text";
 import { Padding } from "src/components/layouts/Margin";
 import Space from "src/components/layouts/Space";
+import ModalizeHeader from "src/components/molecules/ModalizeHeader";
+import PermissionGuide from "src/components/organisms/PermissionGuide";
 import { screens } from "src/dict";
 import useAsyncCallback from "src/hooks/useAsyncCallback";
 import useFocusedEffect from "src/hooks/useFocusedEffect";
@@ -12,10 +17,10 @@ import { useLocation } from "src/provider/location";
 import { BASE_PX } from "src/utils/space";
 
 const FirstScreen: React.FC = () => {
+  const modalizeRef = useRef<Modalize>(null);
   const navigation = useNavigation();
   const {
-    isPermissionOk,
-    requirePermission,
+    isPermissionOk: isLocationPermissionOk,
     startLocationRecording,
     stopLocationRecording,
     checkingIfStartedRecording,
@@ -23,10 +28,24 @@ const FirstScreen: React.FC = () => {
     recheckAll,
   } = useLocation();
 
+  const [mlPermissionStatus] = MediaLibrary.usePermissions();
+
+  const isAllPermissionOk =
+    isLocationPermissionOk &&
+    mlPermissionStatus?.granted &&
+    mlPermissionStatus.accessPrivileges === "all";
+
   const [start, starting] = useAsyncCallback(async () => {
     await startLocationRecording();
     navigation.navigate(screens.CreateNewAlbumSecond);
   });
+  const startWithCheckingPermission = () => {
+    if (!isAllPermissionOk) {
+      modalizeRef.current?.open();
+      return;
+    }
+    start();
+  };
   const continueRecording = () =>
     navigation.navigate(screens.CreateNewAlbumSecond);
   const [stop, stopping] = useAsyncCallback(async () => {
@@ -55,8 +74,12 @@ const FirstScreen: React.FC = () => {
     recheckAll();
   });
 
+  useEffect(() => {
+    if (isAllPermissionOk) modalizeRef.current?.close();
+  }, [isAllPermissionOk]);
+
   return (
-    <SafeAreaView>
+    <><SafeAreaView>
       <Padding size={BASE_PX}>
         <Space vertical>
           <H3>位置情報の収集を開始します</H3>
@@ -68,7 +91,7 @@ const FirstScreen: React.FC = () => {
             純正のカメラやサードパーティーカメラ、スクリーンショットなどもトラックすることができます。
           </SmallP>
           <Button
-            onPress={hasStartedRecording ? continueRecording : start}
+            onPress={hasStartedRecording ? continueRecording : startWithCheckingPermission}
             disabled={
               !isPermissionOk ||
               starting ||
@@ -116,10 +139,20 @@ const FirstScreen: React.FC = () => {
         </Space>
       </Padding>
     </SafeAreaView>
+        <Portal>
+        <Modalize
+          ref={modalizeRef}
+          handlePosition="inside"
+          HeaderComponent={
+            <ModalizeHeader onClose={() => modalizeRef.current?.close()} />
+          }
+        >
+          <PermissionGuide onClose={() => modalizeRef.current?.close()} />
+        </Modalize>
+      </Portal>
+      </>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default FirstScreen;
 
