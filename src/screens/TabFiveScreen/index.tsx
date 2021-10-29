@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import Image from "src/components/atoms/Image";
+import MapPing from "src/components/atoms/MapPing";
 import Message from "src/components/atoms/Message";
 import { Padding } from "src/components/layouts/Margin";
 import DynamicModalizeContainer, {
@@ -106,7 +107,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
       lat2: region.latitude + region.latitudeDelta / 2,
     });
 
-    setImageSize(Math.max(100, Math.min(30 / region.longitudeDelta, 300)));
+    setImageSize(Math.max(40, Math.min(15 / region.longitudeDelta, 120)));
 
     setCurrentRegion({
       ...currentRegion,
@@ -123,7 +124,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
 
   console.log("data", JSON.stringify(data, null, 2));
 
-  const albums: Album[] | null = data;
+  const albums: Album[] | null = data?.albums;
 
   const coordinates: CoordinateType[] = data2?.location;
 
@@ -146,6 +147,15 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     setCurrentAlbum,
   };
 
+  const onPressMapPin = (c: CoordinateType, index: number) => {
+    flatListRef.current?.scrollToIndex({ index: index });
+    mapRef.current?.animateToRegion({
+      ...currentRegion,
+      longitude: c?.longitude,
+      latitude: c?.latitude,
+    });
+    navigationRef?.navigate("ImageFlatList");
+  };
   return (
     <ValueProvider values={globalValues}>
       <View style={{ flex: 1.5 }}>
@@ -169,35 +179,12 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
                 if (node) markerRefs.current[index] = node;
               }}
             >
-              <View
-                style={{
-                  height: imageSize / 2 - 15,
-                  width: imageSize / 2 - 15,
-                  borderRadius: 4,
-                  backgroundColor: "#36C1A7",
-                }}
-                onTouchStart={() => {
-                  flatListRef.current?.scrollToIndex({ index: index });
-                  mapRef.current?.animateToRegion({
-                    ...currentRegion,
-                    longitude: c?.longitude,
-                    latitude: c?.latitude,
-                  });
-                  navigationRef?.navigate("ImageFlatList");
-                }}
-              >
-                <Image
-                  source={{ uri: c.imageUrls.first() }}
-                  width={imageSize / 2 - 25}
-                  height={imageSize / 2 - 25}
-                  style={{
-                    borderRadius: 4,
-                    top: 5,
-                    left: 5,
-                  }}
-                />
-              </View>
-              <View
+              <MapPing
+                onPress={() => onPressMapPin(c, index)}
+                uri={c.imageUrls.first()}
+                imageSize={imageSize}
+              />
+              {/* <View
                 style={{
                   width: 0,
                   height: 0,
@@ -216,13 +203,13 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
                   flatListRef.current?.scrollToIndex({ index: index });
                   navigation.navigate("Albums");
                 }}
-              />
+              /> */}
             </Marker>
           ))}
           <Polyline
             coordinates={coordinates}
             strokeWidth={3}
-            strokeColor="red"
+            strokeColor="#ee82ee"
           />
         </MapView>
         <DynamicModalizeContainer
