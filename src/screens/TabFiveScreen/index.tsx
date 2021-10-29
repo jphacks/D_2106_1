@@ -10,20 +10,20 @@ import {
   View,
 } from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
-import { Modalize } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
 import Message from "src/components/atoms/Message";
-import PostedCard from "src/components/atoms/PostedCard";
-import Margin, { Padding } from "src/components/layouts/Margin";
-import ImageGrid from "src/components/organisms/ImageGrid";
-import { screens } from "src/dict";
+import { Padding } from "src/components/layouts/Margin";
+import DynamicModalizeContainer, {
+  AlbumList,
+  ImageList,
+  useDynamicModalizeState,
+} from "src/components/organisms/DynamicModalize";
 import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useGetAPI } from "src/hooks/useGetAPI";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useValueContext, ValueProvider } from "src/hooks/useValueContext";
 import { useLocation } from "src/provider/location";
-import { LARGE_PX, SMALL_PX } from "src/utils/space";
-import { globalStyles } from "src/utils/style";
+import { SMALL_PX } from "src/utils/space";
 
 type CoordinateType = {
   id: string;
@@ -46,7 +46,6 @@ type GlobalValues = {
   openStatus: string;
   coordinates: CoordinateType[];
   flatListRef: React.RefObject<FlatList<any>>;
-  renderItem: any;
   markerRefs: React.MutableRefObject<{
     [key: string]: Marker;
   }>;
@@ -57,18 +56,20 @@ type GlobalValues = {
 };
 
 type Album = {
-  Id: number;
-  UserId: string;
-  Title: string;
-  StartedAt: string;
-  EndedAt: string;
-  IsPublic: boolean;
-  ThumbnailImageId: number;
+  id: number;
+  userId: string;
+  title: string;
+  startedAt: number;
+  endedAt: number;
+  isPublic: boolean;
+  thumbnailImageId: number;
 };
 
 const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
   const navigation = useNavigation();
   const windowDimensions = useWindowDimensions();
+  const [modalHeight, setModalHeight] = React.useState(windowDimensions.height);
+
   const { stopLocationRecording } = useLocation();
 
   const [mapCorners, setMapCorners] = React.useState<{
@@ -115,30 +116,16 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
   };
 
   const { data } = useGetAPI("/albums");
-
   const { data: data2 } = useGetAPI("/album/detail", {
     album_id: currentAlbum,
     ...mapCorners,
   });
 
-  const albums: Album[] = data;
+  console.log("data", JSON.stringify(data, null, 2));
+
+  const albums: Album[] | null = data;
 
   const coordinates: CoordinateType[] = data2?.location;
-
-  React.useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <Padding left={4}>
-          <AntDesign
-            name="left"
-            onPress={() => navigation.navigate(screens.CreateNewAlbumFirst)}
-            size={24}
-            color="#333"
-          />
-        </Padding>
-      ),
-    });
-  }, []);
 
   useFocusedEffect(() => {
     stopLocationRecording();
@@ -146,45 +133,16 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
 
   const navigationRef = useNavigationContainerRef<ParamList>();
 
-  const renderItem = React.useCallback(
-    ({ item, index }) => (
-      <TouchableOpacity
-        onPress={() => {
-          mapRef.current?.animateToRegion({
-            ...currentRegion,
-            longitude: item?.longitude,
-            latitude: item?.latitude,
-          });
-          flatListRef.current?.scrollToIndex({ index: index });
-        }}
-        activeOpacity={0.7}
-      >
-        <Margin size={SMALL_PX} top={LARGE_PX}>
-          <View style={{ ...globalStyles.shadow, shadowOpacity: 0.15 }}>
-            <Image
-              source={{ uri: item.imageUrls[0] }}
-              height={windowDimensions.height * 0.2 - LARGE_PX}
-              width={windowDimensions.height * 0.2 - LARGE_PX}
-              style={globalStyles.rounodedImage}
-            />
-          </View>
-        </Margin>
-      </TouchableOpacity>
-    ),
-    [openStatus]
-  );
-
   const Stack = createStackNavigator<ParamList>();
 
   const globalValues: GlobalValues = {
     openStatus,
     coordinates,
     flatListRef,
-    renderItem,
     markerRefs,
     mapRef,
     currentRegion,
-    albums,
+    albums: albums ?? [],
     setCurrentAlbum,
   };
 
@@ -267,174 +225,95 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
             strokeColor="red"
           />
         </MapView>
-        <Modalize
-          alwaysOpen={windowDimensions.height * 0.35 + SMALL_PX * 2 - LARGE_PX}
-          modalHeight={windowDimensions.height * 0.75}
-          onPositionChange={(args) => setOpenStatus(args)}
-          handlePosition="inside"
-          rootStyle={{
-            marginBottom: -20,
-          }}
-          modalStyle={[globalStyles.shadow]}
+        <DynamicModalizeContainer
+          onLayout={({ layout: { height } }) => setModalHeight(height)}
+          scrollViewProps={{ scrollEnabled: false }}
         >
           <NavigationContainer independent={true} ref={navigationRef}>
-            <Padding top={LARGE_PX}>
-              <View
-                style={{
-                  width: windowDimensions.width,
-                  height:
-                    openStatus === "initial"
-                      ? windowDimensions.height * 0.35 + SMALL_PX * 2
-                      : windowDimensions.height * 0.75,
-                }}
-              >
-                <Stack.Navigator
-                  screenOptions={{
-                    headerLeft: ({ canGoBack, onPress }) =>
-                      canGoBack && (
-                        <>
-                          <TouchableOpacity onPress={onPress}>
-                            <Padding left={4}>
-                              <AntDesign
-                                name="left"
-                                onPress={onPress}
-                                size={24}
-                                color="#333"
-                              />
-                            </Padding>
-                          </TouchableOpacity>
-                        </>
-                      ),
-                    headerTitle: () => <></>,
-                  }}
-                >
-                  <Stack.Screen name="Albums" component={Albums} />
-                  <Stack.Screen
-                    name="ImageFlatList"
-                    component={ImageFlatList}
-                  />
-                </Stack.Navigator>
-              </View>
-            </Padding>
+            <Stack.Navigator
+              screenOptions={{
+                headerLeft: ({ canGoBack, onPress }) =>
+                  canGoBack && (
+                    <TouchableOpacity onPress={onPress}>
+                      <Padding size={SMALL_PX}>
+                        <AntDesign
+                          name="left"
+                          onPress={onPress}
+                          size={24}
+                          color="#333"
+                        />
+                      </Padding>
+                    </TouchableOpacity>
+                  ),
+                headerTitle: () => null,
+                headerStyle: { height: 40, backgroundColor: "transparent" },
+              }}
+            >
+              <Stack.Screen name="Albums" component={Albums} />
+              <Stack.Screen name="ImageFlatList" component={AlbumDetail} />
+            </Stack.Navigator>
           </NavigationContainer>
-        </Modalize>
+        </DynamicModalizeContainer>
       </View>
     </ValueProvider>
   );
 };
 
-const ImageFlatList: React.FC = () => {
-  const windowDimensions = useWindowDimensions();
-  const globalValues = useValueContext<GlobalValues>();
-  if (globalValues === null) return null;
-
-  const { openStatus, coordinates, flatListRef, renderItem } = globalValues;
-  return (
-    <>
-      {openStatus === "initial" ? (
-        <FlatList
-          data={coordinates}
-          ref={flatListRef}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        />
-      ) : (
-        <ImageGrid
-          data={coordinates
-            ?.map(({ imageUrls, ...c }) => ({
-              ...c,
-              imageUrl: imageUrls.first(),
-            }))
-            .filter<CoordinateWithImageUrl>(
-              (c): c is CoordinateWithImageUrl => !!c.imageUrl
-            )}
-          extractImageUri={(item) => item.imageUrl}
-          renderImage={({ item }) => (
-            <Margin size={SMALL_PX} top={LARGE_PX}>
-              <View style={{ ...globalStyles.shadow, shadowOpacity: 0.15 }}>
-                <Image
-                  source={{ uri: item.imageUrl }}
-                  width={windowDimensions.width / 3 - SMALL_PX * 2}
-                  height={windowDimensions.width / 3 - SMALL_PX * 2}
-                  style={globalStyles.rounodedImage}
-                />
-              </View>
-            </Margin>
-          )}
-          flatListProps={{
-            scrollEnabled: false,
-            numColumns: 3,
-          }}
-        />
-      )}
-    </>
-  );
-};
-
 const Albums: React.FC = () => {
-  const windowDimensions = useWindowDimensions();
   const navigation = useNavigation();
   const globalValues = useValueContext<GlobalValues>();
   if (globalValues === null) return null;
-
-  const {
-    openStatus,
-    flatListRef,
-    markerRefs,
-    mapRef,
-    currentRegion,
-    albums,
-    setCurrentAlbum,
-  } = globalValues;
-
-  const renderItem2 = React.useCallback(
-    ({ item, index }) => (
-      <Margin size={SMALL_PX}>
-        <View style={{ ...globalStyles.shadow, shadowOpacity: 0.15 }}>
-          <PostedCard
-            title={item.Title}
-            imageUrl={
-              // TODO: thumbnailImageId から取得する
-              "https://www.nagoyajo.city.nagoya.jp/images/content/guide/tenshu/index_img01.jpg"
-            }
-            createdAt={[]}
-            timestamp={item.EndedAt}
-            width={
-              openStatus === "top"
-                ? windowDimensions.width - SMALL_PX * 2
-                : windowDimensions.width * 0.6
-            }
-            height={
-              openStatus === "top"
-                ? windowDimensions.height * 0.2
-                : windowDimensions.height * 0.15
-            }
-            onPress={() => {
-              flatListRef?.current?.scrollToIndex({ index: index });
-              navigation.navigate("ImageFlatList");
-              setCurrentAlbum(item.Id);
-            }}
-          />
-        </View>
-      </Margin>
-    ),
-    [openStatus]
-  );
+  const { albums, setCurrentAlbum, flatListRef } = globalValues;
   return (
-    <>
-      <Margin bottom={LARGE_PX}>
-        <FlatList
-          data={albums}
-          ref={flatListRef}
-          renderItem={renderItem2}
-          keyExtractor={(item) => item.id}
-          horizontal={openStatus === "initial"}
-          showsHorizontalScrollIndicator={false}
-        />
-      </Margin>
-    </>
+    <AlbumList
+      data={albums.map((a) => ({
+        ...a,
+        title: a.title,
+        locations: ["愛知県", "名古屋市"],
+        timestamp: a.endedAt,
+        imageUrl: "https://picsum.photos/700",
+      }))}
+      previewFlatListRef={flatListRef}
+      onPressItem={({ item, index }) => {
+        flatListRef?.current?.scrollToIndex({ index: index });
+        navigation.navigate("ImageFlatList");
+        // setCurrentAlbum(item.Id);
+        setCurrentAlbum(1);
+      }}
+      keyExtractor={(item) => item.Id}
+    />
+  );
+};
+
+const AlbumDetail: React.FC = () => {
+  const globalValues = useValueContext<GlobalValues>();
+  const dynamicModalizeState = useDynamicModalizeState();
+  if (globalValues === null) return null;
+  const { currentRegion, mapRef, coordinates, flatListRef } = globalValues;
+  const { contentHeight } = dynamicModalizeState;
+  return (
+    <ImageList
+      data={coordinates
+        ?.map(({ imageUrls, ...c }) => ({
+          ...c,
+          imageUrl: imageUrls.first(),
+        }))
+        .filter<CoordinateWithImageUrl>(
+          (c): c is CoordinateWithImageUrl => !!c.imageUrl
+        )}
+      previewFlatListRef={flatListRef}
+      onPressItem={({ item, index }) => {
+        mapRef.current?.animateToRegion({
+          ...currentRegion,
+          longitude: item?.longitude,
+          latitude: item?.latitude,
+        });
+        flatListRef.current?.scrollToIndex({ index: index });
+      }}
+      extractImageUri={(item) => item.imageUrl}
+      keyExtractor={(item) => item.id}
+      previewSize={contentHeight - 60}
+    />
   );
 };
 

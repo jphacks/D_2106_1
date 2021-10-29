@@ -8,31 +8,33 @@ import Space from "src/components/layouts/Space";
 export type Props = {
   title?: string;
   imageUrl?: string;
-  createdAt?: string[];
+  locations?: string[];
   timestamp?: number;
+  onPress?: () => void;
+  width: number;
+  height: number;
 };
 
-const PostedCard = ({
+const PostCard: React.FC<Props> = ({
   title,
   imageUrl,
-  createdAt,
+  locations,
   timestamp,
   width,
   height,
-  onPress = () => {},
+  onPress,
 }) => {
-  const header = (
-    <Image
-      source={{ uri: imageUrl }}
-      resizeMode="cover"
-      width={width}
-      height={height}
-    />
-  );
   return (
     <Card
-      header={header}
-      style={{ width: width, height: height * 1.5 }}
+      header={
+        <Image
+          source={{ uri: imageUrl }}
+          resizeMode="cover"
+          width={width}
+          height={width * (9 / 16)} // 16:9
+        />
+      }
+      style={{ width, height }}
       onPress={onPress}
       activeOpacity={0.7}
     >
@@ -42,13 +44,13 @@ const PostedCard = ({
       <Space align="end">
         <Text category="h6">{title}</Text>
         <Text status="info" category="label">
-          {createdAt.join(",")}
+          {locations?.join(",")}
         </Text>
       </Space>
     </Card>
   );
 };
-export default PostedCard;
+export default PostCard;
 
 const styles = StyleSheet.create({
   reverse: {
