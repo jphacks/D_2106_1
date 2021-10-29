@@ -15,7 +15,9 @@ import Image from "src/components/atoms/Image";
 import MapPing from "src/components/atoms/MapPing";
 import Message from "src/components/atoms/Message";
 import PostedCard from "src/components/atoms/PostedCard";
+import { P } from "src/components/atoms/Text";
 import Margin, { Padding } from "src/components/layouts/Margin";
+import Space from "src/components/layouts/Space";
 import ImageGrid from "src/components/organisms/ImageGrid";
 import { screens } from "src/dict";
 import useFocusedEffect from "src/hooks/useFocusedEffect";
@@ -156,7 +158,6 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
             longitude: item?.longitude,
             latitude: item?.latitude,
           });
-          flatListRef.current?.scrollToIndex({ index: index });
         }}
         activeOpacity={0.7}
       >
@@ -214,7 +215,6 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
             >
               <View
                 onTouchStart={() => {
-                  flatListRef.current?.scrollToIndex({ index: index });
                   mapRef.current?.animateToRegion({
                     ...currentRegion,
                     longitude: c?.longitude,
@@ -230,7 +230,6 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
                   marginBottom: imageSize / 2 - BASE_PX,
                 }}
                 onTouchStart={() => {
-                  flatListRef.current?.scrollToIndex({ index: index });
                   navigation.navigate("Albums");
                 }}
               />
@@ -306,6 +305,25 @@ const ImageFlatList: React.FC = () => {
   const { openStatus, coordinates, flatListRef, renderItem } = globalValues;
   return (
     <>
+      {coordinates?.length === 0 && (
+        <Space
+          vertical
+          align="center"
+          size={BASE_PX}
+          style={{
+            marginTop: (windowDimensions.height * 0.25) / 2 - 20 + BASE_PX,
+          }}
+        >
+          <P
+            gray
+            style={{
+              fontSize: 20,
+            }}
+          >
+            周辺に写真がありません
+          </P>
+        </Space>
+      )}
       {openStatus === "initial" ? (
         <FlatList
           data={coordinates}
@@ -370,10 +388,7 @@ const Albums: React.FC = () => {
         <View style={{ ...globalStyles.shadow, shadowOpacity: 0.15 }}>
           <PostedCard
             title={item.Title}
-            imageUrl={
-              // TODO: thumbnailImageId から取得する
-              "https://www.nagoyajo.city.nagoya.jp/images/content/guide/tenshu/index_img01.jpg"
-            }
+            imageUrl={item.ThumbnailImageUrl}
             createdAt={[]}
             timestamp={item.EndedAt}
             width={
@@ -387,7 +402,6 @@ const Albums: React.FC = () => {
                 : windowDimensions.height * 0.15
             }
             onPress={() => {
-              flatListRef?.current?.scrollToIndex({ index: index });
               navigation.navigate("ImageFlatList");
               setCurrentAlbum(item.Id);
             }}
