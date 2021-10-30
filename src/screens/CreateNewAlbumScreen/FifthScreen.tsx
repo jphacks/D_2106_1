@@ -170,7 +170,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
         <Polyline coordinates={routes} strokeWidth={3} strokeColor="red" />
       </MapView>
 
-      <DynamicModalizeContainer>
+      <DynamicModalizeContainer loading={loading}>
         <ImageList
           data={coordinates
             ?.map(({ imageUrls, ...c }) => ({
