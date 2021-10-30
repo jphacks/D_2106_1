@@ -93,7 +93,7 @@ function BottomTabNavigator() {
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}
     >
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="TabOne"
         component={ProfileStackNavigator}
         options={{
@@ -101,7 +101,7 @@ function BottomTabNavigator() {
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
-      />
+      /> */}
       <BottomTab.Screen
         name="TabFour"
         component={CreateNewAlbumNavigator}
