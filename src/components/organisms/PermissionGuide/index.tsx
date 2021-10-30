@@ -27,9 +27,6 @@ const PermissionGuide: React.FC<{
     MediaLibrary.usePermissions();
 
   useEffect(() => {
-    console.log("asdf", isPermissionOk);
-    console.log("mlPermissionStatus", mlPermissionStatus);
-
     if (!isPermissionOk) return;
     if (mlPermissionStatus?.accessPrivileges !== "all") return;
     onClose();

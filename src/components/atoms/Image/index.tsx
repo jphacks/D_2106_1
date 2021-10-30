@@ -3,7 +3,7 @@ import { Image as RNImage, ImageProps, StyleSheet } from "react-native";
 import { BORDER_COLOR } from "src/utils/color";
 
 const Image: React.FC<ImageProps> = ({ style, width, height, ...props }) => (
-  <RNImage {...props} style={[style, styles.img, { width, height }]} />
+  <RNImage {...props} style={[styles.img, { width, height }, style]} />
 );
 
 export const ScaledImage: React.FC<
@@ -26,7 +26,7 @@ export const ScaledImage: React.FC<
       <Image
         width={size}
         height={size * (height / width)}
-        style={[style, styles.img]}
+        style={[styles.img, style]}
         {...props}
       />
     );
@@ -35,7 +35,7 @@ export const ScaledImage: React.FC<
       <Image
         width={size * (width / height)}
         height={size}
-        style={[style, styles.img]}
+        style={[styles.img, style]}
         {...props}
       />
     );

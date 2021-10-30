@@ -43,7 +43,7 @@ const SecondScreen: React.FC<{
   const windowDimensions = useWindowDimensions();
   const [isFreeLook, setIsFreeLook] = useState(false);
   const { assets, refreshAssets } = useCameraRoll({
-    options: { createdAfter: recordingBeginTime },
+    options: { createdAfter: recordingBeginTime, first: 100 },
     isDemo,
   });
 
