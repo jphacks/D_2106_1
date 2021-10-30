@@ -91,7 +91,6 @@ const DynamicModalizeContainer = ({
       panGestureAnimatedValue={animated}
       {...props}
     >
-      {loading && <ActivityIndicator />}
       <dynamicModalizeContext.Provider
         value={{
           loading: !!loading,
@@ -104,6 +103,16 @@ const DynamicModalizeContainer = ({
       >
         <View style={{ height: topHeight, position: "relative" }}>
           {children}
+          {loading && (
+            <View
+              style={[
+                styles.fitToParent,
+                { paddingTop: height / 2, backgroundColor: "rgba(0,0,0,0.25)" },
+              ]}
+            >
+              <ActivityIndicator />
+            </View>
+          )}
         </View>
       </dynamicModalizeContext.Provider>
     </Modalize>
@@ -131,7 +140,7 @@ export const ImageList = <T,>({
 }: ImageListProps<T>) => {
   const dynamicModalizeState = useDynamicModalizeState();
   if (dynamicModalizeState === null) return null;
-  const { direction, loading, initialHeight, topHeight, animated } =
+  const { direction, initialHeight, topHeight, animated } =
     dynamicModalizeState;
   const detailListRef = useRef<FlatList>(null);
   const { width } = useWindowDimensions();
@@ -153,12 +162,11 @@ export const ImageList = <T,>({
   }, [direction]);
 
   const horizontalHeight = previewSize ?? initialHeight - 40;
-  const Header = <>{loading && <ActivityIndicator />}</>;
   return (
     <>
       <AnimatedView
         style={[
-          styles.fitToParent,
+          styles.listContainer,
           {
             opacity: increase,
             height: horizontalHeight,
@@ -193,7 +201,7 @@ export const ImageList = <T,>({
         />
       </AnimatedView>
       <AnimatedView
-        style={[styles.fitToParent, { opacity: decrease, height: topHeight }]}
+        style={[styles.listContainer, { opacity: decrease, height: topHeight }]}
         pointerEvents={direction === "horizontal" ? "none" : "auto"}
       >
         <ImageGrid
@@ -306,7 +314,7 @@ export const AlbumList = <
     <>
       <AnimatedView
         style={[
-          styles.fitToParent,
+          styles.listContainer,
           { opacity: increase, height: initialHeight },
         ]}
       >
@@ -318,7 +326,7 @@ export const AlbumList = <
         />
       </AnimatedView>
       <AnimatedView
-        style={[styles.fitToParent, { opacity: decrease, height: topHeight }]}
+        style={[styles.listContainer, { opacity: decrease, height: topHeight }]}
         pointerEvents={direction === "horizontal" ? "none" : "auto"}
       >
         <FlatList
@@ -336,13 +344,20 @@ export const sleep = (msec: number) =>
   new Promise((resolve) => setTimeout(resolve, msec));
 
 const styles = StyleSheet.create({
-  fitToParent: {
+  listContainer: {
     position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
     paddingBottom: 50,
+  },
+  fitToParent: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 });
 
