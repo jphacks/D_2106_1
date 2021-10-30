@@ -1,4 +1,5 @@
 import { Button } from "@ui-kitten/components";
+import Constants from "expo-constants";
 import * as MediaLibrary from "expo-media-library";
 import React, { useEffect, useRef } from "react";
 import { Alert, SafeAreaView } from "react-native";
@@ -15,7 +16,6 @@ import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useLocation } from "src/provider/location";
 import { BASE_PX } from "src/utils/space";
-import Constants from "expo-constants";
 
 const FirstScreen: React.FC = () => {
   const modalizeRef = useRef<Modalize>(null);
