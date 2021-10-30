@@ -3,7 +3,6 @@ import { useRoute } from "@react-navigation/core";
 import * as React from "react";
 import { FlatList, View } from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
-import Image from "src/components/atoms/Image";
 import MapPing from "src/components/atoms/MapPing";
 import Message from "src/components/atoms/Message";
 import { Padding } from "src/components/layouts/Margin";
