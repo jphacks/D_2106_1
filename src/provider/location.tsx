@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "@ui-kitten/components";
+import Constants from "expo-constants";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import moment from "moment";
@@ -80,7 +81,8 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
     boolean | null
   >(null);
   const checkIsLocationAlways = useIsLocationAlways();
-  const isPermissionOk = !!status?.granted && isAlways;
+  const isPermissionOk =
+    (!!status?.granted && isAlways) || Constants.appOwnership === "expo";
 
   const [permissionGuideVisible, setPermissionGuideVisible] = useState(false);
 
@@ -120,7 +122,8 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
 
   const applyDemoData = useCallback(async () => {
     setLocations(demoLocations);
-    await AsyncStorage.setItem(RECORDING_BEGIN_TIME, String(0));
+    await AsyncStorage.setItem(RECORDING_BEGIN_TIME, String(1));
+    console.log("asyncStorage.setItem", RECORDING_BEGIN_TIME, String(1));
     await AsyncStorage.setItem(LOCATION_RECORDS, JSON.stringify(demoLocations));
   }, []);
 

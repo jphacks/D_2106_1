@@ -17,16 +17,19 @@ import { useLocation } from "src/provider/location";
 import { BORDER_COLOR } from "src/utils/color";
 import { BASE_PX } from "src/utils/space";
 
-const PermissionGuide: React.FC<{ onClose: () => void }> = ({
-  onClose,
-  children,
-}) => {
+const PermissionGuide: React.FC<{
+  onClose: () => void;
+  disableLocationRelated?: boolean;
+}> = ({ onClose, children, disableLocationRelated }) => {
   const { width } = useWindowDimensions();
   const { requirePermission, isPermissionOk } = useLocation();
   const [mlPermissionStatus, requestMLPermission] =
     MediaLibrary.usePermissions();
 
   useEffect(() => {
+    console.log("asdf", isPermissionOk);
+    console.log("mlPermissionStatus", mlPermissionStatus);
+
     if (!isPermissionOk) return;
     if (mlPermissionStatus?.accessPrivileges !== "all") return;
     onClose();
@@ -36,7 +39,7 @@ const PermissionGuide: React.FC<{ onClose: () => void }> = ({
       <Padding size={BASE_PX} style={styles.flex1} bottom={40}>
         <Text category="h5">アプリの権限設定を変更してください</Text>
         <Space vertical>
-          {!isPermissionOk && (
+          {!isPermissionOk && !disableLocationRelated && (
             <Space vertical>
               <Block content={"位置情報の利用を有効化してください"} />
               <Button onPress={requirePermission}>位置情報の有効化</Button>
@@ -79,6 +82,10 @@ const PermissionGuide: React.FC<{ onClose: () => void }> = ({
               </Space>
             ) : (
               <Space vertical>
+                <Block content={"設定アプリを開きます"} />
+                <Button onPress={() => Linking.openURL("app-settings:")}>
+                  設定画面を開く
+                </Button>
                 <Block content={"「写真」の項目を開きます"} />
                 <Center>
                   <ScaledImage

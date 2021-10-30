@@ -226,9 +226,8 @@ export default () => {
     RECORDING_BEGIN_TIME,
     null
   );
-  const recordingBeginTime = recordingBeginTimeStr
-    ? parseInt(recordingBeginTimeStr)
-    : null;
+  const recordingBeginTime =
+    recordingBeginTimeStr !== null ? parseInt(recordingBeginTimeStr) : null;
 
   if (loading) return <ScreenLoader />;
   if (!recordingBeginTime)

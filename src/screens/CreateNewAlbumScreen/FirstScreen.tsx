@@ -1,4 +1,5 @@
 import { Button } from "@ui-kitten/components";
+import Constants from "expo-constants";
 import * as MediaLibrary from "expo-media-library";
 import React, { useEffect, useRef } from "react";
 import { Alert, SafeAreaView } from "react-native";
@@ -27,6 +28,7 @@ const FirstScreen: React.FC = () => {
     checkingIfStartedRecording,
     hasStartedRecording,
     recheckAll,
+    applyDemoData,
   } = useLocation();
 
   const [mlPermissionStatus] = MediaLibrary.usePermissions();
@@ -66,10 +68,19 @@ const FirstScreen: React.FC = () => {
     navigation.navigate(screens.CreateNewAlbumSecond);
   });
   const [startDemo, startingDemo] = useAsyncCallback(async () => {
+    await applyDemoData();
     navigation.navigate(screens.CreateNewAlbumSecond, {
       isDemo: true,
     });
   });
+
+  const startDemoWithCheckingPermission = () => {
+    if (!isAllPermissionOk) {
+      modalizeRef.current?.open();
+      return;
+    }
+    startDemo();
+  };
 
   useFocusedEffect(() => {
     recheckAll();
@@ -126,14 +137,16 @@ const FirstScreen: React.FC = () => {
             >
               位置情報の記録を開始（デバッグモード）
             </Button>
-            <Button
-              status="basic"
-              appearance="outline"
-              onPress={startDemo}
-              style={{ borderColor: PRIMARY_COLOR }}
-            >
-              デモを開始
-            </Button>
+            {Constants.appOwnership === "expo" && (
+              <Button
+                status="basic"
+                appearance="outline"
+                onPress={startDemo}
+                style={{ borderColor: PRIMARY_COLOR }}
+              >
+                デモを開始
+              </Button>
+            )}
           </Space>
         </Padding>
       </SafeAreaView>
@@ -145,7 +158,10 @@ const FirstScreen: React.FC = () => {
             <ModalizeHeader onClose={() => modalizeRef.current?.close()} />
           }
         >
-          <PermissionGuide onClose={() => modalizeRef.current?.close()} />
+          <PermissionGuide
+            onClose={() => modalizeRef.current?.close()}
+            disableLocationRelated={Constants.appOwnership === "expo"}
+          />
         </Modalize>
       </Portal>
     </>
