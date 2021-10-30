@@ -182,7 +182,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
             />
           </Marker>
         ))}
-        <Polyline coordinates={routes} strokeWidth={3} strokeColor="red" />
+        <Polyline coordinates={routes} strokeWidth={4} strokeColor="#A7894B" />
       </MapView>
 
       <DynamicModalizeContainer loading={loading}>
