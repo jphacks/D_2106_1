@@ -138,14 +138,14 @@ const FirstScreen: React.FC = () => {
               位置情報の記録を開始（デバッグモード）
             </Button>
             {Constants.appOwnership === "expo" && (
-            <Button
-              status="basic"
-              appearance="outline"
-              onPress={startDemo}
-              style={{ borderColor: PRIMARY_COLOR }}
-            >
-              デモを開始
-            </Button>
+              <Button
+                status="basic"
+                appearance="outline"
+                onPress={startDemo}
+                style={{ borderColor: PRIMARY_COLOR }}
+              >
+                デモを開始
+              </Button>
             )}
           </Space>
         </Padding>
