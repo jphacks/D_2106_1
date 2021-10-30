@@ -15,6 +15,7 @@ import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useLocation } from "src/provider/location";
 import { BASE_PX } from "src/utils/space";
+import Constants from "expo-constants";
 
 const FirstScreen: React.FC = () => {
   const modalizeRef = useRef<Modalize>(null);
@@ -26,6 +27,7 @@ const FirstScreen: React.FC = () => {
     checkingIfStartedRecording,
     hasStartedRecording,
     recheckAll,
+    applyDemoData,
   } = useLocation();
 
   const [mlPermissionStatus] = MediaLibrary.usePermissions();
@@ -65,10 +67,19 @@ const FirstScreen: React.FC = () => {
     navigation.navigate(screens.CreateNewAlbumSecond);
   });
   const [startDemo, startingDemo] = useAsyncCallback(async () => {
+    await applyDemoData();
     navigation.navigate(screens.CreateNewAlbumSecond, {
       isDemo: true,
     });
   });
+
+  const startDemoWithCheckingPermission = () => {
+    if (!isAllPermissionOk) {
+      modalizeRef.current?.open();
+      return;
+    }
+    startDemo();
+  };
 
   useFocusedEffect(() => {
     recheckAll();
@@ -123,9 +134,16 @@ const FirstScreen: React.FC = () => {
             >
               位置情報の記録を開始（デバッグモード）
             </Button>
-            <Button status="basic" appearance="outline" onPress={startDemo}>
-              デモを開始
-            </Button>
+            {Constants.appOwnership === "expo" && (
+              <Button
+                status="basic"
+                appearance="outline"
+                onPress={startDemoWithCheckingPermission}
+                disabled={startingDemo}
+              >
+                デモを開始
+              </Button>
+            )}
             <Button
               status="basic"
               appearance="outline"
@@ -147,7 +165,10 @@ const FirstScreen: React.FC = () => {
             <ModalizeHeader onClose={() => modalizeRef.current?.close()} />
           }
         >
-          <PermissionGuide onClose={() => modalizeRef.current?.close()} />
+          <PermissionGuide
+            onClose={() => modalizeRef.current?.close()}
+            disableLocationRelated={Constants.appOwnership === "expo"}
+          />
         </Modalize>
       </Portal>
     </>

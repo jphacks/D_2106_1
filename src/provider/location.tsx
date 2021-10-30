@@ -14,6 +14,7 @@ import PermissionGuide from "src/components/organisms/PermissionGuide";
 import useInterval from "src/hooks/useInterval";
 import useIsLocationAlways from "src/hooks/useIsLocationAlways";
 import { emptyAsyncFn } from "src/utils";
+import Constants from "expo-constants";
 
 const TIME_INTERVAL = 5000;
 const DISTANCE_INTERVAL = 10;
@@ -79,7 +80,8 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
     boolean | null
   >(null);
   const checkIsLocationAlways = useIsLocationAlways();
-  const isPermissionOk = !!status?.granted && isAlways;
+  const isPermissionOk =
+    (!!status?.granted && isAlways) || Constants.appOwnership === "expo";
 
   const [permissionGuideVisible, setPermissionGuideVisible] = useState(false);
 
@@ -119,7 +121,8 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
 
   const applyDemoData = useCallback(async () => {
     setLocations(demoLocations);
-    await AsyncStorage.setItem(RECORDING_BEGIN_TIME, String(0));
+    await AsyncStorage.setItem(RECORDING_BEGIN_TIME, String(1));
+    console.log("asyncStorage.setItem", RECORDING_BEGIN_TIME, String(1));
     await AsyncStorage.setItem(LOCATION_RECORDS, JSON.stringify(demoLocations));
   }, []);
 

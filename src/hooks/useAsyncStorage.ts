@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
+import useStateWithPromise from "./useStateWithPromise";
 
 // source : https://github.com/react-native-async-storage/async-storage/issues/32
 
@@ -7,7 +8,7 @@ const useAsyncStorage = <T>(
   key: string,
   defaultValue: T
 ): [T, (newValue: T) => void, boolean, boolean] => {
-  const [state, setState] = useState({
+  const [state, setState] = useStateWithPromise({
     hydrated: false,
     storageValue: defaultValue,
   });
@@ -20,7 +21,7 @@ const useAsyncStorage = <T>(
     if (fromStorage) {
       value = JSON.parse(fromStorage);
     }
-    setState({ hydrated: true, storageValue: value });
+    await setState({ hydrated: true, storageValue: value });
   }
 
   async function updateStorage(newValue: T) {

@@ -199,7 +199,6 @@ const styles = StyleSheet.create({
 
 export default () => {
   const route = useRoute();
-  const { applyDemoData } = useLocation();
   const isDemo: boolean = (route.params as any)?.isDemo;
 
   const [recordingBeginTimeStr, , loading] = useAsyncStorage<string | null>(
@@ -216,10 +215,10 @@ export default () => {
         const currentPosition = await Location.getCurrentPositionAsync();
         setStartLocation(positionToLocation(currentPosition));
       } catch {}
-      if (isDemo) applyDemoData();
     };
     fn();
   }, [isDemo]);
+
   if (loading) return <ScreenLoader />;
   if (recordingBeginTime === null)
     return <Message message="記録開始時間が取得できませんでした" />;
