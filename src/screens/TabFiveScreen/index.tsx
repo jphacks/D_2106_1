@@ -201,12 +201,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
                   canGoBack && (
                     <TouchableOpacity onPress={onPress}>
                       <Padding size={SMALL_PX}>
-                        <AntDesign
-                          name="left"
-                          onPress={onPress}
-                          size={24}
-                          color="#333"
-                        />
+                        <AntDesign name="left" size={24} color="#333" />
                       </Padding>
                     </TouchableOpacity>
                   ),
