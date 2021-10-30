@@ -4,6 +4,7 @@ import * as React from "react";
 import { FlatList, View } from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import Image from "src/components/atoms/Image";
+import MapPing from "src/components/atoms/MapPing";
 import Message from "src/components/atoms/Message";
 import { Padding } from "src/components/layouts/Margin";
 import DynamicModalizeContainer, {
@@ -97,6 +98,15 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     stopLocationRecording();
   });
 
+  const onPressMapPin = (c: CoordinateType, index: number) => {
+    flatListRef.current?.scrollToIndex({ index: index });
+    mapRef.current?.animateToRegion({
+      ...currentRegion,
+      longitude: c?.longitude,
+      latitude: c?.latitude - currentRegion.latitudeDelta * 0.125,
+    });
+  };
+
   return (
     <View style={{ flex: 1.5 }}>
       <MapView
@@ -119,6 +129,11 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
               if (node) markerRefs.current[index] = node;
             }}
           >
+            <MapPing
+              onPress={() => onPressMapPin(c, index)}
+              uri={c.imageUrls.first()}
+              imageSize={imageSize / 2 - 25}
+            />
             <View
               style={{
                 height: imageSize / 2 - 15,
