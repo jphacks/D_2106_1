@@ -97,18 +97,17 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
     async (beginTime: number = moment().unix() * 1000) => {
       await AsyncStorage.setItem(RECORDING_BEGIN_TIME, String(beginTime));
       await clearCurrentData();
-      try {
-        await Location.startLocationUpdatesAsync(FETCH_LOCATION, {
-          accuracy: Location.Accuracy.Balanced,
-          distanceInterval: DISTANCE_INTERVAL,
-          deferredUpdatesInterval: TIME_INTERVAL,
-          deferredUpdatesDistance: DISTANCE_INTERVAL,
-        });
-        setHasStartedRecording(true);
-      } catch {
+      if (Constants.appOwnership === "expo") {
         Alert.alert("この機能は Expo Go 経由ではサポートされていません。");
         throw new Error("権限エラー, ExpoGoで起動していると思われる");
       }
+      await Location.startLocationUpdatesAsync(FETCH_LOCATION, {
+        accuracy: Location.Accuracy.Balanced,
+        distanceInterval: DISTANCE_INTERVAL,
+        deferredUpdatesInterval: TIME_INTERVAL,
+        deferredUpdatesDistance: DISTANCE_INTERVAL,
+      });
+      setHasStartedRecording(true);
     },
     []
   );
