@@ -42,6 +42,7 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
   const [previewHeight, setPreviewHeight] = useState(0);
   const { uploadAssetImages } = useUploadImage("/upload/image");
   const [postAlbumMetadata] = usePostAPI("/album");
+  const [postThumbnail] = usePostAPI("/album/thumbnail");
 
   const onLayoutParent = useCallback(
     (e: LayoutChangeEvent) => setParentHeight(e.nativeEvent.layout.height),
@@ -83,7 +84,6 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
         })),
         userId: "user",
       };
-      console.log("variables", variables);
       const result = await postAlbumMetadata(variables);
       albumId = result.id;
     } catch (err) {
@@ -98,6 +98,16 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
       });
     } catch (err) {
       Alert.alert("写真の送信に失敗しました", err.message);
+      return;
+    }
+    try {
+      await postThumbnail({
+        albumId: albumId,
+        thumbnailImageName:
+          thumbnail && `${Math.round(thumbnail.creationTime / 1000)}.jpg`,
+      });
+    } catch (err) {
+      Alert.alert("サムネイルの送信に失敗しました", err.message);
       return;
     }
     await clearCurrentData();
@@ -164,7 +174,9 @@ const FourthScreen: React.FC<{ selectedAssets: Asset[] }> = ({
       <Spinner
         visible={postingAlbum}
         overlayColor={"rgba(0, 0, 0, 0.25)"}
-        customIndicator={<Progress.Pie progress={progress} size={50} />}
+        customIndicator={
+          <Progress.Pie progress={progress} size={50} color={PRIMARY_COLOR} />
+        }
       />
     </>
   );
