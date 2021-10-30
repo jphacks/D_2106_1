@@ -98,7 +98,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
 
   const mapRef = React.useRef<MapView>(null);
 
-  const getBounds = (region: Region) => {
+  const onRegionChange = (region: Region) => {
     setMapCorners({
       lon1: region.longitude - region.longitudeDelta / 2,
       lon2: region.longitude + region.longitudeDelta / 2,
@@ -107,7 +107,6 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     });
 
     setImageSize(Math.max(40, Math.min(15 / region.longitudeDelta, 120)));
-
     setCurrentRegion({
       ...currentRegion,
       longitudeDelta: region.longitudeDelta,
@@ -167,9 +166,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
             latitudeDelta: 10,
             longitudeDelta: 10,
           }}
-          onRegionChange={(region) => {
-            getBounds(region);
-          }}
+          onRegionChangeComplete={onRegionChange}
           style={{ flex: 1.0 }}
         >
           {coordinates?.map((c, index) => (
