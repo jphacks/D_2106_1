@@ -3,7 +3,6 @@ import { useRoute } from "@react-navigation/core";
 import * as React from "react";
 import { FlatList, View } from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
-import Image from "src/components/atoms/Image";
 import MapPing from "src/components/atoms/MapPing";
 import Message from "src/components/atoms/Message";
 import { Padding } from "src/components/layouts/Margin";
@@ -41,8 +40,8 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
 
   const [imageSize, setImageSize] = React.useState<number>(50);
   const [currentRegion, setCurrentRegion] = React.useState<any | null>({
-    latitude: 35.1221702,
-    longitude: 136.9599526,
+    latitude: 37.331,
+    longitude: -122.0399526,
     latitudeDelta: 0.5,
     longitudeDelta: 0.5,
   });
@@ -112,8 +111,8 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
       <MapView
         ref={mapRef}
         initialRegion={{
-          latitude: 37.1234,
-          longitude: 137.1234,
+          latitude: 37.331,
+          longitude: -122.0399526,
           latitudeDelta: 10,
           longitudeDelta: 10,
         }}
@@ -133,52 +132,6 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
               onPress={() => onPressMapPin(c, index)}
               uri={c.imageUrls.first()}
               imageSize={imageSize / 2 - 25}
-            />
-            <View
-              style={{
-                height: imageSize / 2 - 15,
-                width: imageSize / 2 - 15,
-                borderRadius: 4,
-                backgroundColor: "#36C1A7",
-              }}
-              onTouchStart={() => {
-                flatListRef.current?.scrollToIndex({ index: index });
-                mapRef.current?.animateToRegion({
-                  ...currentRegion,
-                  longitude: c?.longitude,
-                  latitude: c?.latitude - currentRegion.latitudeDelta * 0.125,
-                });
-              }}
-            >
-              <Image
-                source={{ uri: c.imageUrls.first() }}
-                width={imageSize / 2 - 25}
-                height={imageSize / 2 - 25}
-                style={{
-                  borderRadius: 4,
-                  top: 5,
-                  left: 5,
-                }}
-              />
-            </View>
-            <View
-              style={{
-                width: 0,
-                height: 0,
-                alignSelf: "center",
-                backgroundColor: "transparent",
-                borderLeftWidth: 10,
-                borderRightWidth: 10,
-                borderTopWidth: 20,
-                borderBottomWidth: 0,
-                borderTopColor: "#36C1A7",
-                borderLeftColor: "transparent",
-                borderRightColor: "transparent",
-                marginBottom: imageSize / 2 + 5,
-              }}
-              onTouchStart={() =>
-                flatListRef.current?.scrollToIndex({ index: index })
-              }
             />
           </Marker>
         ))}
