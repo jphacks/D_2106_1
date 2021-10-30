@@ -128,7 +128,7 @@ const FirstScreen: React.FC = () => {
             >
               位置情報の記録を停止
             </Button>
-            <Button
+            {/* <Button
               status="basic"
               appearance="outline"
               onPress={startDebug}
@@ -136,7 +136,7 @@ const FirstScreen: React.FC = () => {
               style={{ borderColor: PRIMARY_COLOR }}
             >
               位置情報の記録を開始（デバッグモード）
-            </Button>
+            </Button> */}
             {Constants.appOwnership === "expo" && (
               <Button
                 status="basic"
