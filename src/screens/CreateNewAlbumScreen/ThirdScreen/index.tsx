@@ -82,7 +82,6 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number; isDemo?: boolean }> =
     }, [data]);
 
     const navigateToNext = () => {
-      console.log("called");
       navigation.navigate(screens.CreateNewAlbumFour, {
         selected: likedAssets,
       });
@@ -172,6 +171,7 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number; isDemo?: boolean }> =
                               width={50}
                               height={50}
                               resizeMode="contain"
+                              style={{ backgroundColor: "transparent" }}
                             />
                             <P gray style={styles.howToText}>
                               スキップ
@@ -187,7 +187,10 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number; isDemo?: boolean }> =
                               width={50}
                               height={50}
                               resizeMode="contain"
-                              style={{ transform: [{ scaleX: -1 }] }}
+                              style={{
+                                transform: [{ scaleX: -1 }],
+                                backgroundColor: "transparent",
+                              }}
                             />
                             <P gray style={styles.howToText}>
                               アルバムに追加

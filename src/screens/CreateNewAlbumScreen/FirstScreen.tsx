@@ -155,11 +155,19 @@ const FirstScreen: React.FC = () => {
           ref={modalizeRef}
           handlePosition="inside"
           HeaderComponent={
-            <ModalizeHeader onClose={() => modalizeRef.current?.close()} />
+            <ModalizeHeader
+              onClose={() => {
+                modalizeRef.current?.close();
+                recheckAll();
+              }}
+            />
           }
         >
           <PermissionGuide
-            onClose={() => modalizeRef.current?.close()}
+            onClose={() => {
+              modalizeRef.current?.close();
+              recheckAll();
+            }}
             disableLocationRelated={Constants.appOwnership === "expo"}
           />
         </Modalize>
