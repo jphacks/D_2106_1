@@ -131,7 +131,7 @@ export const ImageList = <T,>({
 }: ImageListProps<T>) => {
   const dynamicModalizeState = useDynamicModalizeState();
   if (dynamicModalizeState === null) return null;
-  const { direction, contentHeight, initialHeight, topHeight, animated } =
+  const { direction, loading, initialHeight, topHeight, animated } =
     dynamicModalizeState;
   const detailListRef = useRef<FlatList>(null);
   const { width } = useWindowDimensions();
@@ -153,7 +153,7 @@ export const ImageList = <T,>({
   }, [direction]);
 
   const horizontalHeight = previewSize ?? initialHeight - 40;
-
+  const Header = <>{loading && <ActivityIndicator />}</>;
   return (
     <>
       <AnimatedView

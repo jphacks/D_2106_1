@@ -115,17 +115,18 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
     });
   };
 
-  const { data } = useGetAPI<{ albums: Album[] }>("/albums");
-  const { data: data2 } = useGetAPI("/album/detail", {
+  const { data: listData, loading: loadingList } =
+    useGetAPI<{ albums: Album[] }>("/albums");
+  const { data: detailData, loading: loadingDetail } = useGetAPI<{
+    location: CoordinateType[];
+    route: CoordinateType[];
+  }>("/album/detail", {
     album_id: currentAlbum,
     ...mapCorners,
   });
 
-  const { albums } = data ?? {};
-
-  const coordinates: CoordinateType[] = data2?.location;
-
-  const routes: CoordinateType[] = data2?.route;
+  const { albums } = listData ?? {};
+  const { location: coordinates = [], route: routes = [] } = detailData ?? {};
 
   useFocusedEffect(() => {
     stopLocationRecording();
@@ -194,6 +195,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
         <DynamicModalizeContainer
           onLayout={({ layout: { height } }) => setModalHeight(height)}
           scrollViewProps={{ scrollEnabled: false }}
+          loading={loadingList || loadingDetail}
         >
           <NavigationContainer independent={true} ref={navigationRef}>
             <Stack.Navigator
