@@ -181,8 +181,8 @@ type Coordinate = {
   longitude: number;
 };
 const DEFAULT_REGION = {
-  latitude: 37.331,
-  longitude: -122.0399526,
+  latitude: 35.1221702,
+  longitude: 136.9599526,
   latitudeDelta: 0.2,
   longitudeDelta: 0.2,
 };

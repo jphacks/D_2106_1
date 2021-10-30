@@ -3,6 +3,7 @@ import { useRoute } from "@react-navigation/core";
 import * as React from "react";
 import { FlatList, View } from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
+import Image from "src/components/atoms/Image";
 import MapPing from "src/components/atoms/MapPing";
 import Message from "src/components/atoms/Message";
 import { Padding } from "src/components/layouts/Margin";
@@ -40,8 +41,8 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
 
   const [imageSize, setImageSize] = React.useState<number>(50);
   const [currentRegion, setCurrentRegion] = React.useState<any | null>({
-    latitude: 37.331,
-    longitude: -122.0399526,
+    latitude: 35.1221702,
+    longitude: 136.9599526,
     latitudeDelta: 0.5,
     longitudeDelta: 0.5,
   });
@@ -111,8 +112,8 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
       <MapView
         ref={mapRef}
         initialRegion={{
-          latitude: 37.331,
-          longitude: -122.0399526,
+          latitude: 37.1234,
+          longitude: 137.1234,
           latitudeDelta: 10,
           longitudeDelta: 10,
         }}
