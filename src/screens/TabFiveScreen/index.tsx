@@ -127,6 +127,9 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
 
   const routes: CoordinateType[] = data2?.route;
 
+  console.log("----------------");
+  console.log(routes);
+
   useFocusedEffect(() => {
     stopLocationRecording();
   });
@@ -186,7 +189,7 @@ const FifthScreen: React.FC<{ albumId: string }> = ({ albumId }) => {
             </Marker>
           ))}
           <Polyline
-            coordinates={coordinates}
+            coordinates={routes}
             strokeWidth={4}
             strokeColor="#A7894B"
           />
