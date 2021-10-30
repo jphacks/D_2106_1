@@ -14,6 +14,7 @@ import useAsyncCallback from "src/hooks/useAsyncCallback";
 import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useLocation } from "src/provider/location";
+import { PRIMARY_COLOR } from "src/utils/color";
 import { BASE_PX } from "src/utils/space";
 
 const FirstScreen: React.FC = () => {
@@ -112,6 +113,7 @@ const FirstScreen: React.FC = () => {
                 starting ||
                 stopping
               }
+              style={{ borderColor: PRIMARY_COLOR }}
             >
               位置情報の記録を停止
             </Button>
@@ -120,10 +122,16 @@ const FirstScreen: React.FC = () => {
               appearance="outline"
               onPress={startDebug}
               disabled={!isAllPermissionOk || startingDebug}
+              style={{ borderColor: PRIMARY_COLOR }}
             >
               位置情報の記録を開始（デバッグモード）
             </Button>
-            <Button status="basic" appearance="outline" onPress={startDemo}>
+            <Button
+              status="basic"
+              appearance="outline"
+              onPress={startDemo}
+              style={{ borderColor: PRIMARY_COLOR }}
+            >
               デモを開始
             </Button>
             <Button
@@ -133,6 +141,7 @@ const FirstScreen: React.FC = () => {
                 navigation.navigate(screens.CreateNewAlbumFifth, { albumId: 2 })
               }
               disabled={!isAllPermissionOk || startingDebug}
+              style={{ borderColor: PRIMARY_COLOR }}
             >
               最終画面
             </Button>
