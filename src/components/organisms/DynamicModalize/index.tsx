@@ -16,7 +16,6 @@ import {
 } from "react-native-modalize";
 import Image from "src/components/atoms/Image";
 import PostCard from "src/components/atoms/PostCard";
-import { ViewProps } from "src/components/atoms/Themed";
 import { Center } from "src/components/layouts/Align";
 import Margin, { Padding } from "src/components/layouts/Margin";
 import ImageGrid from "src/components/organisms/ImageGrid";
