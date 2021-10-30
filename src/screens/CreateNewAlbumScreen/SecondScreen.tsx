@@ -92,7 +92,8 @@ const SecondScreen: React.FC<{
         >
           <Polyline
             coordinates={locations.map((l) => l.coordinate)}
-            strokeWidth={8}
+            strokeWidth={4}
+            strokeColor="#A7894B"
           />
           {locations.map((l) => (
             <Marker coordinate={l.coordinate}>
