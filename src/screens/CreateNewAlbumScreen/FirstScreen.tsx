@@ -134,17 +134,6 @@ const FirstScreen: React.FC = () => {
             >
               デモを開始
             </Button>
-            <Button
-              status="basic"
-              appearance="outline"
-              onPress={() =>
-                navigation.navigate(screens.CreateNewAlbumFifth, { albumId: 2 })
-              }
-              disabled={!isAllPermissionOk || startingDebug}
-              style={{ borderColor: PRIMARY_COLOR }}
-            >
-              最終画面
-            </Button>
           </Space>
         </Padding>
       </SafeAreaView>
