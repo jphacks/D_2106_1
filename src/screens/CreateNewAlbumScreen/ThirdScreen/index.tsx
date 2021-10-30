@@ -23,6 +23,7 @@ import useAsyncStorage from "src/hooks/useAsyncStorage";
 import useCameraRoll from "src/hooks/useCameraRoll";
 import { useNavigation } from "src/hooks/useNavigation";
 import { RECORDING_BEGIN_TIME } from "src/provider/location";
+import { PRIMARY_COLOR } from "src/utils/color";
 import { BASE_PX, SMALL_PX } from "src/utils/space";
 import { globalStyles } from "src/utils/style";
 import Card from "./Card";
@@ -49,10 +50,10 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number; isDemo?: boolean }> =
       []
     );
 
-    const { assets } = useCameraRoll(
-      { createdAfter: recordingBeginTime },
-      isDemo
-    );
+    const { assets } = useCameraRoll({
+      options: { createdAfter: recordingBeginTime },
+      isDemo,
+    });
 
     const [likedAssets, setLikedAssets] = useState<typeof assets>([]);
     const likedAssetExists = likedAssets.length > 0;
@@ -96,7 +97,11 @@ const ThirdScreen: React.FC<{ recordingBeginTime: number; isDemo?: boolean }> =
             <Button onPress={navigateToNext} disabled={!likedAssetExists}>
               アルバム情報を入力
             </Button>
-            <Button onPress={resetSelection} appearance="outline">
+            <Button
+              onPress={resetSelection}
+              appearance="outline"
+              style={{ borderColor: PRIMARY_COLOR }}
+            >
               もう一度やり直す
             </Button>
           </Space>
