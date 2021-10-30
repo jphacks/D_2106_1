@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "@ui-kitten/components";
+import Constants from "expo-constants";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import moment from "moment";
@@ -14,7 +15,7 @@ import PermissionGuide from "src/components/organisms/PermissionGuide";
 import useInterval from "src/hooks/useInterval";
 import useIsLocationAlways from "src/hooks/useIsLocationAlways";
 import { emptyAsyncFn } from "src/utils";
-import Constants from "expo-constants";
+import { PRIMARY_COLOR } from "src/utils/color";
 
 const TIME_INTERVAL = 5000;
 const DISTANCE_INTERVAL = 10;
@@ -217,6 +218,7 @@ const LocationProvider: React.FC = React.memo(({ children }) => {
                   } catch {}
                   setPermissionGuideVisible(false);
                 }}
+                style={{ borderColor: PRIMARY_COLOR }}
               >
                 進行している記録を停止
               </Button>

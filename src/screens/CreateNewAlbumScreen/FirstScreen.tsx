@@ -1,4 +1,5 @@
 import { Button } from "@ui-kitten/components";
+import Constants from "expo-constants";
 import * as MediaLibrary from "expo-media-library";
 import React, { useEffect, useRef } from "react";
 import { Alert, SafeAreaView } from "react-native";
@@ -14,8 +15,8 @@ import useAsyncCallback from "src/hooks/useAsyncCallback";
 import useFocusedEffect from "src/hooks/useFocusedEffect";
 import { useNavigation } from "src/hooks/useNavigation";
 import { useLocation } from "src/provider/location";
+import { PRIMARY_COLOR } from "src/utils/color";
 import { BASE_PX } from "src/utils/space";
-import Constants from "expo-constants";
 
 const FirstScreen: React.FC = () => {
   const modalizeRef = useRef<Modalize>(null);
@@ -123,6 +124,7 @@ const FirstScreen: React.FC = () => {
                 starting ||
                 stopping
               }
+              style={{ borderColor: PRIMARY_COLOR }}
             >
               位置情報の記録を停止
             </Button>
@@ -131,6 +133,7 @@ const FirstScreen: React.FC = () => {
               appearance="outline"
               onPress={startDebug}
               disabled={!isAllPermissionOk || startingDebug}
+              style={{ borderColor: PRIMARY_COLOR }}
             >
               位置情報の記録を開始（デバッグモード）
             </Button>
@@ -138,22 +141,12 @@ const FirstScreen: React.FC = () => {
               <Button
                 status="basic"
                 appearance="outline"
-                onPress={startDemoWithCheckingPermission}
-                disabled={startingDemo}
+                onPress={startDemo}
+                style={{ borderColor: PRIMARY_COLOR }}
               >
                 デモを開始
               </Button>
             )}
-            <Button
-              status="basic"
-              appearance="outline"
-              onPress={() =>
-                navigation.navigate(screens.CreateNewAlbumFifth, { albumId: 2 })
-              }
-              disabled={!isAllPermissionOk || startingDebug}
-            >
-              最終画面
-            </Button>
           </Space>
         </Padding>
       </SafeAreaView>
