@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
-import { Image as RNImage, ImageProps } from "react-native";
+import { Image as RNImage, ImageProps, StyleSheet } from "react-native";
 import { BORDER_COLOR } from "src/utils/color";
 
 const Image: React.FC<ImageProps> = ({ style, width, height, ...props }) => (
