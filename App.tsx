@@ -26,7 +26,7 @@ export default function App() {
     return null;
   } else {
     return (
-      <UIKittenProvider {...eva} theme={eva.light}>
+      <UIKittenProvider {...eva} theme={customTheme}>
         <AppProvider serverHost="http://jphacks2021-server-859482516.ap-northeast-1.elb.amazonaws.com">
           <SafeAreaProvider>
             <LocationProvider>
